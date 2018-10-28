@@ -148,6 +148,7 @@
                             return eval(String(JSON.parse(item['Item-Buy-Formula'])).format(bPrice, bLucre, bAmount));
                         },
                         name = JSON.parse(item['Item-Name']),
+                        desc = JSON.parse(item['Item-Description']),
                         bitmap = String(item['Item-Icon-Bitmap']),
                         icon = Number(item['Item-Icon']),
                         usage = JSON.parse(item['Item-Usage']),
@@ -160,6 +161,7 @@
                     Array(
                         ['id', itemId],
                         ['name', name],
+                        ['desc', desc],
                         ['bitmap', bitmap],
                         ['icon', icon],
                         ['usage', usage],
@@ -325,10 +327,6 @@
         var page = this.event.page();
         var image = page.image;
         var bsY = 48;
-        this.contents.paintOpacity = this.standardBackOpacity();
-        this.contents.fillRect(this.contentsPadding(), this.contentsPadding(),
-            this.characterSize(), this.characterSize(), this.gaugeBackColor());
-        this.contents.paintOpacity = 255;
         /**
          * BLOCO DO SPRITE
          */
@@ -345,26 +343,12 @@
         /**
          * BLOCO DO NOME DO SPRITE
          */
-        this.contents.paintOpacity = this.standardBackOpacity();
-        this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
-            this.contentsPadding(), this.characterSize2(), 48, this.gaugeBackColor());
-        this.contents.paintOpacity = 255;
         this.contents.fillRect(this.contentsPadding() + (this.characterSize()), this.contentsPadding() - 5,
             this.characterSize2(), 5, this.normalColor());
         this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
-            (this.contentsPadding() + bsY) - 1, this.characterSize2(), 5, this.normalColor());
-        this.contents.paintOpacity = this.standardBackOpacity();
+            (this.contentsPadding() + bsY) - 1, this.characterSize2(), 5, this.normalColor()), bsY += 53;
         this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
-            (this.contentsPadding() + bsY) + 4, this.characterSize2(), 48, this.gaugeBackColor()),
-            bsY += 53;
-        this.contents.paintOpacity = 255;
-        this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
-            (this.contentsPadding() + bsY) - 5, this.characterSize2(), 5, this.normalColor());
-        this.contents.paintOpacity = this.standardBackOpacity();
-        this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
-            (this.contentsPadding() + bsY) - 1, this.characterSize2(), 48, this.gaugeBackColor()),
-            bsY += 53;
-        this.contents.paintOpacity = 255;
+            (this.contentsPadding() + bsY) - 5, this.characterSize2(), 5, this.normalColor()), bsY += 53;
         this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
             (this.contentsPadding() + bsY) - 6, this.characterSize2(), 5, this.normalColor());
         this.contents.fillRect(this.contentsPadding() + (this.characterSize2() * 2) - 10, this.contentsPadding() - 5,
@@ -495,7 +479,7 @@
     };
 
     Window_SystemShop.prototype.refresh = function () {
-        var x = 16;
+        var x = 20;
         var y = (this.textPadding3() / 2) - 7;
         var shopName = getTextLanguage(this.shop['data']['shopName']);
         var shopLevel = ((level) => {
@@ -610,7 +594,7 @@
     Window_commandSystemShop.prototype.constructor = Window_commandSystemShop;
 
     Window_commandSystemShop.prototype.initialize = function () {
-        Window_Command.prototype.initialize.call(this, 20, Graphics.height - (this.windowHeight() + 14));
+        Window_Command.prototype.initialize.call(this, 20, Graphics.height - (this.windowHeight() + 15));
         this._dialogActivate = false;
     };
 
@@ -1931,6 +1915,7 @@
         var height = this.windowHeight();
         Window_Base.prototype.initialize.call(this, 315, 185, width, height);
         this.items = items;
+        this.createWindowDecription();
         this.refresh();
     };
 
@@ -1948,6 +1933,29 @@
 
     Window_itemsShop.prototype.standardFontSize = function () {
         return 18;
+    };
+
+    Window_itemsShop.prototype.createWindowDecription = function () {
+        this._windowDesc = new Window_Base(15, 140, this.windowWidth() - (15 * 2), 220);
+        this._windowDesc.backOpacity = 0;
+        this._windowDesc.windowskin = ImageManager.loadSystem('Window2');
+        this.addChild(this._windowDesc);
+    };
+
+    Window_itemsShop.prototype.drawDescItem = function (desc) {
+        this._windowDesc.contents.clear();
+        var x = this._windowDesc.textPadding() + 5,
+            width = this._windowDesc.contentsWidth(),
+            height = this._windowDesc.contentsHeight();
+        this._windowDesc.contents.paintOpacity = this.standardBackOpacity();
+        this._windowDesc.contents.fillRect(0, 0, width, height, this.gaugeBackColor());
+        this._windowDesc.contents.paintOpacity = 255;
+        this._windowDesc.resetFontSettings = function () {
+            this.contents.fontFace = "GameFont2";
+            this.contents.fontSize = 18;
+            this.resetTextColor();
+        };
+        this._windowDesc.drawTextEx(JSON.parse(desc), x, 5);
     };
 
     Window_itemsShop.prototype.refresh = function () {
@@ -2064,6 +2072,7 @@
         this.drawIcon(this.items['_default'].icon, 6, 7);
         this.contents.fontFace = "GameFont2", y = 30;
         this.drawTextEx(getTextLanguage(this.items['_default'].name), 130, y), y += 37;
+        this.drawDescItem(getTextLanguage(this.items['_default'].desc));
         this.drawTextEx(getTextLanguage([
             JSON.stringify(
                 {
@@ -2148,7 +2157,7 @@
     Window_bonusShop.prototype.initialize = function () {
         var width = this.windowWidth();
         var height = this.windowHeight();
-        Window_Base.prototype.initialize.call(this, 329, 325, width, height);
+        Window_Base.prototype.initialize.call(this, 330, 324 + 220, width, height);
         this._bonus = {
             buy: 0,
             sell: 0
@@ -2157,7 +2166,7 @@
     };
 
     Window_bonusShop.prototype.windowWidth = function () {
-        return this.fittingHeight(24) + 28;
+        return this.fittingHeight(24) + 25;
     };
 
     Window_bonusShop.prototype.windowHeight = function () {
@@ -2364,6 +2373,11 @@
  * @desc Nome do item
  * @type struct<Language>[]
  * @default []
+ * 
+ * @param Item-Description
+ * @desc Descrição do item
+ * @type struct<LanguageNote>[]
+ * @default []
  *
  * @param Item-Icon-Bitmap
  * @desc Bitmap para o icone do item
@@ -2459,7 +2473,17 @@
  * @type string
  * @default pt_br
  */
-
+/*~struct~LanguageNote:
+ * @param Value
+ * @desc Valor do texto
+ * @type note
+ * @default "???"
+ *
+ * @param Language
+ * @desc O idioma do texto
+ * @type string
+ * @default pt_br
+ */
  /*~struct~dataDialog:
  * @param Initial Message
  * @desc Mensagem inicial do vendedor
