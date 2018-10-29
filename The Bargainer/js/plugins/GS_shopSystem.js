@@ -158,6 +158,16 @@
                         buy_enabled = JSON.parse(item['Item-Buy']);
                     if (!this._shops[shopID]['items'][itemId])
                         this._shops[shopID]['items'][itemId] = {};
+                    if (this._shops[shopID]['items'][itemId].sell != sell) {
+                        if (!this._shops[shopID]['items'][itemId].hasOwnProperty('sell'))
+                            Object.defineProperty(this._shops[shopID]['items'][itemId], 'sell', { writable: true, value: sell });
+                        else this._shops[shopID]['items'][itemId].sell = sell;
+                    }
+                    if (this._shops[shopID]['items'][itemId].buy != buy) {
+                        if (!this._shops[shopID]['items'][itemId].hasOwnProperty('buy'))
+                            Object.defineProperty(this._shops[shopID]['items'][itemId], 'buy', { writable: true, value: buy });
+                        else this._shops[shopID]['items'][itemId].buy = buy;
+                    }
                     Array(
                         ['id', itemId],
                         ['name', name],
@@ -170,9 +180,7 @@
                         ['sell_enabled', sell_enabled],
                         ['buy_enabled', buy_enabled],
                         ['price', price],
-                        ['lucre', lucre],
-                        ['sell', sell],
-                        ['buy', buy]
+                        ['lucre', lucre]
                     ).map(key => {
                         if (key[2]) {
                             if (this._shops[shopID]['items'][itemId][key[0]] === undefined ||
@@ -185,6 +193,13 @@
                     }, this);
                 }, this);
             }
+            Object.keys(this._shops[shopID]['items']).map(key => {
+                if (items.find(item => {
+                    return JSON.parse(item)['Item-Id'] === key;
+                }) === undefined) {
+                    delete this._shops[shopID]['items'][key];
+                }
+            });
         }, this);
         saveData(this.getShops());
     };
@@ -376,6 +391,13 @@
              */
             this._windowCommandSystemShop.setHandler('_seller', this.commandSystemShopProcessSeller.bind(this));
             this._windowCommandSystemShop.setHandler('_seller_goback', this.commandSystemShopSellerGoback.bind(this));
+            this._windowCommandSystemShop.setHandler('_seller_next_item', this.commandSystemShopSellerNextItem.bind(this));
+            this._windowCommandSystemShop.setHandler('_seller_goback_item', this.commandSystemShopSellerBackItem.bind(this));
+            this._windowCommandSystemShop.setHandler('_seller_list_of_items', this.commandSystemShopSellerListOfItems.bind(this));
+            /**
+             * COMANDOS DA LISTA DE ITENS
+             */
+            this._windowCommandSystemShop.setHandler('_list_of_items_goback', this.commandSystemShopProcessListOfItemsGoback.bind(this));
             this.sprite.addChild(this._windowCommandSystemShop);
         }
         if (!this._windowDialog) {
@@ -461,6 +483,33 @@
 
     Scene_SystemShop.prototype.commandSystemShopSellerGoback = function () {
         this._windowCommandSystemShop._commandsType = false;
+        this._windowCommandSystemShop.select(0);
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopSellerNextItem = function () {
+        this._windowItemsShop.nextListItem();
+        this._windowItemsShop.refresh();
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopSellerBackItem = function () {
+        this._windowItemsShop.backListItem();
+        this._windowItemsShop.refresh();
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopSellerListOfItems = function () {
+        this._windowCommandSystemShop._commandsType = 'list_of_items';
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopProcessListOfItemsGoback = function () {
+        this._windowCommandSystemShop._commandsType = 'seller';
         this._windowCommandSystemShop.select(0);
         this._windowCommandSystemShop.refresh();
         this._windowCommandSystemShop.activate();
@@ -637,6 +686,7 @@
     };
 
     Window_commandSystemShop.prototype.addMainCommands = function () {
+        if (!this._iconId) this._iconId = {};
         if (this._commandsType === 'dialog') {
             this.addCommand(getTextLanguage([
                 JSON.stringify(
@@ -676,7 +726,8 @@
             ]), '_goback');
         } else if (this._commandsType === 'seller') {
             this.shop = SceneManager._scene.shop;
-            let _seller_next_item = this.shop['items'].length > 1;
+            let _seller_list_of_items = Object.keys(this.shop['items']).length > 1,
+                _seller_next_item = Object.keys(this.shop['items']).length > 1 && !SceneManager._scene._windowItemsShop.isLastItem();
             this.addCommand(getTextLanguage([
                 JSON.stringify(
                     {
@@ -688,7 +739,7 @@
                         Language: "en_us",
                         Value: 'List of Items'
                     })
-            ]), '_seller_list_of_items', _seller_next_item);
+            ]), '_seller_list_of_items', _seller_list_of_items);
             this.addCommand(getTextLanguage([
                 JSON.stringify(
                     {
@@ -712,7 +763,7 @@
                         Language: "en_us",
                         Value: 'Previous item'
                     })
-            ]), '_seller_goback_item', false);
+            ]), '_seller_goback_item', SceneManager._scene._windowItemsShop.enabledBackItem());
             this.addCommand(getTextLanguage([
                 JSON.stringify(
                     {
@@ -737,10 +788,31 @@
                         Value: 'Go back'
                     })
             ]), '_seller_goback');
+        } else if (this._commandsType === 'list_of_items') {
+            this.shop = SceneManager._scene.shop;
+            let index = -1;
+            for (const key in this.shop['items']) {
+                if (this.shop['items'].hasOwnProperty(key)) {
+                    this.addCommand(getTextLanguage(this.shop['items'][key].name), '_seller_buy');
+                    this._iconId[String(getTextLanguage(this.shop['items'][key].name))] = this.shop['items'][key].icon;
+                }
+            }
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Voltar'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Go back'
+                    })
+            ]), '_list_of_items_goback');
         } else {
             this.shop = SceneManager._scene.shop;
             let dialogEnabled = true,
-                buy_enabled = this.shop['items'].length > 0;
+                buy_enabled = Object.keys(this.shop['items']).length > 0;
             if (typeof SceneManager._scene.textsAmountMax() === 'boolean' &&
                 SceneManager._scene.textsAmountMax() ||
                 SceneManager._scene._windowDialog &&
@@ -784,10 +856,15 @@
         }
     };
 
+    Window_commandSystemShop.prototype.commandIconId = function (symbol) {
+        return this._iconId[symbol];
+    };
+
     Window_commandSystemShop.prototype.drawItem = function (index) {
         var rect = this.itemRectForText(index);
         var align = this.itemTextAlign();
         var iconId = 0;
+        var fontSize = this.contents.fontSize;
         this.resetTextColor();
         this.changePaintOpacity(this.isCommandEnabled(index));
         if (this.commandSymbol(index) === '_dialogue') {
@@ -804,15 +881,21 @@
             iconId = 75;
         } else if (this.commandSymbol(index) === '_goback' ||
             this.commandSymbol(index) === '_seller_goback' ||
-            this.commandSymbol(index) === '_seller_goback_item') {
+            this.commandSymbol(index) === '_seller_goback_item' ||
+            this.commandSymbol(index) === '_list_of_items_goback') {
             iconId = 74;
         } else if (this.commandSymbol(index) === '_seller_next_item') {
             iconId = 73;
         } else if (this.commandSymbol(index) === '_seller_list_of_items') {
             iconId = 186;
         }
+        if (this.commandIconId(this.commandName(index)) != undefined) {
+            iconId = this.commandIconId(this.commandName(index));
+            this.contents.fontSize = 14;
+        }
         this.drawIcon(iconId, rect.x - 1, rect.y + 2);
         this.drawText(this.commandName(index), rect.x + 36, rect.y, rect.width, align);
+        this.contents.fontSize = fontSize;
     };
 
     //-----------------------------------------------------------------------------
@@ -2011,6 +2094,7 @@
         var height = this.windowHeight();
         Window_Base.prototype.initialize.call(this, 315, 185, width, height);
         this.items = items;
+        this.listItem = 0;
         this.createWindowDecription();
         this.refresh();
     };
@@ -2031,6 +2115,27 @@
         return 18;
     };
 
+    Window_itemsShop.prototype.nextListItem = function () {
+        this.listItem = this.listItem + 1 >= Object.keys(this.items).length ?
+            this.listItem : this.listItem + 1;
+    };
+
+    Window_itemsShop.prototype.backListItem = function () {
+        this.listItem = this.listItem - 1 < 0 ? 0 : this.listItem - 1;
+    };
+
+    Window_itemsShop.prototype.listItemId = function () {
+        return Object.keys(this.items)[this.listItem];
+    };
+
+    Window_itemsShop.prototype.isLastItem = function () {
+        return this.listItem + 1 == Object.keys(this.items).length;
+    };
+
+    Window_itemsShop.prototype.enabledBackItem = function () {
+        return this.listItem > 0;
+    };
+
     Window_itemsShop.prototype.createWindowDecription = function () {
         this._windowDesc = new Window_Base(15, 140, this.windowWidth() - (15 * 2), 220);
         this._windowDesc.backOpacity = 0;
@@ -2040,198 +2145,206 @@
 
     Window_itemsShop.prototype.drawDescItem = function (desc) {
         this._windowDesc.contents.clear();
+        this._windowDesc.contents.fontSize = 18;
+        this._windowDesc.contents.fontFace = "GameFont2";
         var x = this._windowDesc.textPadding() + 5,
             width = this._windowDesc.contentsWidth(),
             height = this._windowDesc.contentsHeight();
         this._windowDesc.contents.paintOpacity = this.standardBackOpacity();
         this._windowDesc.contents.fillRect(0, 0, width, height, this.gaugeBackColor());
         this._windowDesc.contents.paintOpacity = 255;
-        this._windowDesc.resetFontSettings = function () {
-            this.contents.fontFace = "GameFont2";
-            this.contents.fontSize = 18;
-            this.resetTextColor();
+        this._windowDesc.drawTextEx = function (text, x, y) {
+            if (text) {
+                var textState = { index: 0, x: x, y: y, left: x };
+                textState.text = this.convertEscapeCharacters(text);
+                textState.height = this.calcTextHeight(textState, false);
+                while (textState.index < textState.text.length) {
+                    this.processCharacter(textState);
+                }
+                return textState.x - x;
+            } else {
+                return 0;
+            }
         };
         this._windowDesc.drawTextEx(JSON.parse(desc), x, 5);
     };
 
     Window_itemsShop.prototype.refresh = function () {
-        Object.keys(this.items).map((itemId) => {
-            var item = this.items[itemId];
-            var y = 22;
-            var sell_price = item.sell(1);
-            var sell_buy = item.buy(Math.floor(sell_price / 4), Math.floor(sell_price / 6), 1);
-            var amount = item.amount;
-            var rarity = ((rarity) => {
-                switch (rarity) {
-                    case 'normal':
-                        return getTextLanguage([
-                            JSON.stringify(
-                                {
-                                    Language: "pt_br",
-                                    Value: 'Comum'
-                                }),
-                            JSON.stringify(
-                                {
-                                    Language: "en_us",
-                                    Value: 'Common'
-                                })
-                        ]);
-                    case 'medium':
-                        return getTextLanguage([
-                            JSON.stringify(
-                                {
-                                    Language: "pt_br",
-                                    Value: 'Procurado'
-                                }),
-                            JSON.stringify(
-                                {
-                                    Language: "en_us",
-                                    Value: 'Wanted'
-                                })
-                        ]);
-                    case 'high':
-                        return getTextLanguage([
-                            JSON.stringify(
-                                {
-                                    Language: "pt_br",
-                                    Value: 'Relíquia'
-                                }),
-                            JSON.stringify(
-                                {
-                                    Language: "en_us",
-                                    Value: 'Relic'
-                                })
-                        ]);
-                    case 'very high':
-                        return getTextLanguage([
-                            JSON.stringify(
-                                {
-                                    Language: "pt_br",
-                                    Value: 'Para colecionadores'
-                                }),
-                            JSON.stringify(
-                                {
-                                    Language: "en_us",
-                                    Value: 'For collectors'
-                                })
-                        ]);
-                    case 'rare':
-                        return getTextLanguage([
-                            JSON.stringify(
-                                {
-                                    Language: "pt_br",
-                                    Value: 'Item Único'
-                                }),
-                            JSON.stringify(
-                                {
-                                    Language: "en_us",
-                                    Value: 'Single Item'
-                                })
-                        ]);
-                    case 'very rare':
-                        return getTextLanguage([
-                            JSON.stringify(
-                                {
-                                    Language: "pt_br",
-                                    Value: 'Único no mundo'
-                                }),
-                            JSON.stringify(
-                                {
-                                    Language: "en_us",
-                                    Value: 'Unique in the world'
-                                })
-                        ]);
-                    default:
-                        return getTextLanguage([
-                            JSON.stringify(
-                                {
-                                    Language: "pt_br",
-                                    Value: 'Comum'
-                                }),
-                            JSON.stringify(
-                                {
-                                    Language: "en_us",
-                                    Value: 'Common'
-                                })
-                        ]);
-                }
-            })(item.rarity);
-            var usage = getTextLanguage(item.usage);
-            this.contents.clear();
-            this.contents.paintOpacity = this.standardBackOpacity();
-            this.contents.fillRect(0, 0, 120, 120, this.gaugeBackColor());
-            this.contents.fillRect(124, y, 200, 36, this.gaugeBackColor()), y += 39;
-            this.contents.fillRect(124, y, 200, 36, this.gaugeBackColor()), y = 22;
-            this.contents.fillRect(327, y, 200, 36, this.gaugeBackColor()), y += 39;
-            this.contents.fillRect(327, y, 200, 36, this.gaugeBackColor()), y = 22;
-            this.contents.fillRect(530, y, 390, 36, this.gaugeBackColor()), y += 39;
-            this.contents.fillRect(530, y, 390, 36, this.gaugeBackColor()), y += 39;
-            this.contents.paintOpacity = 255;
-            this.drawIcon(item.icon, 6, 7);
-            this.contents.fontFace = "GameFont2", y = 30;
-            this.drawTextEx(getTextLanguage(item.name), 130, y), y += 37;
-            this.drawDescItem(getTextLanguage(item.desc));
-            this.drawTextEx(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: `Compra: \\c[29]${sell_price}($)`
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: `Purchase: \\c[29]${sell_price}($)`
-                    })
-            ]), 130, y), y = 30;
-            this.drawTextEx(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: `Venda: \\c[29]${sell_buy}($)`
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: `Sale: \\c[29]${sell_buy}($)`
-                    })
-            ]), 335, y), y += 37;
-            this.drawTextEx(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: `Montante: \\c[8]${amount}`
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: `Amount: \\c[8]${amount}`
-                    })
-            ]), 335, y), y = 30;
-            this.drawTextEx(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: `Raridade: \\c[8]${rarity}`
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: `Rarity: \\c[8]${rarity}`
-                    })
-            ]), 537, y), y += 37;
-            this.drawTextEx(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: `Uso: \\c[8]${usage}`
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: `Usage: \\c[8]${usage}`
-                    })
-            ]), 537, y);
-        }, this);
+        var item = this.items[this.listItemId()];
+        var y = 22;
+        var sell_price = item.sell(1);
+        var sell_buy = item.buy(Math.floor(sell_price / 4), Math.floor(sell_price / 6), 1);
+        var amount = item.amount;
+        var rarity = ((rarity) => {
+            switch (rarity) {
+                case 'normal':
+                    return getTextLanguage([
+                        JSON.stringify(
+                            {
+                                Language: "pt_br",
+                                Value: 'Comum'
+                            }),
+                        JSON.stringify(
+                            {
+                                Language: "en_us",
+                                Value: 'Common'
+                            })
+                    ]);
+                case 'medium':
+                    return getTextLanguage([
+                        JSON.stringify(
+                            {
+                                Language: "pt_br",
+                                Value: 'Procurado'
+                            }),
+                        JSON.stringify(
+                            {
+                                Language: "en_us",
+                                Value: 'Wanted'
+                            })
+                    ]);
+                case 'high':
+                    return getTextLanguage([
+                        JSON.stringify(
+                            {
+                                Language: "pt_br",
+                                Value: 'Relíquia'
+                            }),
+                        JSON.stringify(
+                            {
+                                Language: "en_us",
+                                Value: 'Relic'
+                            })
+                    ]);
+                case 'very high':
+                    return getTextLanguage([
+                        JSON.stringify(
+                            {
+                                Language: "pt_br",
+                                Value: 'Para colecionadores'
+                            }),
+                        JSON.stringify(
+                            {
+                                Language: "en_us",
+                                Value: 'For collectors'
+                            })
+                    ]);
+                case 'rare':
+                    return getTextLanguage([
+                        JSON.stringify(
+                            {
+                                Language: "pt_br",
+                                Value: 'Item Único'
+                            }),
+                        JSON.stringify(
+                            {
+                                Language: "en_us",
+                                Value: 'Single Item'
+                            })
+                    ]);
+                case 'very rare':
+                    return getTextLanguage([
+                        JSON.stringify(
+                            {
+                                Language: "pt_br",
+                                Value: 'Único no mundo'
+                            }),
+                        JSON.stringify(
+                            {
+                                Language: "en_us",
+                                Value: 'Unique in the world'
+                            })
+                    ]);
+                default:
+                    return getTextLanguage([
+                        JSON.stringify(
+                            {
+                                Language: "pt_br",
+                                Value: 'Comum'
+                            }),
+                        JSON.stringify(
+                            {
+                                Language: "en_us",
+                                Value: 'Common'
+                            })
+                    ]);
+            }
+        })(item.rarity);
+        var usage = getTextLanguage(item.usage);
+        this.contents.clear();
+        this.contents.paintOpacity = this.standardBackOpacity();
+        this.contents.fillRect(0, 0, 120, 120, this.gaugeBackColor());
+        this.contents.fillRect(124, y, 200, 36, this.gaugeBackColor()), y += 39;
+        this.contents.fillRect(124, y, 200, 36, this.gaugeBackColor()), y = 22;
+        this.contents.fillRect(327, y, 200, 36, this.gaugeBackColor()), y += 39;
+        this.contents.fillRect(327, y, 200, 36, this.gaugeBackColor()), y = 22;
+        this.contents.fillRect(530, y, 390, 36, this.gaugeBackColor()), y += 39;
+        this.contents.fillRect(530, y, 390, 36, this.gaugeBackColor()), y += 39;
+        this.contents.paintOpacity = 255;
+        this.drawIcon(item.icon, 6, 7);
+        this.contents.fontFace = "GameFont2", y = 30;
+        this.drawTextEx(getTextLanguage(item.name), 130, y), y += 37;
+        this.drawDescItem(getTextLanguage(item.desc));
+        this.drawTextEx(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: `Compra: \\c[29]${sell_price}($)`
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: `Purchase: \\c[29]${sell_price}($)`
+                })
+        ]), 130, y), y = 30;
+        this.drawTextEx(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: `Venda: \\c[29]${sell_buy}($)`
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: `Sale: \\c[29]${sell_buy}($)`
+                })
+        ]), 335, y), y += 37;
+        this.drawTextEx(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: `Montante: \\c[8]${amount}`
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: `Amount: \\c[8]${amount}`
+                })
+        ]), 335, y), y = 30;
+        this.drawTextEx(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: `Raridade: \\c[8]${rarity}`
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: `Rarity: \\c[8]${rarity}`
+                })
+        ]), 537, y), y += 37;
+        this.drawTextEx(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: `Uso: \\c[8]${usage}`
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: `Usage: \\c[8]${usage}`
+                })
+        ]), 537, y);
     };
 
     Window_itemsShop.prototype.drawIcon = function (iconIndex, x, y) {
@@ -2472,7 +2585,7 @@
  * @desc Nome do item
  * @type struct<Language>[]
  * @default []
- * 
+ *
  * @param Item-Description
  * @desc Descrição do item
  * @type struct<LanguageNote>[]
