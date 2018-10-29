@@ -2055,180 +2055,183 @@
     };
 
     Window_itemsShop.prototype.refresh = function () {
-        var y = 22;
-        var sell_price = this.items['_default'].sell(1);
-        var sell_buy = this.items['_default'].buy(Math.floor(sell_price / 4), Math.floor(sell_price / 6), 1);
-        var amount = this.items['_default'].amount;
-        var rarity = ((rarity) => {
-            switch (rarity) {
-                case 'normal':
-                    return getTextLanguage([
-                        JSON.stringify(
-                            {
-                                Language: "pt_br",
-                                Value: 'Comum'
-                            }),
-                        JSON.stringify(
-                            {
-                                Language: "en_us",
-                                Value: 'Common'
-                            })
-                    ]);
-                case 'medium':
-                    return getTextLanguage([
-                        JSON.stringify(
-                            {
-                                Language: "pt_br",
-                                Value: 'Procurado'
-                            }),
-                        JSON.stringify(
-                            {
-                                Language: "en_us",
-                                Value: 'Wanted'
-                            })
-                    ]);
-                case 'high':
-                    return getTextLanguage([
-                        JSON.stringify(
-                            {
-                                Language: "pt_br",
-                                Value: 'Relíquia'
-                            }),
-                        JSON.stringify(
-                            {
-                                Language: "en_us",
-                                Value: 'Relic'
-                            })
-                    ]);
-                case 'very high':
-                    return getTextLanguage([
-                        JSON.stringify(
-                            {
-                                Language: "pt_br",
-                                Value: 'Para colecionadores'
-                            }),
-                        JSON.stringify(
-                            {
-                                Language: "en_us",
-                                Value: 'For collectors'
-                            })
-                    ]);
-                case 'rare':
-                    return getTextLanguage([
-                        JSON.stringify(
-                            {
-                                Language: "pt_br",
-                                Value: 'Item Único'
-                            }),
-                        JSON.stringify(
-                            {
-                                Language: "en_us",
-                                Value: 'Single Item'
-                            })
-                    ]);
-                case 'very rare':
-                    return getTextLanguage([
-                        JSON.stringify(
-                            {
-                                Language: "pt_br",
-                                Value: 'Único no mundo'
-                            }),
-                        JSON.stringify(
-                            {
-                                Language: "en_us",
-                                Value: 'Unique in the world'
-                            })
-                    ]);
-                default:
-                    return getTextLanguage([
-                        JSON.stringify(
-                            {
-                                Language: "pt_br",
-                                Value: 'Comum'
-                            }),
-                        JSON.stringify(
-                            {
-                                Language: "en_us",
-                                Value: 'Common'
-                            })
-                    ]);
-            }
-        })(this.items['_default'].rarity);
-        var usage = getTextLanguage(this.items['_default'].usage);
-        this.contents.clear();
-        this.contents.paintOpacity = this.standardBackOpacity();
-        this.contents.fillRect(0, 0, 120, 120, this.gaugeBackColor());
-        this.contents.fillRect(124, y, 200, 36, this.gaugeBackColor()), y += 39;
-        this.contents.fillRect(124, y, 200, 36, this.gaugeBackColor()), y = 22;
-        this.contents.fillRect(327, y, 200, 36, this.gaugeBackColor()), y += 39;
-        this.contents.fillRect(327, y, 200, 36, this.gaugeBackColor()), y = 22;
-        this.contents.fillRect(530, y, 390, 36, this.gaugeBackColor()), y += 39;
-        this.contents.fillRect(530, y, 390, 36, this.gaugeBackColor()), y += 39;
-        this.contents.paintOpacity = 255;
-        this.drawIcon(this.items['_default'].icon, 6, 7);
-        this.contents.fontFace = "GameFont2", y = 30;
-        this.drawTextEx(getTextLanguage(this.items['_default'].name), 130, y), y += 37;
-        this.drawDescItem(getTextLanguage(this.items['_default'].desc));
-        this.drawTextEx(getTextLanguage([
-            JSON.stringify(
-                {
-                    Language: "pt_br",
-                    Value: `Compra: \\c[29]${sell_price}($)`
-                }),
-            JSON.stringify(
-                {
-                    Language: "en_us",
-                    Value: `Purchase: \\c[29]${sell_price}($)`
-                })
-        ]), 130, y), y = 30;
-        this.drawTextEx(getTextLanguage([
-            JSON.stringify(
-                {
-                    Language: "pt_br",
-                    Value: `Venda: \\c[29]${sell_buy}($)`
-                }),
-            JSON.stringify(
-                {
-                    Language: "en_us",
-                    Value: `Sale: \\c[29]${sell_buy}($)`
-                })
-        ]), 335, y), y += 37;
-        this.drawTextEx(getTextLanguage([
-            JSON.stringify(
-                {
-                    Language: "pt_br",
-                    Value: `Montante: \\c[8]${amount}`
-                }),
-            JSON.stringify(
-                {
-                    Language: "en_us",
-                    Value: `Amount: \\c[8]${amount}`
-                })
-        ]), 335, y), y = 30;
-        this.drawTextEx(getTextLanguage([
-            JSON.stringify(
-                {
-                    Language: "pt_br",
-                    Value: `Raridade: \\c[8]${rarity}`
-                }),
-            JSON.stringify(
-                {
-                    Language: "en_us",
-                    Value: `Rarity: \\c[8]${rarity}`
-                })
-        ]), 537, y), y += 37;
-        this.drawTextEx(getTextLanguage([
-            JSON.stringify(
-                {
-                    Language: "pt_br",
-                    Value: `Uso: \\c[8]${usage}`
-                }),
-            JSON.stringify(
-                {
-                    Language: "en_us",
-                    Value: `Usage: \\c[8]${usage}`
-                })
-        ]), 537, y);
+        Object.keys(this.items).map((itemId) => {
+            var item = this.items[itemId];
+            var y = 22;
+            var sell_price = item.sell(1);
+            var sell_buy = item.buy(Math.floor(sell_price / 4), Math.floor(sell_price / 6), 1);
+            var amount = item.amount;
+            var rarity = ((rarity) => {
+                switch (rarity) {
+                    case 'normal':
+                        return getTextLanguage([
+                            JSON.stringify(
+                                {
+                                    Language: "pt_br",
+                                    Value: 'Comum'
+                                }),
+                            JSON.stringify(
+                                {
+                                    Language: "en_us",
+                                    Value: 'Common'
+                                })
+                        ]);
+                    case 'medium':
+                        return getTextLanguage([
+                            JSON.stringify(
+                                {
+                                    Language: "pt_br",
+                                    Value: 'Procurado'
+                                }),
+                            JSON.stringify(
+                                {
+                                    Language: "en_us",
+                                    Value: 'Wanted'
+                                })
+                        ]);
+                    case 'high':
+                        return getTextLanguage([
+                            JSON.stringify(
+                                {
+                                    Language: "pt_br",
+                                    Value: 'Relíquia'
+                                }),
+                            JSON.stringify(
+                                {
+                                    Language: "en_us",
+                                    Value: 'Relic'
+                                })
+                        ]);
+                    case 'very high':
+                        return getTextLanguage([
+                            JSON.stringify(
+                                {
+                                    Language: "pt_br",
+                                    Value: 'Para colecionadores'
+                                }),
+                            JSON.stringify(
+                                {
+                                    Language: "en_us",
+                                    Value: 'For collectors'
+                                })
+                        ]);
+                    case 'rare':
+                        return getTextLanguage([
+                            JSON.stringify(
+                                {
+                                    Language: "pt_br",
+                                    Value: 'Item Único'
+                                }),
+                            JSON.stringify(
+                                {
+                                    Language: "en_us",
+                                    Value: 'Single Item'
+                                })
+                        ]);
+                    case 'very rare':
+                        return getTextLanguage([
+                            JSON.stringify(
+                                {
+                                    Language: "pt_br",
+                                    Value: 'Único no mundo'
+                                }),
+                            JSON.stringify(
+                                {
+                                    Language: "en_us",
+                                    Value: 'Unique in the world'
+                                })
+                        ]);
+                    default:
+                        return getTextLanguage([
+                            JSON.stringify(
+                                {
+                                    Language: "pt_br",
+                                    Value: 'Comum'
+                                }),
+                            JSON.stringify(
+                                {
+                                    Language: "en_us",
+                                    Value: 'Common'
+                                })
+                        ]);
+                }
+            })(item.rarity);
+            var usage = getTextLanguage(item.usage);
+            this.contents.clear();
+            this.contents.paintOpacity = this.standardBackOpacity();
+            this.contents.fillRect(0, 0, 120, 120, this.gaugeBackColor());
+            this.contents.fillRect(124, y, 200, 36, this.gaugeBackColor()), y += 39;
+            this.contents.fillRect(124, y, 200, 36, this.gaugeBackColor()), y = 22;
+            this.contents.fillRect(327, y, 200, 36, this.gaugeBackColor()), y += 39;
+            this.contents.fillRect(327, y, 200, 36, this.gaugeBackColor()), y = 22;
+            this.contents.fillRect(530, y, 390, 36, this.gaugeBackColor()), y += 39;
+            this.contents.fillRect(530, y, 390, 36, this.gaugeBackColor()), y += 39;
+            this.contents.paintOpacity = 255;
+            this.drawIcon(item.icon, 6, 7);
+            this.contents.fontFace = "GameFont2", y = 30;
+            this.drawTextEx(getTextLanguage(item.name), 130, y), y += 37;
+            this.drawDescItem(getTextLanguage(item.desc));
+            this.drawTextEx(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: `Compra: \\c[29]${sell_price}($)`
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: `Purchase: \\c[29]${sell_price}($)`
+                    })
+            ]), 130, y), y = 30;
+            this.drawTextEx(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: `Venda: \\c[29]${sell_buy}($)`
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: `Sale: \\c[29]${sell_buy}($)`
+                    })
+            ]), 335, y), y += 37;
+            this.drawTextEx(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: `Montante: \\c[8]${amount}`
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: `Amount: \\c[8]${amount}`
+                    })
+            ]), 335, y), y = 30;
+            this.drawTextEx(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: `Raridade: \\c[8]${rarity}`
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: `Rarity: \\c[8]${rarity}`
+                    })
+            ]), 537, y), y += 37;
+            this.drawTextEx(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: `Uso: \\c[8]${usage}`
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: `Usage: \\c[8]${usage}`
+                    })
+            ]), 537, y);
+        }, this);
     };
 
     Window_itemsShop.prototype.drawIcon = function (iconIndex, x, y) {
@@ -2490,7 +2493,7 @@
  * @default 1
  *
  * @param Item-Usage
- * @desc Tipo do item
+ * @desc Tipo de uso do item
  * @type struct<Language>[]
  * @default []
  *
