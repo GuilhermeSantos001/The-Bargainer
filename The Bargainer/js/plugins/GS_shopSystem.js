@@ -364,10 +364,18 @@
         if (!this._windowCommandSystemShop) {
             this._windowCommandSystemShop = new Window_commandSystemShop();
             this._windowCommandSystemShop.backOpacity = 0;
+            /**
+             * COMANDOS DO DIALOGO
+             */
             this._windowCommandSystemShop.setHandler('_dialogue', this.commandSystemShopProcessOk.bind(this));
             this._windowCommandSystemShop.setHandler('_goback', this.commandSystemShopProcessGoback.bind(this));
             this._windowCommandSystemShop.setHandler('_speak', this.commandSystemShopProcessSpeak.bind(this));
             this._windowCommandSystemShop.setHandler('_selectWords', this.commandSystemShopProcessSelectWords.bind(this));
+            /**
+             * COMANDOS DE COMPRA
+             */
+            this._windowCommandSystemShop.setHandler('_seller', this.commandSystemShopProcessSeller.bind(this));
+            this._windowCommandSystemShop.setHandler('_seller_goback', this.commandSystemShopSellerGoback.bind(this));
             this.sprite.addChild(this._windowCommandSystemShop);
         }
         if (!this._windowDialog) {
@@ -415,7 +423,7 @@
 
     Scene_SystemShop.prototype.commandSystemShopProcessOk = function () {
         this._windowDialog._windowCommandDialog.activate();
-        this._windowCommandSystemShop._dialogActivate = true;
+        this._windowCommandSystemShop._commandsType = 'dialog';
         this._windowCommandSystemShop.refresh();
     };
 
@@ -430,7 +438,7 @@
     };
 
     Scene_SystemShop.prototype.commandSystemShopProcessGoback = function () {
-        this._windowCommandSystemShop._dialogActivate = false;
+        this._windowCommandSystemShop._commandsType = false;
         this._windowCommandSystemShop.refresh();
         this._windowCommandSystemShop.activate();
         this._windowCommandSystemShop.select(0);
@@ -442,6 +450,20 @@
         this._windowDialog._windowCommandDialog.clearDialogs();
         this._windowDialog._windowCommandDialog.refresh();
         this._windowDialog._windowCommandDialog.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopProcessSeller = function () {
+        this._windowCommandSystemShop._commandsType = 'seller';
+        this._windowCommandSystemShop.select(0);
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopSellerGoback = function () {
+        this._windowCommandSystemShop._commandsType = false;
+        this._windowCommandSystemShop.select(0);
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
     };
 
     /**
@@ -595,7 +617,7 @@
 
     Window_commandSystemShop.prototype.initialize = function () {
         Window_Command.prototype.initialize.call(this, 20, Graphics.height - (this.windowHeight() + 15));
-        this._dialogActivate = false;
+        this._commandsType = false;
     };
 
     Window_commandSystemShop.prototype.windowWidth = function () {
@@ -615,9 +637,110 @@
     };
 
     Window_commandSystemShop.prototype.addMainCommands = function () {
-        if (!this._dialogActivate) {
+        if (this._commandsType === 'dialog') {
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Dizer'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Say'
+                    })
+            ]), '_speak');
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Selecionar'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Select'
+                    })
+            ]), '_selectWords');
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Voltar'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Go back'
+                    })
+            ]), '_goback');
+        } else if (this._commandsType === 'seller') {
             this.shop = SceneManager._scene.shop;
-            let dialogEnabled = true;
+            let _seller_next_item = this.shop['items'].length > 1;
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Lista de itens'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'List of Items'
+                    })
+            ]), '_seller_list_of_items', _seller_next_item);
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Próximo item'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Next item'
+                    })
+            ]), '_seller_next_item', _seller_next_item);
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Item anterior'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Previous item'
+                    })
+            ]), '_seller_goback_item', false);
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Comprar'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Buy'
+                    })
+            ]), '_seller_buy');
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Voltar'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Go back'
+                    })
+            ]), '_seller_goback');
+        } else {
+            this.shop = SceneManager._scene.shop;
+            let dialogEnabled = true,
+                buy_enabled = this.shop['items'].length > 0;
             if (typeof SceneManager._scene.textsAmountMax() === 'boolean' &&
                 SceneManager._scene.textsAmountMax() ||
                 SceneManager._scene._windowDialog &&
@@ -657,65 +780,38 @@
                         Language: "en_us",
                         Value: 'Sell'
                     })
-            ]), '_buy', this.shop['data']['shopBuy']);
-        } else {
-            this.addCommand(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: 'Dizer'
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: 'Say'
-                    })
-            ]), '_speak');
-            this.addCommand(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: 'Selecionar'
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: 'Select'
-                    })
-            ]), '_selectWords');
-            this.addCommand(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: 'Voltar'
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: 'Go back'
-                    })
-            ]), '_goback');
+            ]), '_buy', this.shop['data']['shopBuy'] && buy_enabled);
         }
     };
 
     Window_commandSystemShop.prototype.drawItem = function (index) {
         var rect = this.itemRectForText(index);
         var align = this.itemTextAlign();
+        var iconId = 0;
         this.resetTextColor();
         this.changePaintOpacity(this.isCommandEnabled(index));
         if (this.commandSymbol(index) === '_dialogue') {
-            this.drawIcon(4, rect.x - 1, rect.y + 2);
+            iconId = 4;
         } else if (this.commandSymbol(index) === '_seller') {
-            this.drawIcon(210, rect.x - 1, rect.y + 2);
+            iconId = 210;
         } else if (this.commandSymbol(index) === '_buy') {
-            this.drawIcon(209, rect.x - 1, rect.y + 2);
+            iconId = 209;
+        } else if (this.commandSymbol(index) === '_seller_buy') {
+            iconId = 196;
         } else if (this.commandSymbol(index) === '_speak') {
-            this.drawIcon(4, rect.x - 1, rect.y + 2);
+            iconId = 4;
         } else if (this.commandSymbol(index) === '_selectWords') {
-            this.drawIcon(75, rect.x - 1, rect.y + 2);
-        } else if (this.commandSymbol(index) === '_goback') {
-            this.drawIcon(74, rect.x - 1, rect.y + 2);
+            iconId = 75;
+        } else if (this.commandSymbol(index) === '_goback' ||
+            this.commandSymbol(index) === '_seller_goback' ||
+            this.commandSymbol(index) === '_seller_goback_item') {
+            iconId = 74;
+        } else if (this.commandSymbol(index) === '_seller_next_item') {
+            iconId = 73;
+        } else if (this.commandSymbol(index) === '_seller_list_of_items') {
+            iconId = 186;
         }
+        this.drawIcon(iconId, rect.x - 1, rect.y + 2);
         this.drawText(this.commandName(index), rect.x + 36, rect.y, rect.width, align);
     };
 
