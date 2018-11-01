@@ -59,28 +59,20 @@
         this._windowMenu.showNow = null;
     };
 
-    /**
-     * Window_Menu
-     */
+    //-----------------------------------------------------------------------------
+    // Window_Menu
+    //
     function Window_Menu() {
         this.initialize.apply(this, arguments);
     }
 
-    Window_Menu.prototype = Object.create(Window_Base.prototype);
+    Window_Menu.prototype = Object.create(Window_Command.prototype);
     Window_Menu.prototype.constructor = Window_Menu;
 
     Window_Menu.prototype.initialize = function () {
-        var width = this.windowWidth();
-        var height = this.windowHeight();
-        var x = (Graphics.width - width) / 2;
-        var y = (Graphics.height - height) / 2;
-        Window_Base.prototype.initialize.call(this, x, y, width, height);
-        this.deactivate();
-        this.contentsOpacity = 0;
-        this.opacity = 0;
-        this._menuSelected = 0;
-        this._fontBitmap2 = new Sprite(new Bitmap(this.windowWidth(), this.windowHeight()));
-        this.addChild(this._fontBitmap2);
+        Window_Command.prototype.initialize.call(this, (Graphics.width - this.windowWidth()) / 2,
+            (Graphics.height - this.windowHeight()) / 2);
+        this.createStructures();
     };
 
     Window_Menu.prototype.windowWidth = function () {
@@ -88,41 +80,71 @@
     };
 
     Window_Menu.prototype.windowHeight = function () {
-        return this.fittingHeight(2);
+        return 340;
     };
 
-    Window_Menu.prototype.update = function () {
-        if (!this.showNow) {
-            if (this.opacity > 0) this.opacity -= 12;
-            if (this.contentsOpacity > 0) this.contentsOpacity -= 14;
-            if (this.opacity & this.contentsOpacity <= 0) if (this.active) this.deactivate();
-            return;
-        } else {
-            if (this.opacity < 255) this.opacity += 12;
-            if (this.contentsOpacity < 255) this.contentsOpacity += 14;
-            if (this.opacity & this.contentsOpacity >= 255) if (!this.active) this.activate();
-        }
-        this.refresh();
+    Window_Menu.prototype.itemHeight = function () {
+        return 48;
     };
 
-    Window_Menu.prototype.refresh = function () {
-        var x = this.textPadding();
-        var iconsX = [];
-        var bitmap = this._fontBitmap2.bitmap;
-        bitmap.fontSize = 12;
-        bitmap.clear();
-        this.contents.clear();
-        if (this._menuSelected == 0) {
-            this.drawIcon(209, x, 5), iconsX.push(x), x += 68;
-            this.drawIcon(187, x, 5), iconsX.push(x), x += 68;
-            this.drawIcon(191, x, 5), iconsX.push(x), x += 68;
-            this.contents.fillRect(x, 5, 1, this.contentsHeight(), this.normalColor()), x += 10;
-            this.drawTextEx('GERAL', x, (this.contentsHeight() / 4) + 2);
-            bitmap.drawText('Itens', iconsX[0] + 32, this.contentsHeight() + 15, this.windowWidth(), 0, 'left');
-            bitmap.drawText('Diario', iconsX[1] + 30, this.contentsHeight() + 15, this.windowWidth(), 0, 'left');
-            bitmap.drawText('Missões', iconsX[2] + 24, this.contentsHeight() + 15, this.windowWidth(), 0, 'left');
-        } else if (this._menuSelected == 1) {
+    Window_Menu.prototype.numVisibleRows = function () {
+        return 1;
+    };
+
+    Window_Menu.prototype.maxCols = function () {
+        return 1;
+    };
+
+    Window_Menu.prototype.makeCommandList = function () {
+        this.addMainCommands();
+    };
+
+    Window_Menu.prototype.addMainCommands = function () {
+        this.addCommand('Inventario', '_inventory');
+        this.addCommand('Habilidades', '_skills');
+        this.addCommand('Contratos', '_contracts');
+        this.addCommand('Finanças', '_finances');
+        this.addCommand('Plantação', '_plantation');
+        this.addCommand('Cidades', '_cities');
+        this.addCommand('Rotas', '_routes');
+        this.addCommand('Musicas', '_musics');
+        this.addCommand('Missões', '_missions');
+        this.addCommand('Missões Diarias', '_missionsDaily');
+        this.addCommand('Dialogos', '_dialogs');
+        this.addCommand('Tutoriais', '_tutorials');
+    };
+
+    Window_Menu.prototype.drawItem = function (index) {
+        var rect = this.itemRectForText(index);
+        this.resetTextColor();
+        this.contents.fontSize = 26;
+        this.changePaintOpacity(this.isCommandEnabled(index));
+        if (this.commandSymbol(index) === '_inventory') {
+            this.drawIcon(209, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_dialogs') {
+            this.drawIcon(187, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_missions') {
+            this.drawIcon(191, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_tutorials') {
+            this.drawIcon(207, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_skills') {
+            this.drawIcon(189, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_missionsDaily') {
+            this.drawIcon(79, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_finances') {
+            this.drawIcon(208, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_plantation') {
+            this.drawIcon(217, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_musics') {
+            this.drawIcon(206, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_cities') {
+            this.drawIcon(205, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_contracts') {
+            this.drawIcon(296, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_routes') {
+            this.drawIcon(68, rect.x, rect.y + 3);
         }
+        this.drawText(this.commandName(index), 46 + rect.x, rect.y + 8, rect.width, 'left');
     };
 
     Window_Menu.prototype.drawIcon = function (iconIndex, x, y) {
@@ -131,6 +153,22 @@
         var ph = Window_Base._iconHeight;
         var sx = iconIndex % 16 * pw;
         var sy = Math.floor(iconIndex / 16) * ph;
-        this.contents.blt(bitmap, sx, sy, pw, ph, x, y, 56, 56);
+        this.contents.blt(bitmap, sx, sy, pw, ph, x, y, 42, 42);
+    };
+
+    Window_Menu.prototype.createStructures = function () {
+        if (!this._bitmapStructures) {
+            this._bitmapStructures = new Sprite(new Bitmap(Graphics.width, Graphics.height));
+            SceneManager._scene.addChild(this._bitmapStructures);
+        }
+        var sprite = this._bitmapStructures;
+        var bitmap = this._bitmapStructures.bitmap;
+        bitmap.fillRect(0, 0, sprite.width, 1, 'white');
+        bitmap.fillRect(0, sprite.height - 1, sprite.width, 1, 'white');
+        bitmap.fontSize = 42;
+        bitmap.drawText('THE BARGAINER', 0, this.y - 20, sprite.width, 0, 'center');
+        bitmap.fontSize = 18;
+        bitmap.drawText(`Olá ${GS.MVD.computerUsername()}, tenha um bom jogo!`, 5, 20, sprite.width, 0, 'left');
+        bitmap.drawText(`Versão | Alpha 0.01`, -5, sprite.height - 15, sprite.width, 0, 'right');
     };
 })();
