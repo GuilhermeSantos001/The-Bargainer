@@ -148,6 +148,7 @@
                             return eval(String(JSON.parse(item['Item-Buy-Formula'])).format(bPrice, bLucre, bAmount));
                         },
                         name = JSON.parse(item['Item-Name']),
+                        desc = JSON.parse(item['Item-Description']),
                         bitmap = String(item['Item-Icon-Bitmap']),
                         icon = Number(item['Item-Icon']),
                         usage = JSON.parse(item['Item-Usage']),
@@ -157,9 +158,20 @@
                         buy_enabled = JSON.parse(item['Item-Buy']);
                     if (!this._shops[shopID]['items'][itemId])
                         this._shops[shopID]['items'][itemId] = {};
+                    if (this._shops[shopID]['items'][itemId].sell != sell) {
+                        if (!this._shops[shopID]['items'][itemId].hasOwnProperty('sell'))
+                            Object.defineProperty(this._shops[shopID]['items'][itemId], 'sell', { writable: true, value: sell });
+                        else this._shops[shopID]['items'][itemId].sell = sell;
+                    }
+                    if (this._shops[shopID]['items'][itemId].buy != buy) {
+                        if (!this._shops[shopID]['items'][itemId].hasOwnProperty('buy'))
+                            Object.defineProperty(this._shops[shopID]['items'][itemId], 'buy', { writable: true, value: buy });
+                        else this._shops[shopID]['items'][itemId].buy = buy;
+                    }
                     Array(
                         ['id', itemId],
                         ['name', name],
+                        ['desc', desc],
                         ['bitmap', bitmap],
                         ['icon', icon],
                         ['usage', usage],
@@ -168,9 +180,7 @@
                         ['sell_enabled', sell_enabled],
                         ['buy_enabled', buy_enabled],
                         ['price', price],
-                        ['lucre', lucre],
-                        ['sell', sell],
-                        ['buy', buy]
+                        ['lucre', lucre]
                     ).map(key => {
                         if (key[2]) {
                             if (this._shops[shopID]['items'][itemId][key[0]] === undefined ||
@@ -183,6 +193,13 @@
                     }, this);
                 }, this);
             }
+            Object.keys(this._shops[shopID]['items']).map(key => {
+                if (items.find(item => {
+                    return JSON.parse(item)['Item-Id'] === key;
+                }) === undefined) {
+                    delete this._shops[shopID]['items'][key];
+                }
+            });
         }, this);
         saveData(this.getShops());
     };
@@ -325,10 +342,6 @@
         var page = this.event.page();
         var image = page.image;
         var bsY = 48;
-        this.contents.paintOpacity = this.standardBackOpacity();
-        this.contents.fillRect(this.contentsPadding(), this.contentsPadding(),
-            this.characterSize(), this.characterSize(), this.gaugeBackColor());
-        this.contents.paintOpacity = 255;
         /**
          * BLOCO DO SPRITE
          */
@@ -345,26 +358,12 @@
         /**
          * BLOCO DO NOME DO SPRITE
          */
-        this.contents.paintOpacity = this.standardBackOpacity();
-        this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
-            this.contentsPadding(), this.characterSize2(), 48, this.gaugeBackColor());
-        this.contents.paintOpacity = 255;
         this.contents.fillRect(this.contentsPadding() + (this.characterSize()), this.contentsPadding() - 5,
             this.characterSize2(), 5, this.normalColor());
         this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
-            (this.contentsPadding() + bsY) - 1, this.characterSize2(), 5, this.normalColor());
-        this.contents.paintOpacity = this.standardBackOpacity();
+            (this.contentsPadding() + bsY) - 1, this.characterSize2(), 5, this.normalColor()), bsY += 53;
         this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
-            (this.contentsPadding() + bsY) + 4, this.characterSize2(), 48, this.gaugeBackColor()),
-            bsY += 53;
-        this.contents.paintOpacity = 255;
-        this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
-            (this.contentsPadding() + bsY) - 5, this.characterSize2(), 5, this.normalColor());
-        this.contents.paintOpacity = this.standardBackOpacity();
-        this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
-            (this.contentsPadding() + bsY) - 1, this.characterSize2(), 48, this.gaugeBackColor()),
-            bsY += 53;
-        this.contents.paintOpacity = 255;
+            (this.contentsPadding() + bsY) - 5, this.characterSize2(), 5, this.normalColor()), bsY += 53;
         this.contents.fillRect(this.contentsPadding() + (this.characterSize()),
             (this.contentsPadding() + bsY) - 6, this.characterSize2(), 5, this.normalColor());
         this.contents.fillRect(this.contentsPadding() + (this.characterSize2() * 2) - 10, this.contentsPadding() - 5,
@@ -380,10 +379,25 @@
         if (!this._windowCommandSystemShop) {
             this._windowCommandSystemShop = new Window_commandSystemShop();
             this._windowCommandSystemShop.backOpacity = 0;
+            /**
+             * COMANDOS DO DIALOGO
+             */
             this._windowCommandSystemShop.setHandler('_dialogue', this.commandSystemShopProcessOk.bind(this));
             this._windowCommandSystemShop.setHandler('_goback', this.commandSystemShopProcessGoback.bind(this));
             this._windowCommandSystemShop.setHandler('_speak', this.commandSystemShopProcessSpeak.bind(this));
             this._windowCommandSystemShop.setHandler('_selectWords', this.commandSystemShopProcessSelectWords.bind(this));
+            /**
+             * COMANDOS DE COMPRA
+             */
+            this._windowCommandSystemShop.setHandler('_seller', this.commandSystemShopProcessSeller.bind(this));
+            this._windowCommandSystemShop.setHandler('_seller_goback', this.commandSystemShopSellerGoback.bind(this));
+            this._windowCommandSystemShop.setHandler('_seller_next_item', this.commandSystemShopSellerNextItem.bind(this));
+            this._windowCommandSystemShop.setHandler('_seller_goback_item', this.commandSystemShopSellerBackItem.bind(this));
+            this._windowCommandSystemShop.setHandler('_seller_list_of_items', this.commandSystemShopSellerListOfItems.bind(this));
+            /**
+             * COMANDOS DA LISTA DE ITENS
+             */
+            this._windowCommandSystemShop.setHandler('_list_of_items_goback', this.commandSystemShopProcessListOfItemsGoback.bind(this));
             this.sprite.addChild(this._windowCommandSystemShop);
         }
         if (!this._windowDialog) {
@@ -431,7 +445,7 @@
 
     Scene_SystemShop.prototype.commandSystemShopProcessOk = function () {
         this._windowDialog._windowCommandDialog.activate();
-        this._windowCommandSystemShop._dialogActivate = true;
+        this._windowCommandSystemShop._commandsType = 'dialog';
         this._windowCommandSystemShop.refresh();
     };
 
@@ -446,7 +460,7 @@
     };
 
     Scene_SystemShop.prototype.commandSystemShopProcessGoback = function () {
-        this._windowCommandSystemShop._dialogActivate = false;
+        this._windowCommandSystemShop._commandsType = false;
         this._windowCommandSystemShop.refresh();
         this._windowCommandSystemShop.activate();
         this._windowCommandSystemShop.select(0);
@@ -458,6 +472,47 @@
         this._windowDialog._windowCommandDialog.clearDialogs();
         this._windowDialog._windowCommandDialog.refresh();
         this._windowDialog._windowCommandDialog.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopProcessSeller = function () {
+        this._windowCommandSystemShop._commandsType = 'seller';
+        this._windowCommandSystemShop.select(0);
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopSellerGoback = function () {
+        this._windowCommandSystemShop._commandsType = false;
+        this._windowCommandSystemShop.select(0);
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopSellerNextItem = function () {
+        this._windowItemsShop.nextListItem();
+        this._windowItemsShop.refresh();
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopSellerBackItem = function () {
+        this._windowItemsShop.backListItem();
+        this._windowItemsShop.refresh();
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopSellerListOfItems = function () {
+        this._windowCommandSystemShop._commandsType = 'list_of_items';
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopProcessListOfItemsGoback = function () {
+        this._windowCommandSystemShop._commandsType = 'seller';
+        this._windowCommandSystemShop.select(0);
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
     };
 
     /**
@@ -495,7 +550,7 @@
     };
 
     Window_SystemShop.prototype.refresh = function () {
-        var x = 16;
+        var x = 20;
         var y = (this.textPadding3() / 2) - 7;
         var shopName = getTextLanguage(this.shop['data']['shopName']);
         var shopLevel = ((level) => {
@@ -610,8 +665,8 @@
     Window_commandSystemShop.prototype.constructor = Window_commandSystemShop;
 
     Window_commandSystemShop.prototype.initialize = function () {
-        Window_Command.prototype.initialize.call(this, 20, Graphics.height - (this.windowHeight() + 14));
-        this._dialogActivate = false;
+        Window_Command.prototype.initialize.call(this, 20, Graphics.height - (this.windowHeight() + 15));
+        this._commandsType = false;
     };
 
     Window_commandSystemShop.prototype.windowWidth = function () {
@@ -631,9 +686,133 @@
     };
 
     Window_commandSystemShop.prototype.addMainCommands = function () {
-        if (!this._dialogActivate) {
+        if (!this._iconId) this._iconId = {};
+        if (this._commandsType === 'dialog') {
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Dizer'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Say'
+                    })
+            ]), '_speak');
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Selecionar'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Select'
+                    })
+            ]), '_selectWords');
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Voltar'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Go back'
+                    })
+            ]), '_goback');
+        } else if (this._commandsType === 'seller') {
             this.shop = SceneManager._scene.shop;
-            let dialogEnabled = true;
+            let _seller_list_of_items = Object.keys(this.shop['items']).length > 1,
+                _seller_next_item = Object.keys(this.shop['items']).length > 1 && !SceneManager._scene._windowItemsShop.isLastItem();
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Lista de itens'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'List of Items'
+                    })
+            ]), '_seller_list_of_items', _seller_list_of_items);
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Próximo item'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Next item'
+                    })
+            ]), '_seller_next_item', _seller_next_item);
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Item anterior'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Previous item'
+                    })
+            ]), '_seller_goback_item', SceneManager._scene._windowItemsShop.enabledBackItem());
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Comprar'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Buy'
+                    })
+            ]), '_seller_buy');
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Voltar'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Go back'
+                    })
+            ]), '_seller_goback');
+        } else if (this._commandsType === 'list_of_items') {
+            this.shop = SceneManager._scene.shop;
+            let index = -1;
+            for (const key in this.shop['items']) {
+                if (this.shop['items'].hasOwnProperty(key)) {
+                    this.addCommand(getTextLanguage(this.shop['items'][key].name), '_seller_buy');
+                    this._iconId[String(getTextLanguage(this.shop['items'][key].name))] = this.shop['items'][key].icon;
+                }
+            }
+            this.addCommand(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: 'Voltar'
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: 'Go back'
+                    })
+            ]), '_list_of_items_goback');
+        } else {
+            this.shop = SceneManager._scene.shop;
+            let dialogEnabled = true,
+                buy_enabled = Object.keys(this.shop['items']).length > 0;
             if (typeof SceneManager._scene.textsAmountMax() === 'boolean' &&
                 SceneManager._scene.textsAmountMax() ||
                 SceneManager._scene._windowDialog &&
@@ -673,66 +852,50 @@
                         Language: "en_us",
                         Value: 'Sell'
                     })
-            ]), '_buy', this.shop['data']['shopBuy']);
-        } else {
-            this.addCommand(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: 'Dizer'
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: 'Say'
-                    })
-            ]), '_speak');
-            this.addCommand(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: 'Selecionar'
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: 'Select'
-                    })
-            ]), '_selectWords');
-            this.addCommand(getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: 'Voltar'
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: 'Go back'
-                    })
-            ]), '_goback');
+            ]), '_buy', this.shop['data']['shopBuy'] && buy_enabled);
         }
+    };
+
+    Window_commandSystemShop.prototype.commandIconId = function (symbol) {
+        return this._iconId[symbol];
     };
 
     Window_commandSystemShop.prototype.drawItem = function (index) {
         var rect = this.itemRectForText(index);
         var align = this.itemTextAlign();
+        var iconId = 0;
+        var fontSize = this.contents.fontSize;
         this.resetTextColor();
         this.changePaintOpacity(this.isCommandEnabled(index));
         if (this.commandSymbol(index) === '_dialogue') {
-            this.drawIcon(4, rect.x - 1, rect.y + 2);
+            iconId = 4;
         } else if (this.commandSymbol(index) === '_seller') {
-            this.drawIcon(210, rect.x - 1, rect.y + 2);
+            iconId = 210;
         } else if (this.commandSymbol(index) === '_buy') {
-            this.drawIcon(209, rect.x - 1, rect.y + 2);
+            iconId = 209;
+        } else if (this.commandSymbol(index) === '_seller_buy') {
+            iconId = 196;
         } else if (this.commandSymbol(index) === '_speak') {
-            this.drawIcon(4, rect.x - 1, rect.y + 2);
+            iconId = 4;
         } else if (this.commandSymbol(index) === '_selectWords') {
-            this.drawIcon(75, rect.x - 1, rect.y + 2);
-        } else if (this.commandSymbol(index) === '_goback') {
-            this.drawIcon(74, rect.x - 1, rect.y + 2);
+            iconId = 75;
+        } else if (this.commandSymbol(index) === '_goback' ||
+            this.commandSymbol(index) === '_seller_goback' ||
+            this.commandSymbol(index) === '_seller_goback_item' ||
+            this.commandSymbol(index) === '_list_of_items_goback') {
+            iconId = 74;
+        } else if (this.commandSymbol(index) === '_seller_next_item') {
+            iconId = 73;
+        } else if (this.commandSymbol(index) === '_seller_list_of_items') {
+            iconId = 186;
         }
+        if (this.commandIconId(this.commandName(index)) != undefined) {
+            iconId = this.commandIconId(this.commandName(index));
+            this.contents.fontSize = 14;
+        }
+        this.drawIcon(iconId, rect.x - 1, rect.y + 2);
         this.drawText(this.commandName(index), rect.x + 36, rect.y, rect.width, align);
+        this.contents.fontSize = fontSize;
     };
 
     //-----------------------------------------------------------------------------
@@ -1931,6 +2094,8 @@
         var height = this.windowHeight();
         Window_Base.prototype.initialize.call(this, 315, 185, width, height);
         this.items = items;
+        this.listItem = 0;
+        this.createWindowDecription();
         this.refresh();
     };
 
@@ -1950,11 +2115,66 @@
         return 18;
     };
 
+    Window_itemsShop.prototype.nextListItem = function () {
+        this.listItem = this.listItem + 1 >= Object.keys(this.items).length ?
+            this.listItem : this.listItem + 1;
+    };
+
+    Window_itemsShop.prototype.backListItem = function () {
+        this.listItem = this.listItem - 1 < 0 ? 0 : this.listItem - 1;
+    };
+
+    Window_itemsShop.prototype.listItemId = function () {
+        return Object.keys(this.items)[this.listItem];
+    };
+
+    Window_itemsShop.prototype.isLastItem = function () {
+        return this.listItem + 1 == Object.keys(this.items).length;
+    };
+
+    Window_itemsShop.prototype.enabledBackItem = function () {
+        return this.listItem > 0;
+    };
+
+    Window_itemsShop.prototype.createWindowDecription = function () {
+        this._windowDesc = new Window_Base(15, 140, this.windowWidth() - (15 * 2), 220);
+        this._windowDesc.backOpacity = 0;
+        this._windowDesc.windowskin = ImageManager.loadSystem('Window2');
+        this.addChild(this._windowDesc);
+    };
+
+    Window_itemsShop.prototype.drawDescItem = function (desc) {
+        this._windowDesc.contents.clear();
+        this._windowDesc.contents.fontSize = 18;
+        this._windowDesc.contents.fontFace = "GameFont2";
+        var x = this._windowDesc.textPadding() + 5,
+            width = this._windowDesc.contentsWidth(),
+            height = this._windowDesc.contentsHeight();
+        this._windowDesc.contents.paintOpacity = this.standardBackOpacity();
+        this._windowDesc.contents.fillRect(0, 0, width, height, this.gaugeBackColor());
+        this._windowDesc.contents.paintOpacity = 255;
+        this._windowDesc.drawTextEx = function (text, x, y) {
+            if (text) {
+                var textState = { index: 0, x: x, y: y, left: x };
+                textState.text = this.convertEscapeCharacters(text);
+                textState.height = this.calcTextHeight(textState, false);
+                while (textState.index < textState.text.length) {
+                    this.processCharacter(textState);
+                }
+                return textState.x - x;
+            } else {
+                return 0;
+            }
+        };
+        this._windowDesc.drawTextEx(JSON.parse(desc), x, 5);
+    };
+
     Window_itemsShop.prototype.refresh = function () {
+        var item = this.items[this.listItemId()];
         var y = 22;
-        var sell_price = this.items['_default'].sell(1);
-        var sell_buy = this.items['_default'].buy(Math.floor(sell_price / 4), Math.floor(sell_price / 6), 1);
-        var amount = this.items['_default'].amount;
+        var sell_price = item.sell(1);
+        var sell_buy = item.buy(Math.floor(sell_price / 4), Math.floor(sell_price / 6), 1);
+        var amount = item.amount;
         var rarity = ((rarity) => {
             switch (rarity) {
                 case 'normal':
@@ -2049,8 +2269,8 @@
                             })
                     ]);
             }
-        })(this.items['_default'].rarity);
-        var usage = getTextLanguage(this.items['_default'].usage);
+        })(item.rarity);
+        var usage = getTextLanguage(item.usage);
         this.contents.clear();
         this.contents.paintOpacity = this.standardBackOpacity();
         this.contents.fillRect(0, 0, 120, 120, this.gaugeBackColor());
@@ -2061,9 +2281,10 @@
         this.contents.fillRect(530, y, 390, 36, this.gaugeBackColor()), y += 39;
         this.contents.fillRect(530, y, 390, 36, this.gaugeBackColor()), y += 39;
         this.contents.paintOpacity = 255;
-        this.drawIcon(this.items['_default'].icon, 6, 7);
+        this.drawIcon(item.icon, 6, 7);
         this.contents.fontFace = "GameFont2", y = 30;
-        this.drawTextEx(getTextLanguage(this.items['_default'].name), 130, y), y += 37;
+        this.drawTextEx(getTextLanguage(item.name), 130, y), y += 37;
+        this.drawDescItem(getTextLanguage(item.desc));
         this.drawTextEx(getTextLanguage([
             JSON.stringify(
                 {
@@ -2148,7 +2369,7 @@
     Window_bonusShop.prototype.initialize = function () {
         var width = this.windowWidth();
         var height = this.windowHeight();
-        Window_Base.prototype.initialize.call(this, 329, 325, width, height);
+        Window_Base.prototype.initialize.call(this, 330, 324 + 220, width, height);
         this._bonus = {
             buy: 0,
             sell: 0
@@ -2157,7 +2378,7 @@
     };
 
     Window_bonusShop.prototype.windowWidth = function () {
-        return this.fittingHeight(24) + 28;
+        return this.fittingHeight(24) + 25;
     };
 
     Window_bonusShop.prototype.windowHeight = function () {
@@ -2365,6 +2586,11 @@
  * @type struct<Language>[]
  * @default []
  *
+ * @param Item-Description
+ * @desc Descrição do item
+ * @type struct<LanguageNote>[]
+ * @default []
+ *
  * @param Item-Icon-Bitmap
  * @desc Bitmap para o icone do item
  * @type file
@@ -2380,7 +2606,7 @@
  * @default 1
  *
  * @param Item-Usage
- * @desc Tipo do item
+ * @desc Tipo de uso do item
  * @type struct<Language>[]
  * @default []
  *
@@ -2459,7 +2685,17 @@
  * @type string
  * @default pt_br
  */
-
+/*~struct~LanguageNote:
+ * @param Value
+ * @desc Valor do texto
+ * @type note
+ * @default "???"
+ *
+ * @param Language
+ * @desc O idioma do texto
+ * @type string
+ * @default pt_br
+ */
  /*~struct~dataDialog:
  * @param Initial Message
  * @desc Mensagem inicial do vendedor
