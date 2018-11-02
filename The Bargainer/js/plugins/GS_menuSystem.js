@@ -12,6 +12,8 @@
         _game_map_initialize = Game_Map.prototype.initialize,
         _scene_map_createAllWindows = Scene_Map.prototype.createAllWindows;
 
+    let _windowMenu_show = null;
+
     /**
      * Game_Map
      */
@@ -48,15 +50,37 @@
 
     Scene_Map.prototype.createWindowMenu = function () {
         this._windowMenu = new Window_Menu();
+        this._windowMenu.setHandler('_inventory', this.onButtonWindowMenu.bind(this, '_inventory'));
+        this._windowMenu.setHandler('_skills', this.onButtonWindowMenu.bind(this, '_skills'));
+        this._windowMenu.setHandler('_missions', this.onButtonWindowMenu.bind(this, '_missions'));
+        this._windowMenu.setHandler('_dialogs', this.onButtonWindowMenu.bind(this, '_dialogs'));
+        this._windowMenu.setHandler('_tutorials', this.onButtonWindowMenu.bind(this, '_tutorials'));
         this.addChild(this._windowMenu);
+        if (_windowMenu_show) this.showWindowMenu();
     };
 
     Scene_Map.prototype.showWindowMenu = function () {
         this._windowMenu.showNow = true;
+        _windowMenu_show = true;
     };
 
     Scene_Map.prototype.hideWindowMenu = function () {
         this._windowMenu.showNow = null;
+        _windowMenu_show = null;
+    };
+
+    Scene_Map.prototype.onButtonWindowMenu = function (handler) {
+        if (handler === '_inventory') {
+            SceneManager.push(Scene_Item);
+        } else if (handler === '_skills') {
+            SceneManager.push(Scene_Skill);
+        } else if (handler === '_missions') {
+            SceneManager.push(Scene_Quest);
+        } else if (handler === '_dialogs') {
+            SceneManager.push(Scene_SystemDialogs);
+        } else if (handler === '_tutorials') {
+            SceneManager.push(Scene_SystemTutorials);
+        }
     };
 
     //-----------------------------------------------------------------------------
@@ -72,6 +96,9 @@
     Window_Menu.prototype.initialize = function () {
         Window_Command.prototype.initialize.call(this, (Graphics.width - this.windowWidth()) / 2,
             (Graphics.height - this.windowHeight()) / 2);
+        this.openness = 0;
+        this.showNow = false;
+        this.deactivate();
         this.createStructures();
     };
 
@@ -95,6 +122,19 @@
         return 1;
     };
 
+    Window_Menu.prototype.update = function () {
+        Window_Command.prototype.update.call(this);
+        if (this.showNow) {
+            if (this.openness < 255) this.openness += 16;
+            else { if (this._bitmapStructures.opacity < 255) this._bitmapStructures.opacity += 16; }
+            if (this.openness & this._bitmapStructures.opacity >= 255) this.activate();
+        } else {
+            if (this._bitmapStructures.opacity > 0) this._bitmapStructures.opacity -= 16;
+            else { if (this.openness > 0) this.openness -= 16; }
+            if (this.openness & this._bitmapStructures.opacity <= 0) this.deactivate();
+        }
+    };
+
     Window_Menu.prototype.makeCommandList = function () {
         this.addMainCommands();
     };
@@ -102,14 +142,14 @@
     Window_Menu.prototype.addMainCommands = function () {
         this.addCommand('Inventario', '_inventory');
         this.addCommand('Habilidades', '_skills');
-        this.addCommand('Contratos', '_contracts');
-        this.addCommand('Finanças', '_finances');
-        this.addCommand('Plantação', '_plantation');
-        this.addCommand('Cidades', '_cities');
-        this.addCommand('Rotas', '_routes');
-        this.addCommand('Musicas', '_musics');
+        this.addCommand('Contratos', '_contracts', false);
+        this.addCommand('Finanças', '_finances', false);
+        this.addCommand('Plantação', '_plantation', false);
+        this.addCommand('Cidades', '_cities', false);
+        this.addCommand('Rotas', '_routes', false);
+        this.addCommand('Musicas', '_musics', false);
         this.addCommand('Missões', '_missions');
-        this.addCommand('Missões Diarias', '_missionsDaily');
+        this.addCommand('Missões Diarias', '_missionsDaily', false);
         this.addCommand('Dialogos', '_dialogs');
         this.addCommand('Tutoriais', '_tutorials');
     };
@@ -159,6 +199,7 @@
     Window_Menu.prototype.createStructures = function () {
         if (!this._bitmapStructures) {
             this._bitmapStructures = new Sprite(new Bitmap(Graphics.width, Graphics.height));
+            this._bitmapStructures.opacity = 0;
             SceneManager._scene.addChild(this._bitmapStructures);
         }
         var sprite = this._bitmapStructures;

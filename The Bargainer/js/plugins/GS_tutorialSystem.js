@@ -11,6 +11,14 @@
  * @default []
  * 
  */
+
+/**
+ * EXPORTAÇÃO DAS FUNÇÕES
+ */
+function Scene_SystemTutorials() {
+    this.initialize.apply(this, arguments);
+}
+
 (function () {
     "use strict";
     /**
@@ -199,9 +207,6 @@
     /**
      * Scene_SystemTutorials
      */
-    function Scene_SystemTutorials() {
-        this.initialize.apply(this, arguments);
-    }
 
     Scene_SystemTutorials.prototype = Object.create(Scene_Base.prototype);
     Scene_SystemTutorials.prototype.constructor = Scene_SystemTutorials;

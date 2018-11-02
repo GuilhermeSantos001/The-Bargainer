@@ -7,6 +7,14 @@
  * @author GuilhermeSantos
  * 
  */
+
+/**
+ * EXPORTAÇÃO DAS FUNÇÕES
+ */
+function Scene_SystemDialogs() {
+    this.initialize.apply(this, arguments);
+}
+
 (function () {
     "use strict";
     //=============================================================================
@@ -135,9 +143,6 @@
     //-----------------------------------------------------------------------------
     // Scene_SystemDialogs
     //
-    function Scene_SystemDialogs() {
-        this.initialize.apply(this, arguments);
-    }
 
     Scene_SystemDialogs.prototype = Object.create(Scene_Base.prototype);
     Scene_SystemDialogs.prototype.constructor = Scene_SystemDialogs;
