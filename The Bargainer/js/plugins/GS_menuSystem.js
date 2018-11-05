@@ -10,7 +10,8 @@
      */
     const _game_map_update = Game_Map.prototype.update,
         _game_map_initialize = Game_Map.prototype.initialize,
-        _scene_map_createAllWindows = Scene_Map.prototype.createAllWindows;
+        _scene_map_createAllWindows = Scene_Map.prototype.createAllWindows,
+        _scene_map_update = Scene_Map.prototype.update;
 
     let _windowMenu_show = null;
 
@@ -25,7 +26,7 @@
     Game_Map.prototype.update = function (sceneActive) {
         _game_map_update.apply(this, arguments);
         if ($gameSystem.isMenuEnabled()) $gameSystem.disableMenu();
-        if (Input.isTriggered('cancel')) this.showMenu();
+        if (Input.isTriggered('cancel') || TouchInput.isCancelled()) this.showMenu();
     };
 
     Game_Map.prototype.showMenu = function () {
@@ -55,8 +56,9 @@
         this._windowMenu.setHandler('_missions', this.onButtonWindowMenu.bind(this, '_missions'));
         this._windowMenu.setHandler('_dialogs', this.onButtonWindowMenu.bind(this, '_dialogs'));
         this._windowMenu.setHandler('_tutorials', this.onButtonWindowMenu.bind(this, '_tutorials'));
+        this._windowMenu.setHandler('_options', this.onButtonWindowMenu.bind(this, '_options'));
         this.addChild(this._windowMenu);
-        if (_windowMenu_show) this.showWindowMenu();
+        if (_windowMenu_show) this._windowMenuRefreshShow = 10;
     };
 
     Scene_Map.prototype.showWindowMenu = function () {
@@ -69,17 +71,43 @@
         _windowMenu_show = null;
     };
 
+    Scene_Map.prototype.registerScenePush = function (scene) {
+        this._registerScenePush = scene;
+    };
+
     Scene_Map.prototype.onButtonWindowMenu = function (handler) {
         if (handler === '_inventory') {
-            SceneManager.push(Scene_Item);
+            this.registerScenePush(Scene_Item);
         } else if (handler === '_skills') {
-            SceneManager.push(Scene_Skill);
+            this.registerScenePush(Scene_Skill);
         } else if (handler === '_missions') {
-            SceneManager.push(Scene_Quest);
+            this.registerScenePush(Scene_Quest);
         } else if (handler === '_dialogs') {
-            SceneManager.push(Scene_SystemDialogs);
+            this.registerScenePush(Scene_SystemDialogs);
         } else if (handler === '_tutorials') {
-            SceneManager.push(Scene_SystemTutorials);
+            this.registerScenePush(Scene_SystemTutorials);
+        } else if (handler === '_options') {
+            this.registerScenePush(Scene_Options);
+        }
+        this._windowMenu.showNow = null;
+    };
+
+    Scene_Map.prototype.update = function () {
+        _scene_map_update.call(this);
+        this.updateRegisterScenePush();
+    };
+
+    Scene_Map.prototype.updateRegisterScenePush = function () {
+        if (this._windowMenu instanceof Window_Menu) {
+            if (typeof this._windowMenuRefreshShow === 'number') {
+                if (this._windowMenuRefreshShow > 0) return this._windowMenuRefreshShow -= .60;
+                else this.showWindowMenu(), this._windowMenuRefreshShow = null;
+            }
+            if (!this._windowMenu.showNow && this._windowMenu.openness <= 0 && this._windowMenu._bitmapStructures.opacity <= 0) {
+                if (this._registerScenePush)
+                    SceneManager.push(this._registerScenePush),
+                        this._registerScenePush = null;
+            }
         }
     };
 
@@ -127,11 +155,11 @@
         if (this.showNow) {
             if (this.openness < 255) this.openness += 16;
             else { if (this._bitmapStructures.opacity < 255) this._bitmapStructures.opacity += 16; }
-            if (this.openness & this._bitmapStructures.opacity >= 255) this.activate();
+            if (this.openness >= 255 && this._bitmapStructures.opacity >= 255) this.activate();
         } else {
             if (this._bitmapStructures.opacity > 0) this._bitmapStructures.opacity -= 16;
             else { if (this.openness > 0) this.openness -= 16; }
-            if (this.openness & this._bitmapStructures.opacity <= 0) this.deactivate();
+            if (this.openness <= 0 && this._bitmapStructures.opacity <= 0) this.deactivate();
         }
     };
 
@@ -152,6 +180,7 @@
         this.addCommand('Missões Diarias', '_missionsDaily', false);
         this.addCommand('Dialogos', '_dialogs');
         this.addCommand('Tutoriais', '_tutorials');
+        this.addCommand('Opções', '_options');
     };
 
     Window_Menu.prototype.drawItem = function (index) {
@@ -183,6 +212,8 @@
             this.drawIcon(296, rect.x, rect.y + 3);
         } else if (this.commandSymbol(index) === '_routes') {
             this.drawIcon(68, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_options') {
+            this.drawIcon(242, rect.x, rect.y + 3);
         }
         this.drawText(this.commandName(index), 46 + rect.x, rect.y + 8, rect.width, 'left');
     };

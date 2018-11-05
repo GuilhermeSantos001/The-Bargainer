@@ -284,9 +284,7 @@ function Scene_SystemTutorials() {
 
     Window_CommandTutorials.prototype.addMainCommands = function () {
         let data_tutorials = $gameSystem.systemTutorials().slice();
-        while (data_tutorials.length < 18) {
-            data_tutorials.push('undefined');
-        }
+        while (data_tutorials.length <= 0 || data_tutorials.length % 18 !== 0) data_tutorials.push('undefined');
         data_tutorials.map(tutorial => {
             if (tutorial === 'undefined') {
                 this.addCommand(null, '--tutorial--', 'item', false);

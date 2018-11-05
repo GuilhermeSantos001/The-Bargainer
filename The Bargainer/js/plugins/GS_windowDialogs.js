@@ -220,7 +220,7 @@ function Scene_SystemDialogs() {
 
     Window_CommandDialogs.prototype.addMainCommands = function () {
         let keys = Object.keys($gameSystem.systemDialogs());
-        while (keys.length < 2) keys.push('--no--item--');
+        while (keys.length <= 0 || keys.length % 2 !== 0) keys.push('--no--item--');
         keys.map(key => {
             if (key != '--no--item--') {
                 var dialog = $gameSystem.systemDialogs()[key];
