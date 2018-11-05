@@ -13,7 +13,8 @@
         _scene_map_createAllWindows = Scene_Map.prototype.createAllWindows,
         _scene_map_update = Scene_Map.prototype.update;
 
-    let _windowMenu_show = null;
+    let _windowMenu_show,
+        _windowMenu_show_delay = 0;
 
     /**
      * Game_Map
@@ -56,19 +57,24 @@
         this._windowMenu.setHandler('_missions', this.onButtonWindowMenu.bind(this, '_missions'));
         this._windowMenu.setHandler('_dialogs', this.onButtonWindowMenu.bind(this, '_dialogs'));
         this._windowMenu.setHandler('_tutorials', this.onButtonWindowMenu.bind(this, '_tutorials'));
+<<<<<<< HEAD
         this._windowMenu.setHandler('_options', this.onButtonWindowMenu.bind(this, '_options'));
         this.addChild(this._windowMenu);
         if (_windowMenu_show) this._windowMenuRefreshShow = 10;
+=======
+        this._windowMenu.setHandler('_missionsDaily', this.onButtonWindowMenu.bind(this, '_missionsDaily'));
+        this.addChild(this._windowMenu);
+>>>>>>> 4db8e150ef17e7d07856fb42a672333eaa78ec80
     };
 
     Scene_Map.prototype.showWindowMenu = function () {
-        this._windowMenu.showNow = true;
-        _windowMenu_show = true;
+        if (!this._windowMenu.showNow) this._windowMenu.showNow = true;
+        if (!_windowMenu_show) _windowMenu_show = true;
     };
 
-    Scene_Map.prototype.hideWindowMenu = function () {
-        this._windowMenu.showNow = null;
-        _windowMenu_show = null;
+    Scene_Map.prototype.hideWindowMenu = function (exception) {
+        if (this._windowMenu.showNow) this._windowMenu.showNow = null;
+        if (!exception) { if (_windowMenu_show) _windowMenu_show = null; }
     };
 
     Scene_Map.prototype.registerScenePush = function (scene) {
@@ -77,6 +83,7 @@
 
     Scene_Map.prototype.onButtonWindowMenu = function (handler) {
         if (handler === '_inventory') {
+<<<<<<< HEAD
             this.registerScenePush(Scene_Item);
         } else if (handler === '_skills') {
             this.registerScenePush(Scene_Skill);
@@ -90,10 +97,25 @@
             this.registerScenePush(Scene_Options);
         }
         this._windowMenu.showNow = null;
+=======
+            this._buttonWindowMenu = 0;
+        } else if (handler === '_skills') {
+            this._buttonWindowMenu = 1;
+        } else if (handler === '_missions') {
+            this._buttonWindowMenu = 2;
+        } else if (handler === '_dialogs') {
+            this._buttonWindowMenu = 3;
+        } else if (handler === '_tutorials') {
+            this._buttonWindowMenu = 4;
+        } else if (handler === '_missionsDaily') {
+            this._buttonWindowMenu = 5;
+        }
+>>>>>>> 4db8e150ef17e7d07856fb42a672333eaa78ec80
     };
 
     Scene_Map.prototype.update = function () {
         _scene_map_update.call(this);
+<<<<<<< HEAD
         this.updateRegisterScenePush();
     };
 
@@ -108,6 +130,35 @@
                     SceneManager.push(this._registerScenePush),
                         this._registerScenePush = null;
             }
+=======
+        this.updateButtonWindowMenu();
+    };
+
+    Scene_Map.prototype.updateButtonWindowMenu = function () {
+        if (_windowMenu_show) {
+            if (_windowMenu_show_delay < 30) _windowMenu_show_delay += .60;
+            else { this.showWindowMenu(), _windowMenu_show_delay = 0; }
+        }
+        if (typeof this._buttonWindowMenu === 'number') {
+            this.hideWindowMenu(true);
+            if (this._windowMenu.openness > 0) return;
+            if (this._buttonWindowMenuDelay < 30) return this._buttonWindowMenuDelay += .60;
+            if (this._buttonWindowMenu == 0) {
+                SceneManager.push(Scene_Item);
+            } else if (this._buttonWindowMenu == 1) {
+                SceneManager.push(Scene_Skill);
+            } else if (this._buttonWindowMenu == 2) {
+                SceneManager.push(Scene_Quest);
+            } else if (this._buttonWindowMenu == 3) {
+                SceneManager.push(Scene_SystemDialogs);
+            } else if (this._buttonWindowMenu == 4) {
+                SceneManager.push(Scene_SystemTutorials);
+            } else if (this._buttonWindowMenu == 5) {
+                SceneManager.push(Scene_DailyMissionsSystem);
+            }
+            this._buttonWindowMenu = null;
+            this._buttonWindowMenuDelay = 0;
+>>>>>>> 4db8e150ef17e7d07856fb42a672333eaa78ec80
         }
     };
 
@@ -142,11 +193,11 @@
         return 48;
     };
 
-    Window_Menu.prototype.numVisibleRows = function () {
+    Window_Menu.prototype.maxCols = function () {
         return 1;
     };
 
-    Window_Menu.prototype.maxCols = function () {
+    Window_Menu.prototype.lineHeight = function () {
         return 1;
     };
 
@@ -177,7 +228,7 @@
         this.addCommand('Rotas', '_routes', false);
         this.addCommand('Musicas', '_musics', false);
         this.addCommand('Missões', '_missions');
-        this.addCommand('Missões Diarias', '_missionsDaily', false);
+        this.addCommand('Missões Diarias', '_missionsDaily');
         this.addCommand('Dialogos', '_dialogs');
         this.addCommand('Tutoriais', '_tutorials');
         this.addCommand('Opções', '_options');
