@@ -57,6 +57,17 @@ function Scene_DailyMissionsSystem() {
         return null;
     };
 
+    function getTextLanguage(text) {
+        let _text = '???';
+        text.map(data => {
+            data = JSON.parse(data);
+            if (data['Language'] === $gameSystem.getterLanguageSystem() ||
+                data['Language'] === 'qualquer')
+                return _text = data['Value'];
+        });
+        return _text;
+    };
+
     /**
      * Game_Interpreter
      */
@@ -223,7 +234,18 @@ function Scene_DailyMissionsSystem() {
         }
         Object.keys(data).map(key => {
             if (data[key] === 'undefined') {
-                this.addCommand(null, '\\i[192] --daily-mission--', 'item', false);
+                this.addCommand(null, getTextLanguage([
+                    JSON.stringify(
+                        {
+                            Language: "pt_br",
+                            Value: "\\i[192] --missão-diária--"
+                        }),
+                    JSON.stringify(
+                        {
+                            Language: "en_us",
+                            Value: "\\i[192] --daily-mission--"
+                        })
+                ]), 'item', false);
             } else {
                 this.addCommand(key, this.convertEscapeCharacters($dataQuests[key].name), 'item');
             }
@@ -292,9 +314,22 @@ function Scene_DailyMissionsSystem() {
         this.contents.clear();
         if (!windowDailyMissions.commandQuestData()) {
             this.changePaintOpacity(false);
-            this.drawTextEx(`Busque por pessoas com esse icone(\\i[192]) para \
-            \nreceber missões. Algumas missões são diarias, \
-            \napós completar, espere o outro dia para repetir.`, x, 0);
+            this.drawTextEx(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: `Procure pessoas com este ícone(\\i[192]) para receber \
+                               \nmissões. Algumas missões são diárias, após \
+                               \ncompletar, espere até a meia-noite para repetir.`
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: `Search for persons with this icon(\\i[192]) to receive \
+                               \nmissions. Some missions are daily, after finishing \
+                               \nthem, wait until midnight to repeat.`
+                    })
+            ]), x, 0);
             this.changePaintOpacity(true);
         } else {
             let description = windowDailyMissions.commandQuestData().description,
@@ -306,7 +341,7 @@ function Scene_DailyMissionsSystem() {
                 }
             this.drawTextEx(`\\tx[2017]`, x, 0);
             this.changePaintOpacity(false);
-            this.contents.fillRect(x, 45, width, 1, 'white');
+            this.contents.fillRect(x, 40, width, 1, 'white');
             this.changePaintOpacity(true);
             description.map(desc => {
                 if (desc) {
@@ -327,13 +362,12 @@ function Scene_DailyMissionsSystem() {
             }, this);
             let y = lineDesc.total + 40,
                 location = windowDailyMissions.commandQuestData().location;
-            this.drawTextEx(`\\tx[2018]`, x, y), y += 45;
+            this.drawTextEx(`\\tx[2018]`, x, y), y += 40;
             this.changePaintOpacity(false);
-            this.contents.fillRect(x, y, width, 1, 'white'), y += 2;
+            this.contents.fillRect(x, y, width, 1, 'white'), y += 8;
             this.changePaintOpacity(true);
-            this.drawTextEx(location, x, y);
+            this.drawTextEx(`\\c[4]${location}`, x, y);
         }
-        console.log(windowDailyMissions.commandQuestData());
     };
 
     Window_DailyMissions.prototype.textIsJumpLine = function (text) {

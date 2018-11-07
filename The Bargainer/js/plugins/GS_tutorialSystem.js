@@ -59,6 +59,17 @@ function Scene_SystemTutorials() {
         return null;
     };
 
+    function getTextLanguage(text) {
+        let _text = '???';
+        text.map(data => {
+            data = JSON.parse(data);
+            if (data['Language'] === $gameSystem.getterLanguageSystem() ||
+                data['Language'] === 'qualquer')
+                return _text = data['Value'];
+        });
+        return _text;
+    };
+
     /**
      * Scene_Boot
      */
@@ -384,7 +395,7 @@ function Scene_SystemTutorials() {
         }
         this.drawTextEx('\\tx[2017]', x, y), y += 22;
         this.drawHorzLine(y), y += 22;
-        this.drawTextEx(description, x, y), y += 160;
+        this.drawTextEx(JSON.parse(getTextLanguage(description)), x, y), y += 160;
         this.drawTextEx('\\tx[2018]', x, y), y += 22;
         this.drawHorzLine(y), y += 22;
         this.drawTextEx(mapName, x, y), y += 108;
@@ -459,12 +470,24 @@ function Scene_SystemTutorials() {
  /*~struct~TutorialWindow:
  * @param Description
  * @desc A descrição do tutorial
- * @type note
- * @default ""
+ * @type struct<DescLanguage>[]
+ * @default []
  * 
  * @param Map-Name
  * @desc O nome do mapa
  * @type string
  * @default \\c[4]Heidel
+ * 
+ */
+ /*~struct~DescLanguage:
+ * @param Value
+ * @desc O valor do texto
+ * @type note
+ * @default
+ * 
+ * @param Language
+ * @desc O idioma do texto
+ * @type string
+ * @default pt_br
  * 
  */

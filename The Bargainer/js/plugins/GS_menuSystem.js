@@ -57,14 +57,9 @@
         this._windowMenu.setHandler('_missions', this.onButtonWindowMenu.bind(this, '_missions'));
         this._windowMenu.setHandler('_dialogs', this.onButtonWindowMenu.bind(this, '_dialogs'));
         this._windowMenu.setHandler('_tutorials', this.onButtonWindowMenu.bind(this, '_tutorials'));
-<<<<<<< HEAD
+        this._windowMenu.setHandler('_missionsDaily', this.onButtonWindowMenu.bind(this, '_missionsDaily'));
         this._windowMenu.setHandler('_options', this.onButtonWindowMenu.bind(this, '_options'));
         this.addChild(this._windowMenu);
-        if (_windowMenu_show) this._windowMenuRefreshShow = 10;
-=======
-        this._windowMenu.setHandler('_missionsDaily', this.onButtonWindowMenu.bind(this, '_missionsDaily'));
-        this.addChild(this._windowMenu);
->>>>>>> 4db8e150ef17e7d07856fb42a672333eaa78ec80
     };
 
     Scene_Map.prototype.showWindowMenu = function () {
@@ -83,21 +78,6 @@
 
     Scene_Map.prototype.onButtonWindowMenu = function (handler) {
         if (handler === '_inventory') {
-<<<<<<< HEAD
-            this.registerScenePush(Scene_Item);
-        } else if (handler === '_skills') {
-            this.registerScenePush(Scene_Skill);
-        } else if (handler === '_missions') {
-            this.registerScenePush(Scene_Quest);
-        } else if (handler === '_dialogs') {
-            this.registerScenePush(Scene_SystemDialogs);
-        } else if (handler === '_tutorials') {
-            this.registerScenePush(Scene_SystemTutorials);
-        } else if (handler === '_options') {
-            this.registerScenePush(Scene_Options);
-        }
-        this._windowMenu.showNow = null;
-=======
             this._buttonWindowMenu = 0;
         } else if (handler === '_skills') {
             this._buttonWindowMenu = 1;
@@ -109,28 +89,13 @@
             this._buttonWindowMenu = 4;
         } else if (handler === '_missionsDaily') {
             this._buttonWindowMenu = 5;
+        } else if (handler === '_options') {
+            this._buttonWindowMenu = 6;
         }
->>>>>>> 4db8e150ef17e7d07856fb42a672333eaa78ec80
     };
 
     Scene_Map.prototype.update = function () {
         _scene_map_update.call(this);
-<<<<<<< HEAD
-        this.updateRegisterScenePush();
-    };
-
-    Scene_Map.prototype.updateRegisterScenePush = function () {
-        if (this._windowMenu instanceof Window_Menu) {
-            if (typeof this._windowMenuRefreshShow === 'number') {
-                if (this._windowMenuRefreshShow > 0) return this._windowMenuRefreshShow -= .60;
-                else this.showWindowMenu(), this._windowMenuRefreshShow = null;
-            }
-            if (!this._windowMenu.showNow && this._windowMenu.openness <= 0 && this._windowMenu._bitmapStructures.opacity <= 0) {
-                if (this._registerScenePush)
-                    SceneManager.push(this._registerScenePush),
-                        this._registerScenePush = null;
-            }
-=======
         this.updateButtonWindowMenu();
     };
 
@@ -155,10 +120,11 @@
                 SceneManager.push(Scene_SystemTutorials);
             } else if (this._buttonWindowMenu == 5) {
                 SceneManager.push(Scene_DailyMissionsSystem);
+            } else if (this._buttonWindowMenu == 6) {
+                SceneManager.push(Scene_Options);
             }
             this._buttonWindowMenu = null;
             this._buttonWindowMenuDelay = 0;
->>>>>>> 4db8e150ef17e7d07856fb42a672333eaa78ec80
         }
     };
 
