@@ -388,20 +388,27 @@ function Scene_SystemTutorials() {
             } else {
                 mapName = `\\c[4]${mapName}\\c[0], \\tx[29] \\c[4]${$dataMapInfos[$gameMap.mapId()].name}.`;
             }
+            this.drawTextEx('\\tx[2017]', x, y), y += 22;
+            this.drawHorzLine(y), y += 22;
+            this.drawTextEx(JSON.parse(getTextLanguage(description)), x, y), y += 160;
+            this.drawTextEx('\\tx[2018]', x, y), y += 22;
+            this.drawHorzLine(y), y += 22;
+            this.drawTextEx(mapName, x, y), y += 108;
+            this.drawTextEx('Status', x, y), y += 22;
+            this.drawHorzLine(y), y += 22;
+            this.drawTextEx(status, x, y), y += 22;
         } else {
-            var description = '',
-                mapName = '',
-                status = '';
+            this.drawTextEx(JSON.parse(getTextLanguage([
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\i[245] Você não pode procurar por tutoriais.\n\\}- Espere até a próxima atualização.\\{')),
+                    'Language': 'pt_br'
+                }),
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\i[245] You cannot search for tutorials.\n\\}- Wait until the next update.\\{')),
+                    'Language': 'en_us'
+                })
+            ])), x, 0);
         }
-        this.drawTextEx('\\tx[2017]', x, y), y += 22;
-        this.drawHorzLine(y), y += 22;
-        this.drawTextEx(JSON.parse(getTextLanguage(description)), x, y), y += 160;
-        this.drawTextEx('\\tx[2018]', x, y), y += 22;
-        this.drawHorzLine(y), y += 22;
-        this.drawTextEx(mapName, x, y), y += 108;
-        this.drawTextEx('Status', x, y), y += 22;
-        this.drawHorzLine(y), y += 22;
-        this.drawTextEx(status, x, y), y += 22;
     };
 })();
 /*~struct~Tutorials:

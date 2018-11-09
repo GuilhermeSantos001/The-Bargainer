@@ -54,6 +54,17 @@ function Scene_SystemDialogs() {
         return null;
     };
 
+    function getTextLanguage(text) {
+        let _text = '???';
+        text.map(data => {
+            data = JSON.parse(data);
+            if (data['Language'] === $gameSystem.getterLanguageSystem() ||
+                data['Language'] === 'qualquer')
+                return _text = data['Value'];
+        });
+        return _text;
+    };
+
     //=============================================================================
     // Game_System
     //=============================================================================
@@ -299,7 +310,30 @@ function Scene_SystemDialogs() {
             }
             this.drawTextEx(text, x, y);
         });
+        if (texts.length <= 0) {
+            var y = 5;
+            this.drawTextEx(JSON.parse(getTextLanguage([
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\i[225] Se você perdeu alguma mensagem importante, não se preocupe, ela será salva.')),
+                    'Language': 'pt_br'
+                }),
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\i[225] If you have lost any important message, don\'t worry she will be saved.')),
+                    'Language': 'en_us'
+                })
+            ])), x, y);
+            register = JSON.parse(getTextLanguage([
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\}Vá em busca de novos diálogos, o mundo está cheio de coisas para fazer.\\{')),
+                    'Language': 'pt_br'
+                }),
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\}Go in search of new dialogs, the world is full of things to do.\\{')),
+                    'Language': 'en_us'
+                })
+            ]));
+        }
         this.drawHorzLine(this.contents.height - this.textPadding() * 8);
-        this.drawTextEx(register, x, this.contents.height - (this.textPadding() / 2) * 9);
+        this.drawTextEx(register, x, this.contentsHeight() - (this.textPadding() * 4) - 4);
     };
 })();
