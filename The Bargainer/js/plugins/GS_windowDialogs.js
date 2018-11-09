@@ -7,6 +7,14 @@
  * @author GuilhermeSantos
  * 
  */
+
+/**
+ * EXPORTAÇÃO DAS FUNÇÕES
+ */
+function Scene_SystemDialogs() {
+    this.initialize.apply(this, arguments);
+}
+
 (function () {
     "use strict";
     //=============================================================================
@@ -44,6 +52,17 @@
             return JSON.parse(LZString.decompressFromBase64(fs.readFileSync(pathFile, 'utf8')));
         }
         return null;
+    };
+
+    function getTextLanguage(text) {
+        let _text = '???';
+        text.map(data => {
+            data = JSON.parse(data);
+            if (data['Language'] === $gameSystem.getterLanguageSystem() ||
+                data['Language'] === 'qualquer')
+                return _text = data['Value'];
+        });
+        return _text;
     };
 
     //=============================================================================
@@ -135,9 +154,6 @@
     //-----------------------------------------------------------------------------
     // Scene_SystemDialogs
     //
-    function Scene_SystemDialogs() {
-        this.initialize.apply(this, arguments);
-    }
 
     Scene_SystemDialogs.prototype = Object.create(Scene_Base.prototype);
     Scene_SystemDialogs.prototype.constructor = Scene_SystemDialogs;
@@ -215,7 +231,7 @@
 
     Window_CommandDialogs.prototype.addMainCommands = function () {
         let keys = Object.keys($gameSystem.systemDialogs());
-        while (keys.length < 2) keys.push('--no--item--');
+        while (keys.length <= 0 || keys.length % 2 !== 0) keys.push('--no--item--');
         keys.map(key => {
             if (key != '--no--item--') {
                 var dialog = $gameSystem.systemDialogs()[key];
@@ -294,7 +310,30 @@
             }
             this.drawTextEx(text, x, y);
         });
+        if (texts.length <= 0) {
+            var y = 5;
+            this.drawTextEx(JSON.parse(getTextLanguage([
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\i[225] Se você perdeu alguma mensagem importante, não se preocupe, ela será salva.')),
+                    'Language': 'pt_br'
+                }),
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\i[225] If you have lost any important message, don\'t worry she will be saved.')),
+                    'Language': 'en_us'
+                })
+            ])), x, y);
+            register = JSON.parse(getTextLanguage([
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\}Vá em busca de novos diálogos, o mundo está cheio de coisas para fazer.\\{')),
+                    'Language': 'pt_br'
+                }),
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\}Go in search of new dialogues, the world is full of things to do.\\{')),
+                    'Language': 'en_us'
+                })
+            ]));
+        }
         this.drawHorzLine(this.contents.height - this.textPadding() * 8);
-        this.drawTextEx(register, x, this.contents.height - (this.textPadding() / 2) * 9);
+        this.drawTextEx(register, x, this.contentsHeight() - (this.textPadding() * 4) - 4);
     };
 })();

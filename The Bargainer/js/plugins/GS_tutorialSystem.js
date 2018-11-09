@@ -11,6 +11,14 @@
  * @default []
  * 
  */
+
+/**
+ * EXPORTAÇÃO DAS FUNÇÕES
+ */
+function Scene_SystemTutorials() {
+    this.initialize.apply(this, arguments);
+}
+
 (function () {
     "use strict";
     /**
@@ -49,6 +57,17 @@
             return JSON.parse(LZString.decompressFromBase64(fs.readFileSync(pathFile, 'utf8')));
         }
         return null;
+    };
+
+    function getTextLanguage(text) {
+        let _text = '???';
+        text.map(data => {
+            data = JSON.parse(data);
+            if (data['Language'] === $gameSystem.getterLanguageSystem() ||
+                data['Language'] === 'qualquer')
+                return _text = data['Value'];
+        });
+        return _text;
     };
 
     /**
@@ -199,9 +218,6 @@
     /**
      * Scene_SystemTutorials
      */
-    function Scene_SystemTutorials() {
-        this.initialize.apply(this, arguments);
-    }
 
     Scene_SystemTutorials.prototype = Object.create(Scene_Base.prototype);
     Scene_SystemTutorials.prototype.constructor = Scene_SystemTutorials;
@@ -279,9 +295,7 @@
 
     Window_CommandTutorials.prototype.addMainCommands = function () {
         let data_tutorials = $gameSystem.systemTutorials().slice();
-        while (data_tutorials.length < 18) {
-            data_tutorials.push('undefined');
-        }
+        while (data_tutorials.length <= 0 || data_tutorials.length % 18 !== 0) data_tutorials.push('undefined');
         data_tutorials.map(tutorial => {
             if (tutorial === 'undefined') {
                 this.addCommand(null, '--tutorial--', 'item', false);
@@ -374,20 +388,27 @@
             } else {
                 mapName = `\\c[4]${mapName}\\c[0], \\tx[29] \\c[4]${$dataMapInfos[$gameMap.mapId()].name}.`;
             }
+            this.drawTextEx('\\tx[2017]', x, y), y += 22;
+            this.drawHorzLine(y), y += 22;
+            this.drawTextEx(JSON.parse(getTextLanguage(description)), x, y), y += 160;
+            this.drawTextEx('\\tx[2018]', x, y), y += 22;
+            this.drawHorzLine(y), y += 22;
+            this.drawTextEx(mapName, x, y), y += 108;
+            this.drawTextEx('Status', x, y), y += 22;
+            this.drawHorzLine(y), y += 22;
+            this.drawTextEx(status, x, y), y += 22;
         } else {
-            var description = '',
-                mapName = '',
-                status = '';
+            this.drawTextEx(JSON.parse(getTextLanguage([
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\i[245] Você não pode procurar por tutoriais.\n\\}- Espere até a próxima atualização.\\{')),
+                    'Language': 'pt_br'
+                }),
+                JSON.stringify({
+                    'Value': JSON.stringify(String('\\C[8]\\i[245] You cannot search for tutorials.\n\\}- Wait until the next update.\\{')),
+                    'Language': 'en_us'
+                })
+            ])), x, 0);
         }
-        this.drawTextEx('\\tx[2017]', x, y), y += 22;
-        this.drawHorzLine(y), y += 22;
-        this.drawTextEx(description, x, y), y += 160;
-        this.drawTextEx('\\tx[2018]', x, y), y += 22;
-        this.drawHorzLine(y), y += 22;
-        this.drawTextEx(mapName, x, y), y += 108;
-        this.drawTextEx('Status', x, y), y += 22;
-        this.drawHorzLine(y), y += 22;
-        this.drawTextEx(status, x, y), y += 22;
     };
 })();
 /*~struct~Tutorials:
@@ -456,12 +477,24 @@
  /*~struct~TutorialWindow:
  * @param Description
  * @desc A descrição do tutorial
- * @type note
- * @default ""
+ * @type struct<DescLanguage>[]
+ * @default []
  * 
  * @param Map-Name
  * @desc O nome do mapa
  * @type string
  * @default \\c[4]Heidel
+ * 
+ */
+ /*~struct~DescLanguage:
+ * @param Value
+ * @desc O valor do texto
+ * @type note
+ * @default
+ * 
+ * @param Language
+ * @desc O idioma do texto
+ * @type string
+ * @default pt_br
  * 
  */
