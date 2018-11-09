@@ -6,6 +6,10 @@
  *
  * @author GuilhermeSantos
  *
+ * @param Description Quests
+ * @type struct<descriptionQuests>[]
+ * @default []
+ * 
  */
 
 /**
@@ -21,7 +25,9 @@ function Scene_DailyMissionsSystem() {
      * Variaveis Globais
      */
     let missionsId = [],
-        missionsStatus = {};
+        missionsStatus = {},
+        params = PluginManager.parameters('GS_dailyMissions'),
+        descriptionQuests = JSON.parse(params['Description Quests']);
 
     /**
      * FUNÇÕES
@@ -155,14 +161,6 @@ function Scene_DailyMissionsSystem() {
 
     Scene_DailyMissionsSystem.prototype.initialize = function () {
         Scene_Base.prototype.initialize.call(this);
-        missionsStatus[1] = {
-            dayMonth: $gameVariables.value(10),
-            status: 'incomplete'
-        };
-        missionsStatus[2] = {
-            dayMonth: $gameVariables.value(10),
-            status: 'incomplete'
-        };
     };
 
     Scene_DailyMissionsSystem.prototype.create = function () {
@@ -332,7 +330,28 @@ function Scene_DailyMissionsSystem() {
             ]), x, 0);
             this.changePaintOpacity(true);
         } else {
-            let description = windowDailyMissions.commandQuestData().description,
+            let description = ((_id) => {
+                try {
+                    let _quest = JSON.parse(descriptionQuests.filter(data => {
+                        return JSON.parse(data)['Quest ID'] == _id;
+                    })[0]);
+                    return JSON.parse(_quest['Description']);
+                }
+                catch (e) {
+                    return [JSON.stringify({
+                        Value: JSON.stringify([
+                            JSON.stringify("\\c[8]Nenhuma informação sobre isso...")
+                        ]),
+                        Language: 'pt_br'
+                    }),
+                    JSON.stringify({
+                        Value: JSON.stringify([
+                            JSON.stringify("\\c[8]Not any information about this...")
+                        ]),
+                        Language: 'en_us'
+                    })];
+                }
+            })(windowDailyMissions.commandQuestData().id),
                 lineDesc = {
                     base: 50,
                     space: 18,
@@ -343,22 +362,27 @@ function Scene_DailyMissionsSystem() {
             this.changePaintOpacity(false);
             this.contents.fillRect(x, 40, width, 1, 'white');
             this.changePaintOpacity(true);
-            description.map(desc => {
-                if (desc) {
-                    let y = lineDesc.base,
-                        w = this.textIsJumpLine(desc),
-                        j = false;
-                    if (lineDesc.draw > 1) y += lineDesc.space * lineDesc.draw;
-                    if (w > 0) j = true;
-                    while (w > 0) {
-                        lineDesc.total += lineDesc.space * lineDesc.draw;
-                        if (w <= 1) lineDesc.total += 40;
-                        w--;
+            description.map(data => {
+                let desc = JSON.parse(data),
+                    texts = JSON.parse(desc['Value']),
+                    language = String(desc['Language']).toLowerCase();
+                texts.map(text => {
+                    if (language === $gameSystem.getterLanguageSystem() || language === 'qualquer') {
+                        let y = lineDesc.base,
+                            w = this.textIsJumpLine(text),
+                            j = false;
+                        if (lineDesc.draw > 1) y += lineDesc.space * lineDesc.draw;
+                        if (w > 0) j = true;
+                        while (w > 0) {
+                            lineDesc.total += lineDesc.space * lineDesc.draw;
+                            if (w <= 1) lineDesc.total += 40;
+                            w--;
+                        }
+                        lineDesc.draw++;
+                        if (!j) lineDesc.total = y;
+                        this.drawTextEx(this.convertEscapeCharacters(JSON.parse(text)), x, y);
                     }
-                    lineDesc.draw++;
-                    if (!j) lineDesc.total = y;
-                    this.drawTextEx(this.convertEscapeCharacters(JSON.parse(desc)), x, y);
-                }
+                }, this);
             }, this);
             let y = lineDesc.total + 40,
                 location = windowDailyMissions.commandQuestData().location;
@@ -366,6 +390,11 @@ function Scene_DailyMissionsSystem() {
             this.changePaintOpacity(false);
             this.contents.fillRect(x, y, width, 1, 'white'), y += 8;
             this.changePaintOpacity(true);
+            if (location === $dataMapInfos[$gameMap.mapId()].name) {
+                location = `\\c[4]${location}\\c[0], \\tx[28]`;
+            } else {
+                location = `\\c[4]${location}\\c[0], \\tx[29] \\c[4]${$dataMapInfos[$gameMap.mapId()].name}.`;
+            }
             this.drawTextEx(`\\c[4]${location}`, x, y);
         }
     };
@@ -384,7 +413,31 @@ function Scene_DailyMissionsSystem() {
                 letter === 'n') s += letter;
             if (s === '\\n') j++ , s = '';
         }
-        console.log(text);
         return j;
     };
 })();
+/*~struct~descriptionQuests:
+ * 
+ * @param Quest ID
+ * @desc ID da missão
+ * @type number
+ * @default 1
+ * 
+ * @param Description
+ * @desc Descrição da missão
+ * @type struct<languageBase>[]
+ * @default []
+ *
+ */
+/*~struct~languageBase:
+ *
+ * @param Value
+ * @desc O valor do texto
+ * @type note[]
+ * @default []
+ *
+ * @param Language
+ * @desc O idioma do texto
+ * @type string
+ * @default qualquer
+ */
