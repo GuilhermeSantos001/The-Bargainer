@@ -10,9 +10,25 @@
      */
     const _game_map_update = Game_Map.prototype.update,
         _game_map_initialize = Game_Map.prototype.initialize,
-        _scene_map_createAllWindows = Scene_Map.prototype.createAllWindows;
+        _scene_map_createAllWindows = Scene_Map.prototype.createAllWindows,
+        _scene_map_update = Scene_Map.prototype.update;
 
-    let _windowMenu_show = null;
+    let _windowMenu_show,
+        _windowMenu_show_delay = 0;
+
+    /**
+     * Functions
+     */
+    function getTextLanguage(text) {
+        let _text = '???';
+        text.map(data => {
+            data = JSON.parse(data);
+            if (data['Language'] === $gameSystem.getterLanguageSystem() ||
+                data['Language'] === 'qualquer')
+                return _text = data['Value'];
+        });
+        return _text;
+    };
 
     /**
      * Game_Map
@@ -25,7 +41,7 @@
     Game_Map.prototype.update = function (sceneActive) {
         _game_map_update.apply(this, arguments);
         if ($gameSystem.isMenuEnabled()) $gameSystem.disableMenu();
-        if (Input.isTriggered('cancel')) this.showMenu();
+        if (Input.isTriggered('cancel') || TouchInput.isCancelled()) this.showMenu();
     };
 
     Game_Map.prototype.showMenu = function () {
@@ -55,31 +71,74 @@
         this._windowMenu.setHandler('_missions', this.onButtonWindowMenu.bind(this, '_missions'));
         this._windowMenu.setHandler('_dialogs', this.onButtonWindowMenu.bind(this, '_dialogs'));
         this._windowMenu.setHandler('_tutorials', this.onButtonWindowMenu.bind(this, '_tutorials'));
+        this._windowMenu.setHandler('_missionsDaily', this.onButtonWindowMenu.bind(this, '_missionsDaily'));
+        this._windowMenu.setHandler('_options', this.onButtonWindowMenu.bind(this, '_options'));
         this.addChild(this._windowMenu);
-        if (_windowMenu_show) this.showWindowMenu();
     };
 
     Scene_Map.prototype.showWindowMenu = function () {
-        this._windowMenu.showNow = true;
-        _windowMenu_show = true;
+        if (!this._windowMenu.showNow) this._windowMenu.showNow = true;
+        if (!_windowMenu_show) _windowMenu_show = true;
     };
 
-    Scene_Map.prototype.hideWindowMenu = function () {
-        this._windowMenu.showNow = null;
-        _windowMenu_show = null;
+    Scene_Map.prototype.hideWindowMenu = function (exception) {
+        if (this._windowMenu.showNow) this._windowMenu.showNow = null;
+        if (!exception) { if (_windowMenu_show) _windowMenu_show = null; }
+    };
+
+    Scene_Map.prototype.registerScenePush = function (scene) {
+        this._registerScenePush = scene;
     };
 
     Scene_Map.prototype.onButtonWindowMenu = function (handler) {
         if (handler === '_inventory') {
-            SceneManager.push(Scene_Item);
+            this._buttonWindowMenu = 0;
         } else if (handler === '_skills') {
-            SceneManager.push(Scene_Skill);
+            this._buttonWindowMenu = 1;
         } else if (handler === '_missions') {
-            SceneManager.push(Scene_Quest);
+            this._buttonWindowMenu = 2;
         } else if (handler === '_dialogs') {
-            SceneManager.push(Scene_SystemDialogs);
+            this._buttonWindowMenu = 3;
         } else if (handler === '_tutorials') {
-            SceneManager.push(Scene_SystemTutorials);
+            this._buttonWindowMenu = 4;
+        } else if (handler === '_missionsDaily') {
+            this._buttonWindowMenu = 5;
+        } else if (handler === '_options') {
+            this._buttonWindowMenu = 6;
+        }
+    };
+
+    Scene_Map.prototype.update = function () {
+        _scene_map_update.call(this);
+        this.updateButtonWindowMenu();
+    };
+
+    Scene_Map.prototype.updateButtonWindowMenu = function () {
+        if (_windowMenu_show) {
+            if (_windowMenu_show_delay < 30) _windowMenu_show_delay += .60;
+            else { this.showWindowMenu(), _windowMenu_show_delay = 0; }
+        }
+        if (typeof this._buttonWindowMenu === 'number') {
+            this.hideWindowMenu(true);
+            if (this._windowMenu.openness > 0) return;
+            if (this._buttonWindowMenuDelay < 30) return this._buttonWindowMenuDelay += .60;
+            if (this._buttonWindowMenu == 0) {
+                SceneManager.push(Scene_Item);
+            } else if (this._buttonWindowMenu == 1) {
+                SceneManager.push(Scene_Skill);
+            } else if (this._buttonWindowMenu == 2) {
+                SceneManager.push(Scene_Quest);
+            } else if (this._buttonWindowMenu == 3) {
+                SceneManager.push(Scene_SystemDialogs);
+            } else if (this._buttonWindowMenu == 4) {
+                SceneManager.push(Scene_SystemTutorials);
+            } else if (this._buttonWindowMenu == 5) {
+                SceneManager.push(Scene_DailyMissionsSystem);
+            } else if (this._buttonWindowMenu == 6) {
+                SceneManager.push(Scene_Options);
+            }
+            this._buttonWindowMenu = null;
+            this._buttonWindowMenuDelay = 0;
         }
     };
 
@@ -114,11 +173,11 @@
         return 48;
     };
 
-    Window_Menu.prototype.numVisibleRows = function () {
+    Window_Menu.prototype.maxCols = function () {
         return 1;
     };
 
-    Window_Menu.prototype.maxCols = function () {
+    Window_Menu.prototype.lineHeight = function () {
         return 1;
     };
 
@@ -127,11 +186,11 @@
         if (this.showNow) {
             if (this.openness < 255) this.openness += 16;
             else { if (this._bitmapStructures.opacity < 255) this._bitmapStructures.opacity += 16; }
-            if (this.openness & this._bitmapStructures.opacity >= 255) this.activate();
+            if (this.openness >= 255 && this._bitmapStructures.opacity >= 255) this.activate();
         } else {
             if (this._bitmapStructures.opacity > 0) this._bitmapStructures.opacity -= 16;
             else { if (this.openness > 0) this.openness -= 16; }
-            if (this.openness & this._bitmapStructures.opacity <= 0) this.deactivate();
+            if (this.openness <= 0 && this._bitmapStructures.opacity <= 0) this.deactivate();
         }
     };
 
@@ -140,18 +199,162 @@
     };
 
     Window_Menu.prototype.addMainCommands = function () {
-        this.addCommand('Inventario', '_inventory');
-        this.addCommand('Habilidades', '_skills');
-        this.addCommand('Contratos', '_contracts', false);
-        this.addCommand('Finanças', '_finances', false);
-        this.addCommand('Plantação', '_plantation', false);
-        this.addCommand('Cidades', '_cities', false);
-        this.addCommand('Rotas', '_routes', false);
-        this.addCommand('Musicas', '_musics', false);
-        this.addCommand('Missões', '_missions');
-        this.addCommand('Missões Diarias', '_missionsDaily', false);
-        this.addCommand('Dialogos', '_dialogs');
-        this.addCommand('Tutoriais', '_tutorials');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Mochila"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Backpack"
+                })
+        ]), '_inventory');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Habilidades"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Skills"
+                })
+        ]), '_skills');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Contratos"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Contracts"
+                })
+        ]), '_contracts', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Carteira"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Wallet"
+                })
+        ]), '_finances', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Plantação"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Plantation"
+                })
+        ]), '_plantation', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Cidades"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Cities"
+                })
+        ]), '_cities', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Rotas"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Routes"
+                })
+        ]), '_routes', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Musicas"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Musics"
+                })
+        ]), '_musics', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Missões"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Quests"
+                })
+        ]), '_missions');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Missões Diárias"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Daily Quests"
+                })
+        ]), '_missionsDaily');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Diálogos"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Dialogues"
+                })
+        ]), '_dialogs');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Tutoriais"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Tutorials"
+                })
+        ]), '_tutorials');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Opções"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Options"
+                })
+        ]), '_options');
     };
 
     Window_Menu.prototype.drawItem = function (index) {
@@ -183,8 +386,10 @@
             this.drawIcon(296, rect.x, rect.y + 3);
         } else if (this.commandSymbol(index) === '_routes') {
             this.drawIcon(68, rect.x, rect.y + 3);
+        } else if (this.commandSymbol(index) === '_options') {
+            this.drawIcon(242, rect.x, rect.y + 3);
         }
-        this.drawText(this.commandName(index), 46 + rect.x, rect.y + 8, rect.width, 'left');
+        this.drawText(this.commandName(index), 46 + rect.x, rect.y + 24, rect.width, 'left');
     };
 
     Window_Menu.prototype.drawIcon = function (iconIndex, x, y) {
@@ -209,7 +414,29 @@
         bitmap.fontSize = 42;
         bitmap.drawText('THE BARGAINER', 0, this.y - 20, sprite.width, 0, 'center');
         bitmap.fontSize = 18;
-        bitmap.drawText(`Olá ${GS.MVD.computerUsername()}, tenha um bom jogo!`, 5, 20, sprite.width, 0, 'left');
-        bitmap.drawText(`Versão | Alpha 0.01`, -5, sprite.height - 15, sprite.width, 0, 'right');
+        bitmap.drawText(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: `Olá ${GS.MVD.computerUsername()}, tenha um bom jogo!`
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: `Hi ${GS.MVD.computerUsername()}, have a good game!`
+                })
+        ]), 15, 20, sprite.width, 0, 'left');
+        bitmap.drawText(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: 'Versão Atual | Alpha 0.01'
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: 'Current Version | Alpha 0.01'
+                })
+        ]), -15, sprite.height - 20, sprite.width, 0, 'right');
     };
 })();
