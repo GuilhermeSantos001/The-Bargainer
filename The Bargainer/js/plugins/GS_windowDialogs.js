@@ -328,7 +328,7 @@ function Scene_SystemDialogs() {
                     'Language': 'pt_br'
                 }),
                 JSON.stringify({
-                    'Value': JSON.stringify(String('\\C[8]\\}Go in search of new dialogs, the world is full of things to do.\\{')),
+                    'Value': JSON.stringify(String('\\C[8]\\}Go in search of new dialogues, the world is full of things to do.\\{')),
                     'Language': 'en_us'
                 })
             ]));

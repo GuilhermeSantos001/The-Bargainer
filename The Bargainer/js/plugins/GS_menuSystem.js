@@ -17,6 +17,20 @@
         _windowMenu_show_delay = 0;
 
     /**
+     * Functions
+     */
+    function getTextLanguage(text) {
+        let _text = '???';
+        text.map(data => {
+            data = JSON.parse(data);
+            if (data['Language'] === $gameSystem.getterLanguageSystem() ||
+                data['Language'] === 'qualquer')
+                return _text = data['Value'];
+        });
+        return _text;
+    };
+
+    /**
      * Game_Map
      */
     Game_Map.prototype.initialize = function () {
@@ -185,19 +199,162 @@
     };
 
     Window_Menu.prototype.addMainCommands = function () {
-        this.addCommand('Inventario', '_inventory');
-        this.addCommand('Habilidades', '_skills');
-        this.addCommand('Contratos', '_contracts', false);
-        this.addCommand('Finanças', '_finances', false);
-        this.addCommand('Plantação', '_plantation', false);
-        this.addCommand('Cidades', '_cities', false);
-        this.addCommand('Rotas', '_routes', false);
-        this.addCommand('Musicas', '_musics', false);
-        this.addCommand('Missões', '_missions');
-        this.addCommand('Missões Diarias', '_missionsDaily');
-        this.addCommand('Dialogos', '_dialogs');
-        this.addCommand('Tutoriais', '_tutorials');
-        this.addCommand('Opções', '_options');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Mochila"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Backpack"
+                })
+        ]), '_inventory');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Habilidades"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Skills"
+                })
+        ]), '_skills');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Contratos"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Contracts"
+                })
+        ]), '_contracts', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Carteira"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Wallet"
+                })
+        ]), '_finances', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Plantação"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Plantation"
+                })
+        ]), '_plantation', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Cidades"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Cities"
+                })
+        ]), '_cities', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Rotas"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Routes"
+                })
+        ]), '_routes', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Musicas"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Musics"
+                })
+        ]), '_musics', false);
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Missões"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Quests"
+                })
+        ]), '_missions');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Missões Diárias"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Daily Quests"
+                })
+        ]), '_missionsDaily');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Diálogos"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Dialogues"
+                })
+        ]), '_dialogs');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Tutoriais"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Tutorials"
+                })
+        ]), '_tutorials');
+        this.addCommand(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Opções"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Options"
+                })
+        ]), '_options');
     };
 
     Window_Menu.prototype.drawItem = function (index) {
@@ -232,7 +389,7 @@
         } else if (this.commandSymbol(index) === '_options') {
             this.drawIcon(242, rect.x, rect.y + 3);
         }
-        this.drawText(this.commandName(index), 46 + rect.x, rect.y + 8, rect.width, 'left');
+        this.drawText(this.commandName(index), 46 + rect.x, rect.y + 24, rect.width, 'left');
     };
 
     Window_Menu.prototype.drawIcon = function (iconIndex, x, y) {
@@ -257,7 +414,29 @@
         bitmap.fontSize = 42;
         bitmap.drawText('THE BARGAINER', 0, this.y - 20, sprite.width, 0, 'center');
         bitmap.fontSize = 18;
-        bitmap.drawText(`Olá ${GS.MVD.computerUsername()}, tenha um bom jogo!`, 5, 20, sprite.width, 0, 'left');
-        bitmap.drawText(`Versão | Alpha 0.01`, -5, sprite.height - 15, sprite.width, 0, 'right');
+        bitmap.drawText(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: `Olá ${GS.MVD.computerUsername()}, tenha um bom jogo!`
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: `Hi ${GS.MVD.computerUsername()}, have a good game!`
+                })
+        ]), 15, 20, sprite.width, 0, 'left');
+        bitmap.drawText(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: 'Versão Atual | Alpha 0.01'
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: 'Current Version | Alpha 0.01'
+                })
+        ]), -15, sprite.height - 20, sprite.width, 0, 'right');
     };
 })();
