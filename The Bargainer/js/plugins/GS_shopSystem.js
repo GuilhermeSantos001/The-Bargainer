@@ -398,6 +398,7 @@
              * COMANDOS DA LISTA DE ITENS
              */
             this._windowCommandSystemShop.setHandler('_list_of_items_goback', this.commandSystemShopProcessListOfItemsGoback.bind(this));
+            this._windowCommandSystemShop.setHandler('_list_of_items_select', this.commandSystemShopProcessListOfItemsSelect.bind(this));
             this.sprite.addChild(this._windowCommandSystemShop);
         }
         if (!this._windowDialog) {
@@ -511,6 +512,13 @@
     Scene_SystemShop.prototype.commandSystemShopProcessListOfItemsGoback = function () {
         this._windowCommandSystemShop._commandsType = 'seller';
         this._windowCommandSystemShop.select(0);
+        this._windowCommandSystemShop.refresh();
+        this._windowCommandSystemShop.activate();
+    };
+
+    Scene_SystemShop.prototype.commandSystemShopProcessListOfItemsSelect = function () {
+        this._windowItemsShop.listItemSetId(this._windowCommandSystemShop.index());
+        this._windowItemsShop.refresh();
         this._windowCommandSystemShop.refresh();
         this._windowCommandSystemShop.activate();
     };
@@ -789,12 +797,16 @@
                     })
             ]), '_seller_goback');
         } else if (this._commandsType === 'list_of_items') {
+            let _enabled = { activate: false, enabled: true, index: 0 };
             this.shop = SceneManager._scene.shop;
-            let index = -1;
             for (const key in this.shop['items']) {
                 if (this.shop['items'].hasOwnProperty(key)) {
-                    this.addCommand(getTextLanguage(this.shop['items'][key].name), '_seller_buy');
+                    if (!_enabled.activate && SceneManager._scene._windowItemsShop.listItem === _enabled.index)
+                        _enabled.activate = true, _enabled.enabled = false;
+                    else _enabled.enabled = true;
+                    _enabled.index++;
                     this._iconId[String(getTextLanguage(this.shop['items'][key].name))] = this.shop['items'][key].icon;
+                    this.addCommand(getTextLanguage(this.shop['items'][key].name), '_list_of_items_select', _enabled.enabled);
                 }
             }
             this.addCommand(getTextLanguage([
@@ -2113,6 +2125,10 @@
 
     Window_itemsShop.prototype.standardFontSize = function () {
         return 18;
+    };
+
+    Window_itemsShop.prototype.listItemSetId = function (id) {
+        return this.listItem = id;
     };
 
     Window_itemsShop.prototype.nextListItem = function () {
