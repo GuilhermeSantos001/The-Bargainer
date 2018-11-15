@@ -2,7 +2,7 @@
 // DrXama_languageManager.js
 //==================================================================================================
 /*:
- * @plugindesc v2.01 - Gerenciador de traduções
+ * @plugindesc v2.1.01 - Gerenciador de traduções
  *
  * @author Dr.Xamã
  *
@@ -240,6 +240,7 @@
  * - this.getterLanguageSystem() - Retorna o idioma do sistema
  * - this.getTextForMessages(id) - Retorna o texto para a mensagem
  *                               - id do texto
+ * - this.getTextLanguage(id) - Retorna o texto para o idioma do sistema
  * ================================================================================
  *    Janela de Mensagens
  * ================================================================================
@@ -314,11 +315,15 @@
  * ================================================================================
  *    Suporte
  * ================================================================================
- * Caso você não consiga usar este plugin acesse os links ou e comente sua  dúvida 
+ * Caso você não consiga usar este plugin acesse os links e comente sua dúvida 
  * no post.
  * 
  * - http://drxama.epizy.com/?p=1
  * - http://www.condadobraveheart.com/forum/index.php?topic=4093.0
+ * - https://centrorpg.com/index.php?topic=19791
+ * 
+ * Assista ao vídeo para aprender a usar o plugin.
+ * - link do vídeo...
  * ================================================================================
  *    Termos de Uso
  * ================================================================================
@@ -332,6 +337,11 @@
  * ================================================================================
  * Para atualizar esse plugin acesse:
  * https://www.dropbox.com/s/mv6xcnbpyqvlus2/DrXama_languageManager.js?dl=0
+ * ================================================================================
+ *    CHANGELOG
+ * ================================================================================
+ * v2.1.01
+ * Novo comando adicionado para pegar o texto no idioma do sistema.
  */
 (function () {
     "use strict";
@@ -3338,6 +3348,10 @@
 
     Game_Interpreter.prototype.getTextForMessages = function (id) {
         return getTextForMessages(id);
+    };
+
+    Game_Interpreter.prototype.getTextLanguage = function (id) {
+        return $gameSystem.getTextLanguage(id);
     };
 
     //-----------------------------------------------------------------------------
