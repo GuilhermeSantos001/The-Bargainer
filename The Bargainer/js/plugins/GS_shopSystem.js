@@ -1056,8 +1056,7 @@
             sell_bonus_type = '';
         dialogs.map(dialog => {
             let data = JSON.parse(dialog);
-            if (String(data['Word']).toLowerCase().trim() === word &&
-                type[String(data['Bonus Type']).toLowerCase().trim()]) {
+            if (String(data['Word']).toLowerCase().trim() === word) {
                 if (String(data['Bonus Type']).toLowerCase().trim() === 'qualquer') {
                     buy_bonus = Number(data['Bonus Buy']);
                     sell_bonus = Number(data['Bonus Sell']);
