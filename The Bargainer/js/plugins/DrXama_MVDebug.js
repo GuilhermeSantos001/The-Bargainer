@@ -257,9 +257,9 @@ GS.MVD = MVD;
             window.resizeBy(dw, dh);
         }
         if (Utils.isNwjs() && Utils.isOptionValid('test')) {
-            // require('nw.gui').Window.get().showDevTools();
-            // Graphics.showFps();
-            // MakerManager.openMaker();
+            require('nw.gui').Window.get().showDevTools();
+            Graphics.showFps();
+            //MakerManager.openMaker();
         } else {
             Graphics._switchStretchMode();
             Graphics._switchFullScreen();
