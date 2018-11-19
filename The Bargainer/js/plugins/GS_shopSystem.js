@@ -28,6 +28,14 @@
  * [{pt_br: 'Como vai?', en_us: 'How are you?'}, 1, [0]]
  * );
  */
+
+/**
+ * Exportação
+ */
+function Game_ItemShop() {
+    this.initialize.apply(this, arguments);
+}
+
 (function () {
     "use strict";
     /**
@@ -49,21 +57,23 @@
         return path.join(base, p);
     };
 
-    function saveData(data) {
+    function saveData(data, path) {
         let fs = require('fs'),
             pathFolder = localPath('save'),
             pathFile = localPath('save/data_5.data');
+        if (path) pathFile = localPath(`save/${path}.data`);
         if (fs.existsSync(pathFolder)) {
-            fs.writeFileSync(pathFile, LZString.compressToBase64(JSON.stringify(data)), 'utf8');
+            fs.writeFileSync(pathFile, LZString.compressToBase64(JsonEx.stringify(data)), 'utf8');
         }
     };
 
-    function loadData() {
+    function loadData(path) {
         let fs = require('fs'),
             pathFolder = localPath('save'),
             pathFile = localPath('save/data_5.data');
+        if (path) pathFile = localPath(`save/${path}.data`);
         if (fs.existsSync(pathFolder) && fs.existsSync(pathFile)) {
-            return JSON.parse(LZString.decompressFromBase64(fs.readFileSync(pathFile, 'utf8')));
+            return JsonEx.parse(LZString.decompressFromBase64(fs.readFileSync(pathFile, 'utf8')));
         }
         return null;
     };
@@ -79,9 +89,9 @@
         return _text;
     };
 
-    //-----------------------------------------------------------------------------
-    // Graphics
-    //
+    /**
+     * Graphics
+     */
     const _graphics_createGameFontLoader = Graphics._createGameFontLoader;
     Graphics._createGameFontLoader = function () {
         _graphics_createGameFontLoader.call(this);
@@ -121,6 +131,7 @@
                 items = JSON.parse(data['Items']);
             if (!this._shops[shopID]) this._shops[shopID] = {}
             this._shops[shopID]['data'] = {
+                'id': shopID,
                 'shopDataDialog': shopDataDialog,
                 'shopName': shopName,
                 'shopLevel': shopLevel,
@@ -155,7 +166,8 @@
                         rarity = String(item['Item-Rarity']),
                         amount = Number(item['Item-Amount']),
                         sell_enabled = JSON.parse(item['Item-Sell']),
-                        buy_enabled = JSON.parse(item['Item-Buy']);
+                        buy_enabled = JSON.parse(item['Item-Buy']),
+                        fabrication = JSON.parse(item['Item-Fabrication']);
                     if (!this._shops[shopID]['items'][itemId])
                         this._shops[shopID]['items'][itemId] = {};
                     if (this._shops[shopID]['items'][itemId].sell != sell) {
@@ -180,7 +192,8 @@
                         ['sell_enabled', sell_enabled],
                         ['buy_enabled', buy_enabled],
                         ['price', price],
-                        ['lucre', lucre]
+                        ['lucre', lucre],
+                        ['fabrication', fabrication]
                     ).map(key => {
                         if (key[2]) {
                             if (this._shops[shopID]['items'][itemId][key[0]] === undefined ||
@@ -204,6 +217,29 @@
         saveData(this.getShops());
     };
 
+    Game_Temp.prototype.getShopItems = function (shopID) {
+        return this._shops[shopID] ? this._shops[shopID]['items'] : null;
+    };
+
+    Game_Temp.prototype.getItemShop = function (shopID, itemID) {
+        if (!this.getShopItems(shopID)) return;
+        return this.getShopItems(shopID)[itemID] ? this.getShopItems(shopID)[itemID] : null;
+    };
+
+    Game_Temp.prototype.addItemShop = function (shopID, itemID, amount) {
+        if (typeof amount != 'number') return;
+        this.getItemShop(shopID, itemID)['amount'] += Math.round(amount);
+        saveData(this.getShops());
+    };
+
+    Game_Temp.prototype.loseItemShop = function (shopID, itemID, amount) {
+        if (typeof amount != 'number') return;
+        this.getItemShop(shopID, itemID)['amount'] -= Math.round(amount);
+        if (this.getItemShop(shopID, itemID)['amount'] < 0)
+            this.getItemShop(shopID, itemID)['amount'] = 0;
+        saveData(this.getShops());
+    };
+
     /**
      * Game_Interpreter
      */
@@ -215,6 +251,184 @@
                     SceneManager.gotoExpress(Scene_SystemShop, shop);
                 }
             }, this);
+    };
+
+    /**
+     * Game_Map
+     */
+    const _game_map_update = Game_Map.prototype.update;
+    Game_Map.prototype.update = function (sceneActive) {
+        _game_map_update.apply(this, arguments);
+        if (sceneActive) {
+            this.updateSystemShop();
+        }
+    };
+
+    Game_Map.prototype.updateSystemShop = function () {
+        this.updateItemsShop();
+    };
+
+    Game_Map.prototype.updateItemsShop = function () {
+        if (!this._itemsShop) {
+            if (loadData('data_6')) this._itemsShop = loadData('data_6');
+            if (!this._itemsShop) this._itemsShop = {};
+            Object.keys($gameTemp.getShops()).map(key => {
+                for (const key2 in $gameTemp.getShops()[key].items) {
+                    if ($gameTemp.getShops()[key].items.hasOwnProperty(key2)) {
+                        if (this._itemsShop[key] instanceof Game_ItemShop === false)
+                            this._itemsShop[key] = new Game_ItemShop(
+                                $gameTemp.getShops()[key].items[key2].fabrication,
+                                $gameTemp.getShops()[key].data.id,
+                                $gameTemp.getShops()[key].items[key2].id
+                            );
+                        else this._itemsShop[key].initialize(
+                            $gameTemp.getShops()[key].items[key2].fabrication,
+                            $gameTemp.getShops()[key].data.id,
+                            $gameTemp.getShops()[key].items[key2].id
+                        );
+                    }
+                }
+            });
+            this.itemShopSave();
+        }
+        this.getArrayItemsShop().map(itemShop => {
+            if (this.getItemsShop()[itemShop] instanceof Game_ItemShop) this.getItemsShop()[itemShop].update();
+        });
+    };
+
+    Game_Map.prototype.itemShopSave = function () {
+        return saveData(this.getItemsShop(), 'data_6');
+    };
+
+    Game_Map.prototype.getItemsShop = function () {
+        return this._itemsShop;
+    };
+
+    Game_Map.prototype.getArrayItemsShop = function () {
+        return Object.keys(this.getItemsShop());
+    };
+
+    /**
+     * Game_ItemShop
+     */
+    Game_ItemShop.prototype.initialize = function (data, shopID, itemID) {
+        this._data = data;
+        this._shopID = shopID;
+        this._itemID = itemID;
+        this._days_of_work = JSON.parse(this._data['Days of Work']);
+        this._days_of_vacations = JSON.parse(this._data['Days and Months of vacations']);
+        this._day_of_fabrication = null;
+        this._mapId = Number(this._data['Map-ID']);
+        this._eventId = Number(this._data['Event-ID']);
+        this._eventSelfSwitches = [
+            String(this._data['Event-SelfSwitches_1']).toUpperCase().trim(),
+            String(this._data['Event-SelfSwitches_2']).toUpperCase().trim(),
+            String(this._data['Event-SelfSwitches_3']).toUpperCase().trim()
+        ];
+        this._timer_of_fabrication = Number(this._data['Timer of Fabrication']);
+    };
+
+    Game_ItemShop.prototype.getDayOfFabrication = function () {
+        return this._day_of_fabrication;
+    };
+
+    Game_ItemShop.prototype.update = function () {
+        this.updateDayOfFabrication();
+        this.updateItemFabrication();
+    };
+
+    Game_ItemShop.prototype.updateDayOfFabrication = function () {
+        /**
+         * Define o dia de fabricação
+         */
+        if (!this.getDayOfFabrication()) {
+            this._days_of_work.map(days => {
+                let day = JSON.parse(days);
+                if (Number(day['Month of Year']) == $gameVariables.value(12) &&
+                    Number(day['Day of Month']) == $gameVariables.value(10)) {
+                    this._day_of_fabrication = [
+                        $gameVariables.value(12),
+                        $gameVariables.value(10)
+                    ];
+                    $gameMap.itemShopSave();
+                    return;
+                }
+            }, this);
+        } else if (this.getDayOfFabrication()[0] != $gameVariables.value(12) ||
+            this.getDayOfFabrication()[0] == $gameVariables.value(12) &&
+            this.getDayOfFabrication()[1] < $gameVariables.value(10)) {
+            this._day_of_fabrication = null;
+            $gameMap.itemShopSave();
+        }
+        /**
+         * Define o dia de férias
+         */
+        if (this.getDayOfFabrication()) {
+            this._days_of_vacations.map(days => {
+                let day = JSON.parse(days);
+                if (Number(day['Month of Year']) == $gameVariables.value(12) &&
+                    Number(day['Day of Month']) == $gameVariables.value(10)) {
+                    this._day_of_fabrication = null;
+                    $gameMap.itemShopSave();
+                }
+            }, this);
+        }
+    };
+
+    Game_ItemShop.prototype.updateItemFabrication = function () {
+        /**
+         * Configura a data do evento
+         */
+        if (typeof this._event != 'object') this._event = {};
+        if (this._event['working'] === undefined) this._event['working'] = false;
+        if (this._event['hide'] === undefined) this._event['hide'] = false;
+        if (this._event['timeOfFabrication'] === undefined) this._event['timeOfFabrication'] = 0;
+        if (this._event['itemFabricationAmount'] === undefined) this._event['itemFabricationAmount'] = 0;
+        /**
+         * Verifica se é dia de trabalho
+         */
+        if (this.getDayOfFabrication()) {
+            if (this._mapId == $gameMap.mapId()) {
+                /**
+                 * Processos do evento
+                 */
+                if (!this._event['working']) {
+                    if ($gameSelfSwitches.value([this._mapId, this._eventId, this._eventSelfSwitches[1]]) === false &&
+                        $gameSelfSwitches.value([this._mapId, this._eventId, this._eventSelfSwitches[0]]) !== true) {
+                        $gameSelfSwitches.setValue([this._mapId, this._eventId, this._eventSelfSwitches[0]], true);
+                    }
+                } else {
+                    if ($gameSelfSwitches.value([this._mapId, this._eventId, this._eventSelfSwitches[1]]) !== true) {
+                        $gameSelfSwitches.setValue([this._mapId, this._eventId, this._eventSelfSwitches[1]], true);
+                        $gameMap.event(this._eventId)._shopSystem_eventSetPosition = true;
+                    }
+                }
+                if ($gameSelfSwitches.value([this._mapId, this._eventId, this._eventSelfSwitches[1]])) {
+                    if (!this._event['working']) this._event['working'] = true;
+                    if (!this._event['hide']) this._event['hide'] = true;
+                    if (this._event['timeOfFabrication'] < this._timer_of_fabrication) {
+                        return this._event['timeOfFabrication'] += .60;
+                    } else {
+                        this._event['timeOfFabrication'] = 0;
+                        if (Math.randomInt(2)) this._event['itemFabricationAmount']++;
+                    }
+                    $gameMap.itemShopSave();
+                }
+            }
+        } else {
+            if (this._event['working']) {
+                if ($gameSelfSwitches.value([this._mapId, this._eventId, this._eventSelfSwitches[1]])) {
+                    $gameSelfSwitches.setValue([this._mapId, this._eventId, this._eventSelfSwitches[1]], false);
+                    $gameSelfSwitches.setValue([this._mapId, this._eventId, this._eventSelfSwitches[2]], true);
+                }
+                if (!$gameSelfSwitches.value([this._mapId, this._eventId, this._eventSelfSwitches[2]])) {
+                    if (this._event['working']) this._event['working'] = false;
+                    if (this._event['hide']) this._event['hide'] = false;
+                    $gameTemp.addItemShop(this._shopID, this._itemID, this._event['itemFabricationAmount']);
+                    $gameMap.itemShopSave();
+                }
+            }
+        }
     };
 
     /**
@@ -2688,6 +2902,11 @@
  * @on Sim
  * @off Não
  * @default true
+ * 
+ * @param Item-Fabrication
+ * @desc Fabricação desse item
+ * @type struct<ItemFabrication>
+ * 
  */
 /*~struct~Language:
  * @param Value
@@ -3027,4 +3246,82 @@
  * @type number
  * @decimals 2
  * @default 0.06
+ */
+ /*~struct~ItemFabrication:
+ * @param Days of Work
+ * @desc Dias de trabalho
+ * @type struct<CalendarDaysMonths>[]
+ * @default []
+ * 
+ * @param Days and Months of vacations
+ * @desc Dias e Meses de ferias
+ * @type struct<CalendarDaysMonths>[]
+ * @default []
+ * 
+ * @param Map-ID
+ * @desc ID do mapa do NPC
+ * @type number
+ * @min 1
+ * @default 1
+ * 
+ * @param Event-ID
+ * @desc ID do evento do NPC
+ * @type number
+ * @min 1
+ * @default 1
+ * 
+ * @param Event-SelfSwitches_1
+ * @desc Primeiro 'Switch Local' a ser ativado enquanto o evento está trabalhando.
+ * @type select
+ * @default A
+ * @option A
+ * @option B
+ * @option C
+ * @option D
+ * 
+ * @param Event-SelfSwitches_2
+ * @desc Segundo 'Switch Local' a ser ativado enquanto o evento está trabalhando.
+ * @type select
+ * @default A
+ * @option A
+ * @option B
+ * @option C
+ * @option D
+ * 
+ * @param Event-SelfSwitches_3
+ * @desc Terceiro 'Switch Local' a ser ativado enquanto o evento está trabalhando.
+ * @type select
+ * @default A
+ * @option A
+ * @option B
+ * @option C
+ * @option D
+ * 
+ * @param Timer of Fabrication
+ * @desc Tempo de fabricação
+ * @type number
+ * @min 1
+ * @default 180
+ * 
+ */
+/*~struct~CalendarDaysMonths:
+ * @param Month of Year
+ * @desc Mês do ano
+ * @type select
+ * @default 1
+ * @option Mercúrio
+ * @value 1
+ * @option Vênus
+ * @value 2
+ * @option Terra
+ * @value 3
+ * @option Marte
+ * @value 4
+ * 
+ * @param Day of Month
+ * @desc Dia do mês
+ * @type number
+ * @min 1
+ * @default 1
+ * 
  */
