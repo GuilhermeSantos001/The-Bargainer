@@ -2,7 +2,7 @@
 // DrXama_charactersNames.js
 //==================================================================================================
 /*:
- * @plugindesc v1.14 - Adição de nome sobre o personagem, seguidores e eventos
+ * @plugindesc v1.3.2 - Adição de nome sobre o personagem, seguidores e eventos
  *
  * @author Dr.Xamã
  * 
@@ -35,6 +35,9 @@
  * ================================================================================
  * Para usar os nomes personalizados para os eventos, você precisa usar o plugin
  * "DrXama_languageManager".
+ * 
+ * Você pode definir o nome de um evento como 'getById ID' para pegar um nome
+ * especificado pelos parâmetros. Exemplo: getById 1
  * ================================================================================
  *    Comandos
  * ================================================================================
@@ -43,6 +46,10 @@
  * - event_textOff - Desliga a exibição do nome do evento
  * - event_textOn - Força a exibição do nome do evento
  * - event_name: String - Nome a ser exibido
+ * - event_textIcon: Number - Index do icone
+ * - event_textIconId: String - O identificador do icone
+ * - event_textBitmapWidth: Number - A largura do bitmap do icone
+ * - event_textBitmapHeight: Number - A altura do bitmap do icone
  * - event_textColor: Number(0-31) - Numero da cor do texto
  * - event_textFontSize: Number(10-72) - Tamanho do texto
  * - event_textDistance: Number(0-100) - Distancia do texto ao evento
@@ -58,12 +65,39 @@
  * - event_textAnimationFadeFrames: Number(1-???) - Frames da animação(Fade)
  * - event_textAnimationScaleFrames: Number(1-???) - Frames da animação(Scale)
  * - event_textAnimationRotationFrames: Number(1-???) - Frames da animação(Rotation)
+ * - $gameSystem.showEventTextIcon(id) - Exibe o icone do evento
+ * - $gameSystem.hideEventTextIcon(id) - Oculta o icone do evento
  * ================================================================================
  *    Atualização
  * ================================================================================
  * Para atualizar esse plugin vá no github do Dr.Xamã
  * https://github.com/GS-GAME-WORDS/Dr.Xama---RPG-MAKER-MV
  */
+var DX = DX || {
+    'site': function () { return require('nw.gui').Shell.openExternal('http://drxama.epizy.com/?i=1'); },
+    'terms': function () { return require('nw.gui').Shell.openExternal('http://drxama.epizy.com/?page_id=296'); },
+    'compatibility': function () {
+        if (Utils.RPGMAKER_VERSION == '1.4.1' ||
+            Utils.RPGMAKER_VERSION == '1.4.0' ||
+            Utils.RPGMAKER_VERSION == '1.3.5' ||
+            Utils.RPGMAKER_VERSION == '1.3.4' ||
+            Utils.RPGMAKER_VERSION == '1.3.3' ||
+            Utils.RPGMAKER_VERSION == '1.3.2' ||
+            Utils.RPGMAKER_VERSION == '1.3.1' ||
+            Utils.RPGMAKER_VERSION == '1.3.0' ||
+            Utils.RPGMAKER_VERSION == '1.2.0' ||
+            Utils.RPGMAKER_VERSION == '1.1.0' ||
+            Utils.RPGMAKER_VERSION == '1.0.1' ||
+            Utils.RPGMAKER_NAME != 'MV')
+            return Graphics.printError('Dr.Xamã', 'Atualmente seu RPG MAKER MV não suporta o seguinte plugin: DrXama_charactersNames'), SceneManager.stop();
+    }
+};
+DX.charactersNames = DX.charactersNames || {
+    'page': function () { return require('nw.gui').Shell.openExternal('http://drxama.epizy.com/?p=275'); },
+    'update': function () { return require('nw.gui').Shell.openExternal('https://www.dropbox.com/s/qrepex5oprlwmbr/DrXama_charactersNames.js?dl=0'); },
+    'changelog': function () { return require('nw.gui').Shell.openExternal('https://github.com/GS-GAME-WORDS/Dr.Xama---RPG-MAKER-MV/blob/master/changelog/DrXama_charactersNames.md'); },
+    'version': function () { return console.log('v1.3.2') }
+};
 (function () {
     "use strict";
     //-----------------------------------------------------------------------------
@@ -73,7 +107,8 @@
     params["Atores"] = params["Atores"].length <= 0 ? '[]' : params["Atores"];
     params["Nomes dos eventos"] = params["Nomes dos eventos"].length <= 0 ? '[]' : params["Nomes dos eventos"];
     var parameters_actors = JSON.parse(params["Atores"]),
-        parameters_eventsNames = JSON.parse(params["Nomes dos eventos"]);
+        parameters_eventsNames = JSON.parse(params["Nomes dos eventos"]),
+        bitmapIconsHide = [];
 
     function actorParameter(actorId) {
         var i = 0;
@@ -108,6 +143,58 @@
                 return name = String(data["Nome"]);
         });
         return name;
+    };
+
+    function localPath(p) {
+        // Retira uma parte da string
+        if (p.substring(0, 1) === '/')
+            p = p.substring(1);
+        // Importa o modulo PATH do Node
+        var path = require('path'),
+            // Cria a base para o caminho local
+            base = path.dirname(process.mainModule.filename);
+        // Retorna a base do caminho associado ao caminho
+        return path.join(base, p);
+    };
+
+    function saveData() {
+        let fs = require('fs');
+        if (fs.existsSync(localPath('save'))) {
+            fs.writeFileSync(localPath('save/data_7.data'), LZString.compressToBase64(JsonEx.stringify(bitmapIconsHide)), 'utf8');
+        }
+    };
+
+    function initializeData() {
+        let fs = require('fs');
+        if (fs.existsSync(localPath('save/data_7.data'))) {
+            bitmapIconsHide = JsonEx.parse(LZString.decompressFromBase64(fs.readFileSync(localPath('save/data_7.data'), 'utf8')));
+        }
+    };
+
+    //-----------------------------------------------------------------------------
+    // Scene_Map
+    //
+    const _scene_map_start = Scene_Map.prototype.start,
+        _scene_map_update = Scene_Map.prototype.update;
+    let _framesIconsHide = null;
+
+    Scene_Map.prototype.start = function () {
+        _scene_map_start.call(this);
+        _framesIconsHide = {
+            initialize: true,
+            frames: 60
+        };
+    };
+
+    Scene_Map.prototype.update = function () {
+        _scene_map_update.call(this);
+        if (!_framesIconsHide) return;
+        if (_framesIconsHide.frames > 0) {
+            _framesIconsHide.frames -= .60;
+        } else {
+            _framesIconsHide = null;
+            $gameSystem.updateHideIcons();
+        }
     };
 
     //-----------------------------------------------------------------------------
@@ -185,18 +272,25 @@
     //-----------------------------------------------------------------------------
     // Game_System
     //
+    const _game_system_initialize = Game_System.prototype.initialize;
+    Game_System.prototype.initialize = function () {
+        _game_system_initialize.call(this);
+        initializeData();
+    };
+
     Game_System.prototype.showEventTextIcon = function (id) {
         let scene = SceneManager._scene;
         id = id === undefined ? '_default' : String(id).replace(/\s{1,}/g, '');
         if (scene instanceof Scene_Map) {
             let sceneSpriteset = scene._spriteset;
-            if (sceneSpriteset._charactersNames && sceneSpriteset._charactersNames.length > 0) {
+            if (sceneSpriteset && sceneSpriteset._charactersNames && sceneSpriteset._charactersNames.length > 0) {
                 sceneSpriteset._charactersNames.map(character => {
                     if (character._bitmapIcon.id === id) {
                         character._bitmapIcon.show = true;
                         character.setBitmap();
+                        this.removeCacheHideIcon(id);
                     }
-                });
+                }, this);
             }
         }
     };
@@ -206,16 +300,35 @@
         id = id === undefined ? '_default' : String(id).replace(/\s{1,}/g, '');
         if (scene instanceof Scene_Map) {
             let sceneSpriteset = scene._spriteset;
-            if (sceneSpriteset._charactersNames && sceneSpriteset._charactersNames.length > 0) {
+            if (sceneSpriteset && sceneSpriteset._charactersNames && sceneSpriteset._charactersNames.length > 0) {
                 sceneSpriteset._charactersNames.map(character => {
                     if (character._bitmapIcon.id === id) {
                         character._bitmapIcon.show = false;
                         character.setFrame(0, 0, 48, 48);
                         character.setBitmap();
+                        this.addCacheHideIcon(id);
                     }
-                });
+                }, this);
             }
         }
+    };
+
+    Game_System.prototype.addCacheHideIcon = function (id) {
+        if (bitmapIconsHide.filter(_id => { return _id === id }).length <= 0)
+            bitmapIconsHide.push(id);
+        saveData();
+    };
+
+    Game_System.prototype.removeCacheHideIcon = function (id) {
+        if (bitmapIconsHide.filter(_id => { return _id === id }).length > 0)
+            bitmapIconsHide.splice(bitmapIconsHide.indexOf(id), 1);
+        saveData();
+    };
+
+    Game_System.prototype.updateHideIcons = function () {
+        bitmapIconsHide.map(id => {
+            this.hideEventTextIcon(id);
+        }, this);
     };
 
     //-----------------------------------------------------------------------------
@@ -316,6 +429,7 @@
         var bitmapAnimationRotationFramesChange = false;
         var bitmapAnimationRotationFrames = this._animationRotationFrames;
         var bitmapIcon = { index: null, id: '_default', show: true, distance: 0 };
+        var bitmapResize = { resize: null, width: this.bitmap.width, height: this.bitmap.height };
         if (this._character instanceof Game_Event) {
             bitmapText = $dataMap.events[this._character.eventId()].name;
             bitmapTextShow = true;
@@ -385,6 +499,12 @@
                             bitmapAnimationRotationFrames = parseInt(text.replace('event_textAnimationRotationFrames:', '')) || 20;
                             if (bitmapAnimationRotationFrames < 1) bitmapAnimationRotationFrames = 1;
                             bitmapAnimationRotationFramesChange = true;
+                        } else if (text.contains('event_textBitmapWidth')) {
+                            bitmapResize.width = parseInt(text.replace('event_textBitmapWidth:', '')) || bitmapData.width;
+                            bitmapResize.resize = true;
+                        } else if (text.contains('event_textBitmapHeight')) {
+                            bitmapResize.height = parseInt(text.replace('event_textBitmapHeight:', '')) || bitmapData.height;
+                            bitmapResize.resize = true;
                         }
                     }
                 });
@@ -416,6 +536,10 @@
                 }
                 if (bitmapAnimationRotationFramesChange) {
                     this._animationRotationFrames = bitmapAnimationRotationFrames;
+                }
+                if (bitmapResize.resize) {
+                    this.bitmap = new Bitmap(bitmapResize.width, bitmapResize.height);
+                    bitmapResize.resize = null;
                 }
             }
         }
@@ -544,7 +668,7 @@
                 if (this._bitmapText.toLowerCase().includes('getbyid'))
                     this._bitmapText = eventName(Number(this._bitmapText.match(/\d+/g)[0]));
             }
-            this.bitmap.drawText(this._bitmapText, 0, 25, this.bitmap.width, 0, 'center');
+            this.bitmap.drawText(this._bitmapText, 0, this.bitmap.height / 2, this.bitmap.width, 5, 'center');
         }
     };
 

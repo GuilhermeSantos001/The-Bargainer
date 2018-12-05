@@ -2,7 +2,7 @@
 // DrXama_languageManager.js
 //==================================================================================================
 /*:
- * @plugindesc v2.1.01 - Gerenciador de traduções
+ * @plugindesc v2.2.3 - Gerenciador de traduções
  *
  * @author Dr.Xamã
  *
@@ -101,8 +101,8 @@
  * @parent Janelas
  * @desc Textos da janela de status
  * @type struct<JanelaStatus>
- * @default {"Texto Max HP":"[\"{\\\"Valor\\\":\\\"Max HP\\\",\\\"Idioma\\\":\\\"qualquer\\\"}\"]","Texto Max MP":"[\"{\\\"Valor\\\":\\\"Max MP\\\",\\\"Idioma\\\":\\\"qualquer\\\"}\"]","Texto Attack":"[\"{\\\"Valor\\\":\\\"Ataque\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Attack\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Defense":"[\"{\\\"Valor\\\":\\\"Defesa\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Defense\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto M.Attack":"[\"{\\\"Valor\\\":\\\"M.Ataque\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"M.Attack\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto M.Defense":"[\"{\\\"Valor\\\":\\\"M.Defesa\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"M.Defense\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Agility":"[\"{\\\"Valor\\\":\\\"Agilidade\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Agility\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Luck":"[\"{\\\"Valor\\\":\\\"Sorte\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Luck\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Hit":"[\"{\\\"Valor\\\":\\\"Dano\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Hit\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Evasion":"[\"{\\\"Valor\\\":\\\"Evasão\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Evasion\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Current":"[\"{\\\"Valor\\\":\\\"%1 Atual\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"%1 Current\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Exp":"[\"{\\\"Valor\\\":\\\"Exp\\\",\\\"Idioma\\\":\\\"qualquer\\\"}\"]","Texto Exp Next":"[\"{\\\"Valor\\\":\\\"Para o Próximo %1\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"%1 to next\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]"}
- *
+ * @default {"Texto Max HP":"[\"{\\\"Valor\\\":\\\"Max HP\\\",\\\"Idioma\\\":\\\"qualquer\\\"}\"]","Texto Max MP":"[\"{\\\"Valor\\\":\\\"Max MP\\\",\\\"Idioma\\\":\\\"qualquer\\\"}\"]","Texto Attack":"[\"{\\\"Valor\\\":\\\"Ataque\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Attack\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Defense":"[\"{\\\"Valor\\\":\\\"Defesa\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Defense\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto M.Attack":"[\"{\\\"Valor\\\":\\\"M.Ataque\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"M.Attack\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto M.Defense":"[\"{\\\"Valor\\\":\\\"M.Defesa\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"M.Defense\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Agility":"[\"{\\\"Valor\\\":\\\"Agilidade\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Agility\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Luck":"[\"{\\\"Valor\\\":\\\"Sorte\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Luck\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Hit":"[\"{\\\"Valor\\\":\\\"Dano\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Hit\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Evasion":"[\"{\\\"Valor\\\":\\\"Evasão\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Evasion\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Current":"[\"{\\\"Valor\\\":\\\"%1 Atual\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"Current %1\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]","Texto Exp":"[\"{\\\"Valor\\\":\\\"Exp\\\",\\\"Idioma\\\":\\\"qualquer\\\"}\"]","Texto Exp Next":"[\"{\\\"Valor\\\":\\\"Para o Próximo %1\\\",\\\"Idioma\\\":\\\"pt_br\\\"}\",\"{\\\"Valor\\\":\\\"To next %1\\\",\\\"Idioma\\\":\\\"en_us\\\"}\"]"}
+ * 
  * @param GameEnd
  * @parent Janelas
  * @desc Textos da janela de sair do jogo
@@ -240,7 +240,6 @@
  * - this.getterLanguageSystem() - Retorna o idioma do sistema
  * - this.getTextForMessages(id) - Retorna o texto para a mensagem
  *                               - id do texto
- * - this.getTextLanguage(id) - Retorna o texto para o idioma do sistema
  * ================================================================================
  *    Janela de Mensagens
  * ================================================================================
@@ -315,15 +314,11 @@
  * ================================================================================
  *    Suporte
  * ================================================================================
- * Caso você não consiga usar este plugin acesse os links e comente sua dúvida 
+ * Caso você não consiga usar este plugin acesse os links ou e comente sua  dúvida 
  * no post.
  * 
  * - http://drxama.epizy.com/?p=1
  * - http://www.condadobraveheart.com/forum/index.php?topic=4093.0
- * - https://centrorpg.com/index.php?topic=19791
- * 
- * Assista ao vídeo para aprender a usar o plugin.
- * - link do vídeo...
  * ================================================================================
  *    Termos de Uso
  * ================================================================================
@@ -337,3057 +332,3107 @@
  * ================================================================================
  * Para atualizar esse plugin acesse:
  * https://www.dropbox.com/s/mv6xcnbpyqvlus2/DrXama_languageManager.js?dl=0
- * ================================================================================
- *    CHANGELOG
- * ================================================================================
- * v2.1.01
- * Novo comando adicionado para pegar o texto no idioma do sistema.
  */
+var DX = DX || {
+	'site': function () { return require('nw.gui').Shell.openExternal('http://drxama.epizy.com/?i=1'); },
+	'terms': function () { return require('nw.gui').Shell.openExternal('http://drxama.epizy.com/?page_id=296'); },
+	'compatibility': function () {
+		if (Utils.RPGMAKER_VERSION == '1.4.1' ||
+			Utils.RPGMAKER_VERSION == '1.4.0' ||
+			Utils.RPGMAKER_VERSION == '1.3.5' ||
+			Utils.RPGMAKER_VERSION == '1.3.4' ||
+			Utils.RPGMAKER_VERSION == '1.3.3' ||
+			Utils.RPGMAKER_VERSION == '1.3.2' ||
+			Utils.RPGMAKER_VERSION == '1.3.1' ||
+			Utils.RPGMAKER_VERSION == '1.3.0' ||
+			Utils.RPGMAKER_VERSION == '1.2.0' ||
+			Utils.RPGMAKER_VERSION == '1.1.0' ||
+			Utils.RPGMAKER_VERSION == '1.0.1' ||
+			Utils.RPGMAKER_NAME != 'MV')
+			return Graphics.printError('Dr.Xamã', 'Atualmente seu RPG MAKER MV não suporta o seguinte plugin: DrXama_languageManager'), SceneManager.stop();
+	}
+};
+DX.languageManager = DX.languageManager || {
+	'page': function () { return require('nw.gui').Shell.openExternal('http://drxama.epizy.com/?p=1'); },
+	'update': function () { return require('nw.gui').Shell.openExternal('https://www.dropbox.com/s/mv6xcnbpyqvlus2/DrXama_languageManager.js?dl=0'); },
+	'changelog': function () { return require('nw.gui').Shell.openExternal('https://github.com/GS-GAME-WORDS/Dr.Xama---RPG-MAKER-MV/blob/master/changelog/DrXama_languageManager.md'); },
+	'version': function () { return console.log('v2.2.3') }
+};
 (function () {
-    "use strict";
-    //-----------------------------------------------------------------------------
-    // Parâmetros
-    //
-    var params = (function () {
-        function JsonParse(object) {
-            object = object || {};
-            Object.keys(object).forEach(function (key) {
-                if (object[key].length > 0) {
-                    object[key] = JSON.parse(object[key]) || {};
-                }
-            });
-            return object;
-        }
-        var file = PluginManager.parameters('DrXama_languageManager'),
-            language = JSON.parse(file['Idiomas'] || []),
-            languageId = (function () {
-                var fs = require('fs'),
-                    path_folderSystem = localPath('system'),
-                    path_folderLanguage = localPath('system/language/save'),
-                    path_fileSettingsLanguage = path_folderLanguage + '\\' + 'settingsLanguageSystem.drxamasave',
-                    value = Number(file['Idioma'] || 0);
-                if (fs.existsSync(path_folderLanguage)) {
-                    if (fs.existsSync(path_fileSettingsLanguage) && !Utils.isOptionValid('test')) {
-                        var datafile = JSON.parse(LZString.decompressFromBase64(fs.readFileSync(path_fileSettingsLanguage, { encoding: 'utf8' })));
-                        value = datafile.languageId;
-                    }
-                }
-                return value;
-            })(),
-            title = JsonParse(JSON.parse(file['Title'] || {})),
-            menu = JsonParse(JSON.parse(file['Menu'] || {})),
-            shop = JsonParse(JSON.parse(file['Shop'] || {})),
-            save = JsonParse(JSON.parse(file['Save'] || {})),
-            load = JsonParse(JSON.parse(file['Load'] || {})),
-            options = JsonParse(JSON.parse(file['Options'] || {})),
-            status = JsonParse(JSON.parse(file['Status'] || {})),
-            basic = JsonParse(JSON.parse(file['Basic'] || {})),
-            gameEnd = JsonParse(JSON.parse(file['GameEnd'] || {})),
-            battle = JsonParse(JSON.parse(file['Battle'] || {})),
-            elementTypes = JsonParse(JSON.parse(file['Elementos(Tipo)'] || [])),
-            skillTypes = JsonParse(JSON.parse(file['Habilidades(Tipo)'] || [])),
-            weaponsTypes = JsonParse(JSON.parse(file['Armas(Tipo)'] || [])),
-            armorTypes = JsonParse(JSON.parse(file['Armaduras(Tipo)'] || [])),
-            equipTypes = JsonParse(JSON.parse(file['Equipamentos(Tipo)'] || [])),
-            messages = JsonParse(JSON.parse(file['Geral'] || {})),
-            states = JsonParse(JSON.parse(file['Estados'] || [])),
-            skills = JsonParse(JSON.parse(file['Habilidades'] || [])),
-            actors = JsonParse(JSON.parse(file['Atores'] || [])),
-            classes = JsonParse(JSON.parse(file['Classes'] || [])),
-            items = JsonParse(JSON.parse(file['Itens'] || [])),
-            weapons = JsonParse(JSON.parse(file['Armas'] || [])),
-            armors = JsonParse(JSON.parse(file['Armadura'] || [])),
-            enemies = JsonParse(JSON.parse(file['Inimigos'] || [])),
-            texts = JsonParse(JSON.parse(file['Textos'] || [])),
-            specialsTexts = JsonParse(JSON.parse(file['Especiais'] || [])),
-            windowToCompilator = JSON.parse(file['Janela do compilador'] || false),
-            defaultLanguageCompilator = String(file['Idioma padrão do compilador'] || 'qualquer'),
-            imageButtonCompilator = String(file['Imagem dos botões do compilador'] || 'ButtonSet_HelpSystemInfo'),
-            commandLanguageOptions = function () {
-                var commands = JsonParse(JSON.parse(file['Comando Idioma'] || [])),
-                    commandValue = ['???', '???'];
-                commands.map(function (command) {
-                    let valor = String(command['Texto']),
-                        valor2 = String(command['Valor']),
-                        idioma = String(command['Idioma']);
-                    if (idioma == getterLanguageSystem() || idioma == 'qualquer') {
-                        return commandValue = [valor, valor2];
-                    }
-                });
-                return commandValue;
-            };
-        return {
-            'language': language,
-            'languageId': languageId,
-            'commandLanguageOptions': commandLanguageOptions,
-            'title': title,
-            'menu': menu,
-            'shop': shop,
-            'save': save,
-            'load': load,
-            'options': options,
-            'status': status,
-            'basic': basic,
-            'gameEnd': gameEnd,
-            'battle': battle,
-            'elementTypes': elementTypes,
-            'skillTypes': skillTypes,
-            'weaponsTypes': weaponsTypes,
-            'armorTypes': armorTypes,
-            'equipTypes': equipTypes,
-            'messages': messages,
-            'states': states,
-            'skills': skills,
-            'actors': actors,
-            'classes': classes,
-            'items': items,
-            'weapons': weapons,
-            'armors': armors,
-            'enemies': enemies,
-            'texts': texts,
-            'specialsTexts': specialsTexts,
-            'windowToCompilator': windowToCompilator,
-            'defaultLanguageCompilator': defaultLanguageCompilator,
-            'imageButtonCompilator': imageButtonCompilator
-        }
-    })();
-
-    //-----------------------------------------------------------------------------
-    // Variaveis Globais
-    //
-    var translateObject = {},
-        baseAlradyInitialize = null;
-
-    //-----------------------------------------------------------------------------
-    // String
-    //
-    String.prototype.includesEx = function (string) {
-        return this.toLowerCase().replace(/\s{1,}/g, '')
-            .includes(string.toLowerCase().replace(/\s{1,}/g, ''));
-    };
-
-    //-----------------------------------------------------------------------------
-    // Funções
-    //
-    // Retorna o caminho local para o arquivo/pasta
-    function localPath(p) {
-        // Retira uma parte da string
-        if (p.substring(0, 1) === '/')
-            p = p.substring(1);
-        // Importa o modulo PATH do Node
-        var path = require('path'),
-            // Cria a base para o caminho local
-            base = path.dirname(process.mainModule.filename);
-        // Retorna a base do caminho associado ao caminho
-        return path.join(base, p);
-    };
-
-    // Cria a pasta do sistema
-    function createSystemFolders() {
-        var fs = require('fs'),
-            path_folderSystem = localPath('system'),
-            path_folderLanguage = localPath('system/language'),
-            path_folderLanguageSave = localPath('system/language/save');
-        if (!fs.existsSync(path_folderSystem)) {
-            fs.mkdirSync(path_folderSystem);
-        }
-        if (!fs.existsSync(path_folderLanguage)) {
-            fs.mkdirSync(path_folderLanguage);
-        }
-        if (!fs.existsSync(path_folderLanguageSave)) {
-            fs.mkdirSync(path_folderLanguageSave);
-        }
-    };
-
-    // Cria o arquivo de configuração do sistema
-    function createFileSettingsLanguage(callback, setLanguage) {
-        var fs = require('fs'),
-            path_folderSystem = localPath('system'),
-            path_folderLanguage = localPath('system/language/save'),
-            path_fileSettingsLanguage = path_folderLanguage + '\\' + 'settingsLanguageSystem.drxamasave',
-            data = LZString.compressToBase64(JSON.stringify({
-                'language': params.language[params.languageId],
-                'languageId': params.languageId,
-                'isCompleteGame': false
-            }, null, 2));
-        if (fs.existsSync(path_folderLanguage)) {
-            if (!fs.existsSync(path_fileSettingsLanguage) || Utils.isOptionValid('test') || setLanguage) {
-                fs.writeFileSync(path_fileSettingsLanguage, data);
-            }
-            if (fs.existsSync(path_fileSettingsLanguage) && !Utils.isOptionValid('test')) {
-                var datafile = JSON.parse(LZString.decompressFromBase64(fs.readFileSync(path_fileSettingsLanguage, { encoding: 'utf8' })));
-                if (!datafile.isCompleteGame) {
-                    datafile.language = params.language[params.languageId];
-                    datafile.languageId = params.languageId;
-                    datafile.isCompleteGame = true;
-                    fs.writeFileSync(path_fileSettingsLanguage,
-                        LZString.compressToBase64(JSON.stringify(datafile, null, 2)));
-                }
-            }
-        }
-        if (typeof callback === 'function') callback();
-    };
-
-    // Retorna a linguagem padrão do sistema
-    function getterLanguageSystem() {
-        var fs = require('fs'),
-            path_folderSystem = localPath('system'),
-            path_folderLanguage = localPath('system/language/save'),
-            path_fileSettingsLanguage = path_folderLanguage + '\\' + 'settingsLanguageSystem.drxamasave',
-            language = params.language[params.languageId];
-        if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_fileSettingsLanguage)) {
-            var data = JSON.parse(LZString.decompressFromBase64(
-                fs.readFileSync(path_fileSettingsLanguage, {
-                    'encoding': 'utf8'
-                })));
-            language = data.language;
-        }
-        return language;
-    };
-
-    // Retorna o texto para a linguagem padrão do sistema
-    function getterTextLanguage(object) {
-        if (object instanceof Array) {
-            var language = getterLanguageSystem(),
-                text = '???';
-            object.forEach(function (key) {
-                key = JSON.parse(key) || {};
-                let idioma = key.Idioma || 'qualquer',
-                    valor = key.Valor || '???',
-                    elemento = null;
-                if (key.Element)
-                    elemento = (function () {
-                        var id = key.Element[1],
-                            stringCase = String(key.Element[0]).toLowerCase();
-                        switch (stringCase) {
-                            case 'equipamento':
-                            case 'armadura':
-                            case 'arma':
-                            case 'habilidade':
-                            case 'elemento':
-                            case 'statesmessage':
-                            case 'skills':
-                            case 'skillsmessage':
-                            case 'actors':
-                            case 'classes':
-                            case 'items':
-                            case 'weapons':
-                            case 'armors':
-                            case 'enemies':
-                                if (!translateObject[stringCase])
-                                    translateObject[stringCase] = {};
-                                if (!translateObject[stringCase][id])
-                                    translateObject[stringCase][id] = {};
-                                return translateObject[stringCase][id];
-                            case 'states':
-                                return $dataStates[id];
-                            case 'item':
-                                return $dataItems[id];
-                        }
-                    })();
-                if (idioma === language || idioma == 'qualquer') {
-                    if (elemento) {
-                        if (!elemento.translate) {
-                            elemento.translate = true;
-                        } else {
-                            return;
-                        }
-                    }
-                    return text = valor;
-                }
-            });
-            return text;
-        }
-        return '???';
-    };
-
-    // Define os textos do TextManager
-    function defineTextManager() {
-        Object.defineProperties(TextManager, {
-            newGame: {
-                value: getterTextLanguage(params.title['Texto New Game'])
-            },
-            continue_: {
-                value: getterTextLanguage(params.title['Texto Continue'])
-            },
-            item: {
-                value: getterTextLanguage(params.menu['Texto Item']),
-            },
-            skill: {
-                value: getterTextLanguage(params.menu['Texto Skill'])
-            },
-            equip: {
-                value: getterTextLanguage(params.menu['Texto Equip'])
-            },
-            status: {
-                value: getterTextLanguage(params.menu['Texto Status'])
-            },
-            formation: {
-                value: getterTextLanguage(params.menu['Texto Formation'])
-            },
-            save: {
-                value: getterTextLanguage(params.menu['Texto Save'])
-            },
-            gameEnd: {
-                value: getterTextLanguage(params.menu['Texto Game End'])
-            },
-            options: {
-                value: getterTextLanguage(params.menu['Texto Options'])
-            },
-            weapon: {
-                value: getterTextLanguage(params.menu['Texto Weapon'])
-            },
-            armor: {
-                value: getterTextLanguage(params.menu['Texto Armor'])
-            },
-            keyItem: {
-                value: getterTextLanguage(params.menu['Texto Key Item'])
-            },
-            equip2: {
-                value: getterTextLanguage(params.menu['Texto Equip(2)'])
-            },
-            optimize: {
-                value: getterTextLanguage(params.menu['Texto Optimize'])
-            },
-            clear: {
-                value: getterTextLanguage(params.menu['Texto Clear'])
-            },
-            buy: {
-                value: getterTextLanguage(params.shop['Texto Buy'])
-            },
-            sell: {
-                value: getterTextLanguage(params.shop['Texto Sell'])
-            },
-            cancel: {
-                value: getterTextLanguage(params.basic['Texto Cancel'])
-            },
-            possession: {
-                value: getterTextLanguage(params.shop['Texto Possession'])
-            },
-            saveMessage: {
-                value: getterTextLanguage(params.save['Texto Save Message'])
-            },
-            loadMessage: {
-                value: getterTextLanguage(params.load['Texto Load Message'])
-            },
-            file: {
-                value: getterTextLanguage(params.basic['Texto File'])
-            },
-            alwaysDash: {
-                value: getterTextLanguage(params.options['Texto Always Dash'])
-            },
-            commandRemember: {
-                value: getterTextLanguage(params.options['Texto Command Remember'])
-            },
-            bgmVolume: {
-                value: getterTextLanguage(params.options['Texto BGM Volume'])
-            },
-            bgsVolume: {
-                value: getterTextLanguage(params.options['Texto BGS Volume'])
-            },
-            meVolume: {
-                value: getterTextLanguage(params.options['Texto ME Volume'])
-            },
-            seVolume: {
-                value: getterTextLanguage(params.options['Texto SE Volume'])
-            },
-            expTotal: {
-                value: getterTextLanguage(params.status['Texto Current'])
-            },
-            exp: {
-                value: getterTextLanguage(params.status['Texto Exp'])
-            },
-            expNext: {
-                value: getterTextLanguage(params.status['Texto Exp Next'])
-            },
-            level: {
-                value: getterTextLanguage(params.basic['Texto Level'])
-            },
-            toTitle: {
-                value: getterTextLanguage(params.gameEnd['Texto To Title'])
-            },
-            fight: {
-                value: getterTextLanguage(params.battle['Texto Fight'])
-            },
-            escape: {
-                value: getterTextLanguage(params.battle['Texto Escape'])
-            },
-            attack: {
-                value: getterTextLanguage(params.battle['Texto Attack'])
-            },
-            guard: {
-                value: getterTextLanguage(params.battle['Texto Guard'])
-            }
-        });
-    };
-
-    // Define os textos dos termos
-    var systemTerms = {
-        'params': null,
-        'basic': null
-    };
-    function defineSystemTerms() {
-        if (systemTerms.params instanceof Array === false) systemTerms.params = $dataSystem.terms.params.slice(0);
-        if (systemTerms.basic instanceof Array === false) systemTerms.basic = $dataSystem.terms.basic.slice(0);
-        function setTextParameter(manager, value, object, object2, index) {
-            Object.keys(manager).forEach(function (key) {
-                if (key.includesEx(String(value))) {
-                    object2[index] = getterTextLanguage(manager[key]);
-                }
-                if (key.includesEx(String('gold'))) {
-                    $dataSystem.currencyUnit = getterTextLanguage(manager[key]);
-                }
-            });
-        };
-
-        function setTextParameter2(manager, stringIndex, object, index) {
-            manager.forEach(function (key) {
-                var id = Number(key['Texto ' + stringIndex + ' Id']),
-                    text = String(key['Texto ' + stringIndex + ' Texto']),
-                    language = String(key['Texto Idioma']);
-                if (id == index) {
-                    var translateId = String(stringIndex).toLowerCase();
-                    if (!translateObject[translateId] || translateObject[translateId] && !translateObject[translateId][index] ||
-                        translateObject[translateId] && translateObject[translateId][index] && !translateObject[translateId][index].translate) {
-                        object[index] = getterTextLanguage([
-                            JSON.stringify({
-                                'Idioma': language,
-                                'Valor': text,
-                                'Element': [
-                                    stringIndex,
-                                    index
-                                ]
-                            })
-                        ])
-                    }
-                }
-            });
-        };
-
-        function setTextParameterMessage(manager, object) {
-            Object.keys(manager).forEach(function (key) {
-                Object.keys(object).forEach(function (key2) {
-                    if (key.includesEx(String(key2))) {
-                        object[key2] = getterTextLanguage(manager[key])
-                    }
-                });
-            });
-        };
-        setTextParameterMessage(params.messages, $dataSystem.terms.messages);
-        var i = 0,
-            length = systemTerms.params.length,
-            object = systemTerms.params;
-        for (; i < length; i++) {
-            setTextParameter(params.status, object[i], object, $dataSystem.terms.params, i);
-        }
-        i = 0,
-            length = systemTerms.basic.length,
-            object = systemTerms.basic;
-        for (; i < length; i++) {
-            setTextParameter(params.basic, object[i], object, $dataSystem.terms.basic, i);
-        }
-        i = 0,
-            length = $dataSystem.elements.length,
-            object = $dataSystem.elements;
-        for (; i < length; i++) {
-            setTextParameter2(params.elementTypes, 'Elemento', object, i);
-        }
-        i = 0,
-            length = $dataSystem.skillTypes.length,
-            object = $dataSystem.skillTypes;
-        for (; i < length; i++) {
-            setTextParameter2(params.skillTypes, 'Habilidade', object, i);
-        }
-        i = 0,
-            length = $dataSystem.weaponTypes.length,
-            object = $dataSystem.weaponTypes;
-        for (; i < length; i++) {
-            setTextParameter2(params.weaponsTypes, 'Arma', object, i);
-        }
-        i = 0,
-            length = $dataSystem.armorTypes.length,
-            object = $dataSystem.armorTypes;
-        for (; i < length; i++) {
-            setTextParameter2(params.armorTypes, 'Armadura', object, i);
-        }
-        i = 0,
-            length = $dataSystem.equipTypes.length,
-            object = $dataSystem.equipTypes;
-        for (; i < length; i++) {
-            setTextParameter2(params.equipTypes, 'Equipamento', object, i);
-        }
-    };
-
-    // Define os textos dos estados
-    function defineSystemStates() {
-        if (params.states instanceof Array) {
-            params.states.forEach(function (state) {
-                var id = Number(state['Texto Estado Id']),
-                    name = String(state['Texto Estado Nome']),
-                    messages = [
-                        String(state['Texto Estado message 1']),
-                        String(state['Texto Estado message 2']),
-                        String(state['Texto Estado message 3']),
-                        String(state['Texto Estado message 4'])
-                    ],
-                    language = String(state['Texto Idioma']);
-                if ($dataStates[id]) {
-                    if (name.length > 0) {
-                        if (!$dataStates[id].translate) {
-                            $dataStates[id].name = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': name,
-                                    'Element': [
-                                        'states',
-                                        id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                    messages.forEach(function (message, index) {
-                        var messageId = index + 1;
-                        if (message.length > 0) {
-                            if (!translateObject['statesmessage'] ||
-                                translateObject['statesmessage'] && !translateObject['statesmessage']['message' + messageId] ||
-                                translateObject['statesmessage'] && translateObject['statesmessage']['message' + messageId] &&
-                                !translateObject['statesmessage']['message' + messageId].translate) {
-                                $dataStates[id]['message' + messageId] = getterTextLanguage([
-                                    JSON.stringify({
-                                        'Idioma': language,
-                                        'Valor': ' ' + message,
-                                        'Element': [
-                                            'statesMessage',
-                                            'message' + messageId
-                                        ]
-                                    })
-                                ]);
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    };
-
-    // Define os textos das habilidades
-    function defineSystemSkills() {
-        if (params.skills instanceof Array) {
-            params.skills.forEach(function (skill) {
-                var id = Number(skill['Texto Habilidade Id']),
-                    name = String(skill['Texto Habilidade Nome']),
-                    description = JSON.parse(skill['Texto Habilidade Descrição']),
-                    messages = [
-                        String(skill['Texto Habilidade message 1']),
-                        String(skill['Texto Habilidade message 2'])
-                    ],
-                    language = String(skill['Texto Idioma']);
-                if ($dataSkills[id]) {
-                    if (name.length > 0) {
-                        if (!translateObject['skills'] ||
-                            translateObject['skills'] &&
-                            !translateObject['skills']['name' + id] ||
-                            translateObject['skills'] &&
-                            translateObject['skills']['name' + id] &&
-                            !translateObject['skills']['name' + id].translate) {
-                            $dataSkills[id].name = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': name,
-                                    'Element': [
-                                        'skills',
-                                        'name' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                    if (description.length > 0) {
-                        if (!translateObject['skills'] ||
-                            translateObject['skills'] &&
-                            !translateObject['skills']['description' + id] ||
-                            translateObject['skills'] &&
-                            translateObject['skills']['description' + id] &&
-                            !translateObject['skills']['description' + id].translate) {
-                            $dataSkills[id].description = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': description,
-                                    'Element': [
-                                        'skills',
-                                        'description' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                    messages.forEach(function (message, index) {
-                        var messageId = index + 1;
-                        if (message.length > 0) {
-                            if (!translateObject['skillsmessage'] ||
-                                translateObject['skillsmessage'] &&
-                                !translateObject['skillsmessage']['message' + messageId] ||
-                                translateObject['skillsmessage'] &&
-                                translateObject['skillsmessage']['message' + messageId] &&
-                                !translateObject['skillsmessage']['message' + messageId].translate) {
-                                $dataSkills[id]['message' + messageId] = getterTextLanguage([
-                                    JSON.stringify({
-                                        'Idioma': language,
-                                        'Valor': ' ' + message,
-                                        'Element': [
-                                            'skillsMessage',
-                                            'message' + messageId
-                                        ]
-                                    })
-                                ]);
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    };
-
-    // Define os textos dos atores
-    function defineSystemActors() {
-        if (params.actors instanceof Array) {
-            params.actors.forEach(function (actor) {
-                var id = Number(actor['Texto Ator Id']),
-                    name = String(actor['Texto Ator Nome']),
-                    nickname = String(actor['Texto Ator Nickname']),
-                    profile = JSON.parse(actor['Texto Ator Profile']),
-                    language = String(actor['Texto Idioma']);
-                if ($dataActors[id]) {
-                    if (name.length > 0) {
-                        if (!translateObject['actors'] ||
-                            translateObject['actors'] &&
-                            !translateObject['actors']['name' + id] ||
-                            translateObject['actors'] &&
-                            translateObject['actors']['name' + id] &&
-                            !translateObject['actors']['name' + id].translate) {
-                            $dataActors[id].name = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': name,
-                                    'Element': [
-                                        'Actors',
-                                        'name' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                    if (nickname.length > 0) {
-                        if (!translateObject['actors'] ||
-                            translateObject['actors'] &&
-                            !translateObject['actors']['nickname' + id] ||
-                            translateObject['actors'] &&
-                            translateObject['actors']['nickname' + id] &&
-                            !translateObject['actors']['nickname' + id].translate) {
-                            $dataActors[id].nickname = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': nickname,
-                                    'Element': [
-                                        'Actors',
-                                        'nickname' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                    if (profile.length > 0) {
-                        if (!translateObject['actors'] ||
-                            translateObject['actors'] &&
-                            !translateObject['actors']['profile' + id] ||
-                            translateObject['actors'] &&
-                            translateObject['actors']['profile' + id] &&
-                            !translateObject['actors']['profile' + id].translate) {
-                            $dataActors[id].profile = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': profile,
-                                    'Element': [
-                                        'Actors',
-                                        'profile' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                }
-            });
-        }
-    };
-
-    // Define os textos das classes
-    function defineSystemClasses() {
-        if (params.classes instanceof Array) {
-            params.classes.forEach(function (classe) {
-                var id = Number(classe['Texto Classe Id']),
-                    name = String(classe['Texto Classe Nome']),
-                    language = String(classe['Texto Idioma']);
-                if ($dataClasses[id]) {
-                    if (name.length > 0) {
-                        if (!translateObject['classes'] ||
-                            translateObject['classes'] &&
-                            !translateObject['classes']['name' + id] ||
-                            translateObject['classes'] &&
-                            translateObject['classes']['name' + id] &&
-                            !translateObject['classes']['name' + id].translate) {
-                            $dataClasses[id].name = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': name,
-                                    'Element': [
-                                        'Classes',
-                                        'name' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                }
-            });
-        }
-    };
-
-    // Define os textos das itens
-    function defineSystemItems() {
-        if (params.items instanceof Array) {
-            params.items.forEach(function (item) {
-                var id = Number(item['Texto Item Id']),
-                    name = String(item['Texto Item Nome']),
-                    description = JSON.parse(item['Texto Item Descrição']),
-                    language = String(item['Texto Idioma']);
-                if ($dataItems[id]) {
-                    if (name.length > 0) {
-                        if (!translateObject['items'] ||
-                            translateObject['items'] &&
-                            !translateObject['items']['name' + id] ||
-                            translateObject['items'] &&
-                            translateObject['items']['name' + id] &&
-                            !translateObject['items']['name' + id].translate) {
-                            $dataItems[id].name = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': name,
-                                    'Element': [
-                                        'Items',
-                                        'name' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                    if (description.length > 0) {
-                        if (!translateObject['items'] ||
-                            translateObject['items'] &&
-                            !translateObject['items']['description' + id] ||
-                            translateObject['items'] &&
-                            translateObject['items']['description' + id] &&
-                            !translateObject['items']['description' + id].translate) {
-                            $dataItems[id].description = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': description,
-                                    'Element': [
-                                        'Items',
-                                        'description' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                }
-            });
-        }
-    };
-
-    // Define os textos das armas
-    function defineSystemWeapons() {
-        if (params.weapons instanceof Array) {
-            params.weapons.forEach(function (weapon) {
-                var id = Number(weapon['Texto Arma Id']),
-                    name = String(weapon['Texto Arma Nome']),
-                    description = JSON.parse(weapon['Texto Arma Descrição']),
-                    language = String(weapon['Texto Idioma']);
-                if ($dataWeapons[id]) {
-                    if (name.length > 0) {
-                        if (!translateObject['weapons'] ||
-                            translateObject['weapons'] &&
-                            !translateObject['weapons']['name' + id] ||
-                            translateObject['weapons'] &&
-                            translateObject['weapons']['name' + id] &&
-                            !translateObject['weapons']['name' + id].translate) {
-                            $dataWeapons[id].name = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': name,
-                                    'Element': [
-                                        'Weapons',
-                                        'name' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                    if (description.length > 0) {
-                        if (!translateObject['weapons'] ||
-                            translateObject['weapons'] &&
-                            !translateObject['weapons']['description' + id] ||
-                            translateObject['weapons'] &&
-                            translateObject['weapons']['description' + id] &&
-                            !translateObject['weapons']['description' + id].translate) {
-                            $dataWeapons[id].description = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': description,
-                                    'Element': [
-                                        'Weapons',
-                                        'description' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                }
-            });
-        }
-    };
-
-    // Define os textos das armaduras
-    function defineSystemArmors() {
-        if (params.armors instanceof Array) {
-            params.armors.forEach(function (armor) {
-                var id = Number(armor['Texto Armadura Id']),
-                    name = String(armor['Texto Armadura Nome']),
-                    description = JSON.parse(armor['Texto Armadura Descrição']),
-                    language = String(armor['Texto Idioma']);
-                if ($dataArmors[id]) {
-                    if (name.length > 0) {
-                        if (!translateObject['armors'] ||
-                            translateObject['armors'] &&
-                            !translateObject['armors']['name' + id] ||
-                            translateObject['armors'] &&
-                            translateObject['armors']['name' + id] &&
-                            !translateObject['armors']['name' + id].translate) {
-                            $dataArmors[id].name = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': name,
-                                    'Element': [
-                                        'Armors',
-                                        'name' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                    if (description.length > 0) {
-                        if (!translateObject['armors'] ||
-                            translateObject['armors'] &&
-                            !translateObject['armors']['description' + id] ||
-                            translateObject['armors'] &&
-                            translateObject['armors']['description' + id] &&
-                            !translateObject['armors']['description' + id].translate) {
-                            $dataArmors[id].description = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': description,
-                                    'Element': [
-                                        'Armors',
-                                        'description' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                }
-            });
-        }
-    };
-
-    // Define os textos das inimigos
-    function defineSystemEnemies() {
-        if (params.enemies instanceof Array) {
-            params.enemies.forEach(function (enemies) {
-                var id = Number(enemies['Texto Inimigo Id']),
-                    name = String(enemies['Texto Inimigo Nome']),
-                    language = String(enemies['Texto Idioma']);
-                if ($dataEnemies[id]) {
-                    if (name.length > 0) {
-                        if (!translateObject['enemies'] ||
-                            translateObject['enemies'] &&
-                            !translateObject['enemies']['name' + id] ||
-                            translateObject['enemies'] &&
-                            translateObject['enemies']['name' + id] &&
-                            !translateObject['enemies']['name' + id].translate) {
-                            $dataEnemies[id].name = getterTextLanguage([
-                                JSON.stringify({
-                                    'Idioma': language,
-                                    'Valor': name,
-                                    'Element': [
-                                        'Enemies',
-                                        'name' + id
-                                    ]
-                                })
-                            ]);
-                        }
-                    }
-                }
-            });
-        }
-    };
-
-    // Define os nomes dos Game_Actors
-    function defineGameActors() {
-        if ($gameActors instanceof Game_Actors) {
-            $gameActors._data.map(function (actor) {
-                if (actor instanceof Game_Actor) {
-                    let data = $dataActors[actor.actorId()];
-                    actor.setName(data.name);
-                    actor.setNickname(data.nickname);
-                    actor.setProfile(data.profile);
-                }
-            });
-        }
-    };
-
-    // Retorna o texto para as mensagens
-    function getTextForMessages(id) {
-        var texto = '???';
-        if (params.texts instanceof Array) {
-            params.texts.forEach(function (text) {
-                var _id = Number(text['Texto Id']),
-                    valor = String(text['Texto Valor']),
-                    language = String(text['Texto Idioma']);
-                if (_id == id) {
-                    if (params.language[params.languageId] == String(language).toLowerCase() || String(language).toLowerCase() == 'qualquer') {
-                        return texto = getterTextLanguage([
-                            JSON.stringify({
-                                'Idioma': language,
-                                'Valor': convertEscapeCharacters(valor)
-                            })
-                        ]);
-                    }
-                }
-            });
-        }
-        return texto;
-    };
-
-    // Converte o texto
-    function convertEscapeCharacters(text) {
-        text = text.replace(/\\/g, '\x1b');
-        text = text.replace(/\x1b\x1b/g, '\\');
-        text = text.replace(/\x1bST\[(.*)\]/gi, function () {
-            return specialTextValue(arguments[1]);
-        }.bind(this));
-        return text;
-    };
-
-    // Retorna o valor especial
-    function specialTextValue(code) {
-        switch (String(code).toLowerCase()) {
-            case 'username':
-            case '1':
-                return process.env.SteamAppUser || process.env.USERNAME;
-        }
-    };
-
-    // Define todos os textos
-    function defineAllTexts() {
-        defineTextManager();
-        defineSystemTerms();
-        defineSystemStates();
-        defineSystemSkills();
-        defineSystemActors();
-        defineSystemClasses();
-        defineSystemItems();
-        defineSystemWeapons();
-        defineSystemArmors();
-        defineSystemEnemies();
-        defineGameActors();
-    };
-
-    function setMessageBox(messageId) {
-        var specialsTexts = params.specialsTexts;
-        if (specialsTexts instanceof Array) {
-            specialsTexts.forEach(function (specialText) {
-                var language = getterLanguageSystem(),
-                    idioma = String(specialText['Texto Idioma']),
-                    id = Number(specialText['Texto Especial Id']),
-                    valor = String(specialText['Texto Especial Texto']).replace(/\"/g, '').split('\\n'),
-                    face = [
-                        Boolean(JSON.parse(specialText['Texto Especial Face'])),
-                        String(specialText['Texto Especial Face Name']),
-                        Number(specialText['Texto Especial Face Index'])
-                    ];
-                if (id == messageId) {
-                    if (language == idioma || idioma == 'qualquer') {
-                        if (face[0]) {
-                            $gameMessage.setFaceImage(face[1], face[2]);
-                        }
-                        valor.forEach(function (message) {
-                            $gameMessage.add(message);
-                        });
-                    }
-                }
-            });
-        }
-    };
-
-    // Cria uma tela de ajuda para o usuario
-    var winHelpSystemInfo;
-    function helpWindowSystemInfo() {
-        if (Utils.isOptionValid('test')) {
-            if (!winHelpSystemInfo) {
-                winHelpSystemInfo = true;
-                SceneManager.push(Scene_HelpSystemInfo);
-            }
-        }
-    };
-
-    // Inicia o sistema
-    function initializeSystem() {
-        loadSystemTextsFolders();
-        createSystemFolders();
-        if (params.windowToCompilator) {
-            if (!winHelpSystemInfo) {
-                createFileSettingsLanguage();
-            } else {
-                createFileSettingsLanguage(defineAllTexts);
-            }
-            helpWindowSystemInfo();
-        } else {
-            createFileSettingsLanguage(defineAllTexts);
-        }
-    };
-
-    // Carrega os textos personalizados nas pastas
-    function loadSystemTextsFolders() {
-        var fs = require('fs'),
-            path_folderSystem = localPath('system'),
-            path_folderLanguage = localPath('system/language'),
-            path_folderLanguageTranslate = localPath(`system/language/translate`),
-            folders = [],
-            setValues = {
-                'actors': false,
-                'classes': false,
-                'skills': false,
-                'items': false,
-                'weapons': false,
-                'armors': false,
-                'enemies': false,
-                'states': false,
-                'elements': false,
-                'skillTypes': false,
-                'weaponTypes': false,
-                'armorTypes': false,
-                'equipmentTypes': false
-            };
-        if (fs.existsSync(path_folderLanguage)) {
-            if (fs.existsSync(path_folderLanguageTranslate)) {
-                // Lista as pastas
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        folders.push(folderPath);
-                    }
-                });
-                // Lista os arquivos nas pastas
-                folders.map(function (folder) {
-                    if (fs.existsSync(folder)) {
-                        fs.readdirSync(folder).forEach(function (file) {
-                            let filePath = folder + '\\' + file,
-                                fileType = null;
-                            if (fs.lstatSync(filePath).isFile()) {
-                                if (String(file).toLowerCase().includesEx('actors')) {
-                                    fileType = 'actors';
-                                    if (!setValues.actors) {
-                                        setValues.actors = true;
-                                        params.actors = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('classes')) {
-                                    fileType = 'classes';
-                                    if (!setValues.classes) {
-                                        setValues.classes = true;
-                                        params.classes = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('skills')) {
-                                    fileType = 'skills';
-                                    if (!setValues.skills) {
-                                        setValues.skills = true;
-                                        params.skills = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('items')) {
-                                    fileType = 'items';
-                                    if (!setValues.items) {
-                                        setValues.items = true;
-                                        params.items = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('weapons')) {
-                                    fileType = 'weapons';
-                                    if (!setValues.weapons) {
-                                        setValues.weapons = true;
-                                        params.weapons = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('armors')) {
-                                    fileType = 'armors';
-                                    if (!setValues.armors) {
-                                        setValues.armors = true;
-                                        params.armors = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('enemies')) {
-                                    fileType = 'enemies';
-                                    if (!setValues.enemies) {
-                                        setValues.enemies = true;
-                                        params.enemies = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('states')) {
-                                    fileType = 'states';
-                                    if (!setValues.states) {
-                                        setValues.states = true;
-                                        params.states = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('elements')) {
-                                    fileType = 'elements';
-                                    if (!setValues.elements) {
-                                        setValues.elements = true;
-                                        params.elementTypes = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('skillTypes')) {
-                                    fileType = 'skillTypes';
-                                    if (!setValues.skillTypes) {
-                                        setValues.skillTypes = true;
-                                        params.skillTypes = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('weaponTypes')) {
-                                    fileType = 'weaponTypes';
-                                    if (!setValues.weaponTypes) {
-                                        setValues.weaponTypes = true;
-                                        params.weaponsTypes = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('armorTypes')) {
-                                    fileType = 'armorTypes';
-                                    if (!setValues.armorTypes) {
-                                        setValues.armorTypes = true;
-                                        params.armorTypes = [];
-                                    }
-                                } else if (String(file).toLowerCase().includesEx('equipmentTypes')) {
-                                    fileType = 'equipmentTypes';
-                                    if (!setValues.equipmentTypes) {
-                                        setValues.equipmentTypes = true;
-                                        params.equipTypes = [];
-                                    }
-                                }
-                                let datafile = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf8' }));
-                                if (datafile instanceof Array) {
-                                    if (fileType === 'actors') {
-                                        if ($dataActors.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsActors(datafile);
-                                        } else if ($dataActors.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsActors(datafile);
-                                        }
-                                    } else if (fileType === 'classes') {
-                                        if ($dataClasses.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsClasses(datafile);
-                                        } else if ($dataClasses.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsClasses(datafile);
-                                        }
-                                    } else if (fileType === 'skills') {
-                                        if ($dataSkills.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsSkills(datafile);
-                                        } else if ($dataSkills.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsSkills(datafile);
-                                        }
-                                    } else if (fileType === 'items') {
-                                        if ($dataItems.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsItems(datafile);
-                                        } else if ($dataItems.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsItems(datafile);
-                                        }
-                                    } else if (fileType === 'weapons') {
-                                        if ($dataWeapons.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsWeapons(datafile);
-                                        } else if ($dataWeapons.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsWeapons(datafile);
-                                        }
-                                    } else if (fileType === 'armors') {
-                                        if ($dataWeapons.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsArmors(datafile);
-                                        } else if ($dataWeapons.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsActors(datafile);
-                                        }
-                                    } else if (fileType === 'enemies') {
-                                        if ($dataEnemies.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsEnemies(datafile);
-                                        } else if ($dataEnemies.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsEnemies(datafile);
-                                        }
-                                    } else if (fileType === 'states') {
-                                        if ($dataStates.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsStates(datafile);
-                                        } else if ($dataStates.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsStates(datafile);
-                                        }
-                                    } else if (fileType === 'elements') {
-                                        if ($dataSystem.elements.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesElements(datafile);
-                                        } else if ($dataSystem.elements.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesElements(datafile);
-                                        }
-                                    } else if (fileType === 'skillTypes') {
-                                        if ($dataSystem.skillTypes.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesSkills(datafile);
-                                        } else if ($dataSystem.skillTypes.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesSkills(datafile);
-                                        }
-                                    } else if (fileType === 'weaponTypes') {
-                                        if ($dataSystem.weaponTypes.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesWeapon(datafile);
-                                        } else if ($dataSystem.weaponTypes.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesWeapon(datafile);
-                                        }
-                                    } else if (fileType === 'armorTypes') {
-                                        if ($dataSystem.armorTypes.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesArmor(datafile);
-                                        } else if ($dataSystem.armorTypes.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesArmor(datafile);
-                                        }
-                                    } else if (fileType === 'equipmentTypes') {
-                                        if ($dataSystem.equipTypes.length > datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesEquipment(datafile);
-                                        } else if ($dataSystem.equipTypes.length < datafile.length) {
-                                            datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesEquipment(datafile);
-                                        }
-                                    }
-                                    datafile.map(function (content) {
-                                        if (content) {
-                                            if (fileType === 'actors') {
-                                                params.actors.push(content);
-                                            } else if (fileType === 'classes') {
-                                                params.classes.push(content);
-                                            } else if (fileType === 'skills') {
-                                                params.skills.push(content);
-                                            } else if (fileType === 'items') {
-                                                params.items.push(content);
-                                            } else if (fileType === 'weapons') {
-                                                params.weapons.push(content);
-                                            } else if (fileType === 'armors') {
-                                                params.armors.push(content);
-                                            } else if (fileType === 'enemies') {
-                                                params.enemies.push(content);
-                                            } else if (fileType === 'states') {
-                                                params.states.push(content);
-                                            } else if (fileType === 'elements') {
-                                                params.elementTypes.push(content);
-                                            } else if (fileType === 'skillTypes') {
-                                                params.skillTypes.push(content);
-                                            } else if (fileType === 'weaponTypes') {
-                                                params.weaponsTypes.push(content);
-                                            } else if (fileType === 'armorTypes') {
-                                                params.armorTypes.push(content);
-                                            } else if (fileType === 'equipmentTypes') {
-                                                params.equipTypes.push(content);
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    };
-
-    //-----------------------------------------------------------------------------
-    // Scene_HelpSystemInfo
-    //
-    // The scene class of the title screen.
-
-    function Scene_HelpSystemInfo() {
-        this.initialize.apply(this, arguments);
-    }
-
-    Scene_HelpSystemInfo.prototype = Object.create(Scene_Base.prototype);
-    Scene_HelpSystemInfo.prototype.constructor = Scene_HelpSystemInfo;
-
-    Scene_HelpSystemInfo.prototype.initialize = function () {
-        Scene_Base.prototype.initialize.call(this);
-    };
-
-    Scene_HelpSystemInfo.prototype.create = function () {
-        Scene_Base.prototype.create.call(this);
-        this.createBackground();
-        this.createButtons();
-    };
-
-    Scene_HelpSystemInfo.prototype.start = function () {
-        Scene_Base.prototype.start.call(this);
-        this.startFadeIn(this.fadeSpeed(), false);
-    };
-
-    Scene_HelpSystemInfo.prototype.updateFade = function () {
-        if (this._fadeDuration > 0) {
-            var d = this._fadeDuration;
-            if (this._fadeSign > 0) {
-                this._fadeSprite.opacity -= this._fadeSprite.opacity / d;
-            } else {
-                this._fadeSprite.opacity += (255 - this._fadeSprite.opacity) / d;
-            }
-            this._fadeDuration--;
-        }
-        if (this._fadeDuration <= 0 && this._closeWin) {
-            translateObject = {};
-            SceneManager.pop();
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.createBackground = function () {
-        var texts = [
-            ['Escolha a melhor forma para traduzir o seu jogo!', 28],
-            ['Está janela só irá ser exibida no modo de teste do projeto!', 18],
-            ['Plugin: DrXama_languageManager.js', 14],
-            ['Compilar os Textos: Gera os arquivos para traduzir o jogo!', 14],
-            ['Ver pasta translate: Exibe a pasta no computador', 14]
-        ];
-        this._backSprite = new Sprite(new Bitmap(Graphics.width, Graphics.height));
-        this._backSprite.bitmap.fillAll('#005bb7');
-        texts.forEach(function (text, keyId) {
-            var keyY = 92;
-            if (keyId > 0) {
-                keyY += 42 * keyId;
-            }
-            this._backSprite.bitmap.fontSize = text[1];
-            this._backSprite.bitmap.drawText(text[0],
-                0, keyY, Graphics.width, 0, 'center');
-        }, this);
-        this.addChild(this._backSprite);
-    };
-
-    Scene_HelpSystemInfo.prototype.createButtons = function () {
-        this._buttons = [
-            {
-                'sprite': new Sprite_Button(),
-                'y': Graphics.height / 2,
-                'event': 'compilarTextos',
-                'text': 'Compilar os textos'
-            },
-            {
-                'sprite': new Sprite_Button(),
-                'y': (Graphics.height / 2) + 70,
-                'event': 'mostrarPastaTranslate',
-                'text': 'Ver pasta translate'
-            },
-            {
-                'sprite': new Sprite_Button(),
-                'y': (Graphics.height / 2) + 140,
-                'event': 'compilationExit',
-                'text': 'Sair'
-            }
-        ];
-        this._buttons.map(function (data) {
-            var button = data.sprite,
-                positionY = data.y,
-                buttonEvent = data.event,
-                buttonText = data.text;
-            button.bitmap = ImageManager.loadSystem(params.imageButtonCompilator);
-            button.setColdFrame(0, 0, 180, 65);
-            button.setHotFrame(0, 65, 180, 65);
-            button.setClickHandler(this.buttonsEventCall.bind(this, buttonEvent));
-            button.move((Graphics.width / 2) - (180 / 2), positionY);
-            var text = new Sprite(new Bitmap(180, 65)),
-                textColor = ['#ebebeb', '#ffffff'],
-                textValue = buttonText,
-                textFontSize = 16,
-                textX = 0,
-                textY = 65 / 2;
-            text.bitmap.fontSize = textFontSize;
-            text.bitmap.drawText(textValue, textX, textY, 180, 0, 'center');
-            button.addChild(text);
-            this.addChild(button);
-            // Define o processo de updateFrame do botão 1
-            var __updateFrame = button.updateFrame;
-            button.updateFrame = function () {
-                __updateFrame.call(this);
-                if (button._touching && !button._textPress) {
-                    button._textPress = true;
-                    button.children[0].bitmap.clear();
-                    button.children[0].bitmap.textColor = textColor[0];
-                    button.children[0].bitmap.drawText(textValue, textX, textY, 180, 0, 'center');
-                } else if (!button._touching && button._textPress) {
-                    button._textPress = false;
-                    button.children[0].bitmap.clear();
-                    button.children[0].bitmap.textColor = textColor[1];
-                    button.children[0].bitmap.drawText(textValue, textX, textY, 180, 0, 'center');
-                }
-            };
-        }, this);
-    };
-
-    Scene_HelpSystemInfo.prototype.buttonsEventCall = function (event) {
-        switch (String(event).toLowerCase()) {
-            case 'compilartextos':
-                this.compileTexts(window.prompt('Escreva um código de compilação valido'));
-                break;
-            case 'mostrarpastatranslate':
-                var fs = require('fs'),
-                    path_folderLanguage = localPath('system/language'),
-                    path_folderLanguageTranslate = localPath(`system/language/translate`);
-                if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                    if (Utils.isNwjs()) {
-                        require('nw.gui').Shell.showItemInFolder(path_folderLanguageTranslate);
-                    } else {
-                        window.alert('Não é possivel abrir a pasta translate');
-                    }
-                } else {
-                    window.alert('Não é possivel abrir a pasta translate');
-                }
-                break;
-            case 'compilationexit':
-                this.startFadeOut(this.fadeSpeed(), false);
-                this._closeWin = true;
-                break;
-            default:
-                break;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTexts = function (compileEvent) {
-        var fs = require('fs'),
-            path_folderLanguage = localPath('system/language'),
-            path_folderLanguageTranslate = localPath(`system/language/translate`),
-            system_prompt1 = 'Escreva o nome da pasta de idioma';
-        if (typeof compileEvent != 'string') return;
-        function compilationSuccess(desc) {
-            if (!desc || desc && typeof desc === 'string'
-                && desc.length <= 0) desc = '???';
-            window.alert(`A compilação para ${desc} está completa!`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                if (Utils.isNwjs() && window.confirm('Deseja abrir a pasta translate?')) {
-                    require('nw.gui').Shell.showItemInFolder(path_folderLanguageTranslate);
-                }
-            }
-        }
-        if (compileEvent.length > 0) {
-            if (String(compileEvent).toLowerCase() === String('BDD_ABAS').toLowerCase() ||
-                Number(compileEvent) == 1) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsActors(language);
-                this.compileTextsClasses(language);
-                this.compileTextsSkills(language);
-                this.compileTextsItems(language);
-                this.compileTextsWeapons(language);
-                this.compileTextsArmors(language);
-                this.compileTextsEnemies(language);
-                this.compileTextsStates(language);
-                this.compileTextsTypesElements(language);
-                this.compileTextsTypesSkills(language);
-                this.compileTextsTypesWeapon(language);
-                this.compileTextsTypesArmor(language);
-                this.compileTextsTypesEquipment(language);
-                compilationSuccess('o banco de dados');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_ATORES').toLowerCase() ||
-                Number(compileEvent) == 11) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsActors(language);
-                compilationSuccess('a aba do banco de dados dos atores');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_CLASSES').toLowerCase() ||
-                Number(compileEvent) == 12) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsClasses(language);
-                compilationSuccess('a aba do banco de dados das classes');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_SKILLS').toLowerCase() ||
-                Number(compileEvent) == 13) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsSkills(language);
-                compilationSuccess('a aba do banco de dados das habilidades');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_ITEMS').toLowerCase() ||
-                Number(compileEvent) == 14) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsItems(language);
-                compilationSuccess('a aba do banco de dados dos itens');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_WEAPONS').toLowerCase() ||
-                Number(compileEvent) == 15) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsWeapons(language);
-                compilationSuccess('a aba do banco de dados das armas');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_ARMORS').toLowerCase() ||
-                Number(compileEvent) == 16) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsArmors(language);
-                compilationSuccess('a aba do banco de dados das armaduras');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_ENEMIES').toLowerCase() ||
-                Number(compileEvent) == 17) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsEnemies(language);
-                compilationSuccess('a aba do banco de dados dos inimigos');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_STATES').toLowerCase() ||
-                Number(compileEvent) == 18) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsStates(language);
-                compilationSuccess('a aba do banco de dados dos estados');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_ELEMENTS').toLowerCase() ||
-                Number(compileEvent) == 19) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsTypesElements(language);
-                compilationSuccess('a aba do banco de dados dos elementos');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_TYPESSKILLS').toLowerCase() ||
-                Number(compileEvent) == 110) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsTypesSkills(language);
-                compilationSuccess('a aba do banco de dados dos tipos de habilidades');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_TYPESWEAPON').toLowerCase() ||
-                Number(compileEvent) == 111) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsTypesWeapon(language);
-                compilationSuccess('a aba do banco de dados dos tipos de armas');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_TYPESARMOR').toLowerCase() ||
-                Number(compileEvent) == 112) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsTypesArmor(language);
-                compilationSuccess('a aba do banco de dados dos tipos de armaduras');
-            } else if (String(compileEvent).toLowerCase() === String('BDD_TYPESEQUIPMENT').toLowerCase() ||
-                Number(compileEvent) == 113) {
-                this.compileTextsCreateFolder('translate');
-                var language = window.prompt(system_prompt1);
-                if (language === null || language != null && language.length <= 0) {
-                    language = params.defaultLanguageCompilator;
-                }
-                this.compileTextsTypesEquipment(language);
-                compilationSuccess('a aba do banco de dados dos tipos de equipamentos');
-            }
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsCreateFolder = function (folderName) {
-        var fs = require('fs'),
-            path_folderSystem = localPath('system'),
-            path_folderLanguage = localPath('system/language'),
-            path_folderLanguageTranslate = localPath('system/language/translate');
-        if (fs.existsSync(path_folderSystem) && fs.existsSync(path_folderLanguage)) {
-            if (!fs.existsSync(path_folderLanguageTranslate)) {
-                fs.mkdirSync(path_folderLanguageTranslate);
-                console.warn(`A pasta \"system/language/translate\" foi criada!`);
-            }
-            if (String(folderName).toLowerCase() === 'translate') return;
-            if (folderName === null || typeof folderName === 'string' && folderName.length > 0) {
-                var path_folderLanguageFolder = localPath(`system/language/translate/${folderName}`);
-                if (!fs.existsSync(path_folderLanguageFolder)) {
-                    fs.mkdirSync(path_folderLanguageFolder);
-                    console.warn(`A pasta \"system/language/translate/${folderName}\" foi criada!`);
-                }
-            }
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsCreateFile = function (fileData, folderFile, fileType) {
-        var fs = require('fs'),
-            path_folderSystem = localPath('system'),
-            path_folderLanguage = localPath('system/language'),
-            path_folderLanguageTranslate = localPath(`system/language/translate/${folderFile}`),
-            data = JSON.stringify(fileData, null, 2);
-        if (fs.existsSync(path_folderLanguage)) {
-            if (fs.existsSync(path_folderLanguageTranslate)) {
-                var pathFile = path_folderLanguageTranslate + '\\' + fileType + '.json';
-                fs.writeFileSync(pathFile, data);
-                console.warn(`O arquivo \"system/language/translate/${folderFile}/${fileType}.json\" foi criado!`);
-            }
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsActors = function (language) {
-        if ($dataActors instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataActors.map(function (actor) {
-                if (actor) {
-                    data.push({
-                        'Texto Ator Id': actor.id,
-                        'Texto Ator Nome': actor.name,
-                        'Texto Ator Nickname': actor.nickname,
-                        'Texto Ator Profile': JSON.stringify(actor.profile),
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'Actors');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsActors = function (content) {
-        if ($dataActors instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var actorsIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                actorsIds.push(content['Texto Ator Id']);
-                        });
-                        $dataActors.filter(function (actor) {
-                            if (actor && actor.id != null) {
-                                if (actorsIds.indexOf(actor.id) === -1)
-                                    return true;
-                            }
-                        }).forEach(function (actor) {
-                            if (actor) {
-                                data.push({
-                                    'Texto Ator Id': actor.id,
-                                    'Texto Ator Nome': actor.name,
-                                    'Texto Ator Nickname': actor.nickname,
-                                    'Texto Ator Profile': JSON.stringify(actor.profile),
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'Actors');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsActors = function (content) {
-        if ($dataActors instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var actorsIds = [];
-                $dataActors.forEach(function (actor) {
-                    if (actor && actor.id != null)
-                        actorsIds.push(actor.id);
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (actorsIds.indexOf(content['Texto Ator Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'Actors');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsClasses = function (language) {
-        if ($dataClasses instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataClasses.map(function (Class) {
-                if (Class) {
-                    data.push({
-                        'Texto Classe Id': Class.id,
-                        'Texto Classe Nome': Class.name,
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'Classes');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsClasses = function (content) {
-        if ($dataClasses instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var classesIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                classesIds.push(content['Texto Classe Id']);
-                        });
-                        $dataClasses.filter(function (Class) {
-                            if (Class && Class.id != null) {
-                                if (classesIds.indexOf(Class.id) === -1)
-                                    return true;
-                            }
-                        }).forEach(function (Class) {
-                            if (Class) {
-                                data.push({
-                                    'Texto Classe Id': Class.id,
-                                    'Texto Classe Nome': Class.name,
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'Classes');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsClasses = function (content) {
-        if ($dataClasses instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var classesIds = [];
-                $dataClasses.forEach(function (Class) {
-                    if (Class && Class.id != null)
-                        classesIds.push(Class.id);
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (classesIds.indexOf(content['Texto Classe Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'Classes');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsSkills = function (language) {
-        if ($dataSkills instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataSkills.map(function (skill) {
-                if (skill) {
-                    data.push({
-                        'Texto Habilidade Id': skill.id,
-                        'Texto Habilidade Nome': skill.name,
-                        'Texto Habilidade Descrição': JSON.stringify(skill.description),
-                        'Texto Habilidade message 1': skill.message1,
-                        'Texto Habilidade message 2': skill.message2,
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'Skills');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsSkills = function (content) {
-        if ($dataSkills instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var skillsIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                skillsIds.push(content['Texto Habilidade Id']);
-                        });
-                        $dataSkills.filter(function (skill) {
-                            if (skill && skill.id != null) {
-                                if (skillsIds.indexOf(skill.id) === -1)
-                                    return true;
-                            }
-                        }).forEach(function (skill) {
-                            if (skill) {
-                                data.push({
-                                    'Texto Habilidade Id': skill.id,
-                                    'Texto Habilidade Nome': skill.name,
-                                    'Texto Habilidade Descrição': JSON.stringify(skill.description),
-                                    'Texto Habilidade message 1': skill.message1,
-                                    'Texto Habilidade message 2': skill.message2,
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'Skills');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsSkills = function (content) {
-        if ($dataSkills instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var skillsIds = [];
-                $dataSkills.forEach(function (skill) {
-                    if (skill && skill.id != null)
-                        skillsIds.push(skill.id);
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (skillsIds.indexOf(content['Texto Habilidade Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'Skills');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsItems = function (language) {
-        if ($dataItems instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataItems.map(function (item) {
-                if (item) {
-                    data.push({
-                        'Texto Item Id': item.id,
-                        'Texto Item Nome': item.name,
-                        'Texto Item Descrição': JSON.stringify(item.description),
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'Items');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsItems = function (content) {
-        if ($dataItems instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var itemsIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                itemsIds.push(content['Texto Item Id']);
-                        });
-                        $dataItems.filter(function (item) {
-                            if (item && item.id != null) {
-                                if (itemsIds.indexOf(item.id) === -1)
-                                    return true;
-                            }
-                        }).forEach(function (item) {
-                            if (item) {
-                                data.push({
-                                    'Texto Item Id': item.id,
-                                    'Texto Item Nome': item.name,
-                                    'Texto Item Descrição': JSON.stringify(item.description),
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'Items');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsItems = function (content) {
-        if ($dataItems instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var itemsIds = [];
-                $dataItems.forEach(function (item) {
-                    if (item && item.id != null)
-                        itemsIds.push(item.id);
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (itemsIds.indexOf(content['Texto Item Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'Items');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsWeapons = function (language) {
-        if ($dataWeapons instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataWeapons.map(function (weapon) {
-                if (weapon) {
-                    data.push({
-                        'Texto Arma Id': weapon.id,
-                        'Texto Arma Nome': weapon.name,
-                        'Texto Arma Descrição': JSON.stringify(weapon.description),
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'Weapons');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsWeapons = function (content) {
-        if ($dataWeapons instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var weaponsIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                weaponsIds.push(content['Texto Arma Id']);
-                        });
-                        $dataWeapons.filter(function (weapon) {
-                            if (weapon && weapon.id != null) {
-                                if (weaponsIds.indexOf(weapon.id) === -1)
-                                    return true;
-                            }
-                        }).forEach(function (weapon) {
-                            if (weapon) {
-                                data.push({
-                                    'Texto Arma Id': weapon.id,
-                                    'Texto Arma Nome': weapon.name,
-                                    'Texto Arma Descrição': JSON.stringify(weapon.description),
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'Weapons');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsWeapons = function (content) {
-        if ($dataWeapons instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var weaponsIds = [];
-                $dataWeapons.forEach(function (weapon) {
-                    if (weapon && weapon.id != null)
-                        weaponsIds.push(weapon.id);
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (weaponsIds.indexOf(content['Texto Arma Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'Weapons');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsArmors = function (language) {
-        if ($dataArmors instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataArmors.map(function (armor) {
-                if (armor) {
-                    data.push({
-                        'Texto Armadura Id': armor.id,
-                        'Texto Armadura Nome': armor.name,
-                        'Texto Armadura Descrição': JSON.stringify(armor.description),
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'Armors');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsArmors = function (content) {
-        if ($dataArmors instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var armorsIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                armorsIds.push(content['Texto Armadura Id']);
-                        });
-                        $dataArmors.filter(function (armor) {
-                            if (armor && armor.id != null) {
-                                if (armorsIds.indexOf(armor.id) === -1)
-                                    return true;
-                            }
-                        }).forEach(function (armor) {
-                            if (armor) {
-                                data.push({
-                                    'Texto Armadura Id': armor.id,
-                                    'Texto Armadura Nome': armor.name,
-                                    'Texto Armadura Descrição': JSON.stringify(armor.description),
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'Armors');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsArmors = function (content) {
-        if ($dataArmors instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var armorsIds = [];
-                $dataArmors.forEach(function (armor) {
-                    if (armor && armor.id != null)
-                        armorsIds.push(armor.id);
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (armorsIds.indexOf(content['Texto Armadura Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'Armors');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsEnemies = function (language) {
-        if ($dataEnemies instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataEnemies.map(function (enemy) {
-                if (enemy) {
-                    data.push({
-                        'Texto Inimigo Id': enemy.id,
-                        'Texto Inimigo Nome': enemy.name,
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'Enemies');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsEnemies = function (content) {
-        if ($dataEnemies instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var enemiesIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                enemiesIds.push(content['Texto Inimigo Id']);
-                        });
-                        $dataEnemies.filter(function (enemy) {
-                            if (enemy && enemy.id != null) {
-                                if (enemiesIds.indexOf(enemy.id) === -1)
-                                    return true;
-                            }
-                        }).forEach(function (enemy) {
-                            if (enemy) {
-                                data.push({
-                                    'Texto Inimigo Id': enemy.id,
-                                    'Texto Inimigo Nome': enemy.name,
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'Enemies');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsEnemies = function (content) {
-        if ($dataEnemies instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var enemiesIds = [];
-                $dataEnemies.forEach(function (enemy) {
-                    if (enemy && enemy.id != null)
-                        enemiesIds.push(enemy.id);
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (enemiesIds.indexOf(content['Texto Inimigo Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'Enemies');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsStates = function (language) {
-        if ($dataStates instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataStates.map(function (state) {
-                if (state) {
-                    data.push({
-                        'Texto Estado Id': state.id,
-                        'Texto Estado Nome': state.name,
-                        'Texto Estado message 1': state.message1,
-                        'Texto Estado message 2': state.message2,
-                        'Texto Estado message 3': state.message3,
-                        'Texto Estado message 4': state.message4,
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'States');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsStates = function (content) {
-        if ($dataStates instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var statesIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                statesIds.push(content['Texto Estado Id']);
-                        });
-                        $dataStates.filter(function (state) {
-                            if (state && state.id != null) {
-                                if (statesIds.indexOf(state.id) === -1)
-                                    return true;
-                            }
-                        }).forEach(function (state) {
-                            if (state) {
-                                data.push({
-                                    'Texto Estado Id': state.id,
-                                    'Texto Estado Nome': state.name,
-                                    'Texto Estado message 1': state.message1,
-                                    'Texto Estado message 2': state.message2,
-                                    'Texto Estado message 3': state.message3,
-                                    'Texto Estado message 4': state.message4,
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'States');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsStates = function (content) {
-        if ($dataStates instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var statesIds = [];
-                $dataStates.forEach(function (state) {
-                    if (state && state.id != null)
-                        statesIds.push(state.id);
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (statesIds.indexOf(content['Texto Estado Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'States');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsTypesElements = function (language) {
-        if ($dataSystem && $dataSystem.elements instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataSystem.elements.map(function (element, i) {
-                if (element) {
-                    data.push({
-                        'Texto Elemento Id': i,
-                        'Texto Elemento Texto': element,
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'Elements');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesElements = function (content) {
-        if ($dataSystem && $dataSystem.elements instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var elementsIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                elementsIds.push(content['Texto Elemento Id']);
-                        });
-                        $dataSystem.elements.filter(function (element, i) {
-                            if (elementsIds.indexOf(i) === -1)
-                                return true;
-                        }).map(function (element, i) {
-                            if (element) {
-                                data.push({
-                                    'Texto Elemento Id': i,
-                                    'Texto Elemento Texto': element,
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'Elements');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesElements = function (content) {
-        if ($dataSystem && $dataSystem.elements instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var elementsIds = [];
-                $dataSystem.elements.map(function (element, i) {
-                    if (element) {
-                        elementsIds.push(i);
-                    }
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (elementsIds.indexOf(content['Texto Elemento Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'Elements');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsTypesSkills = function (language) {
-        if ($dataSystem && $dataSystem.skillTypes instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataSystem.skillTypes.map(function (skill, i) {
-                if (skill) {
-                    data.push({
-                        'Texto Habilidade Id': i,
-                        'Texto Habilidade Texto': skill,
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'SkillTypes');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesSkills = function (content) {
-        if ($dataSystem && $dataSystem.skillTypes instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var skillTypesIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                skillTypesIds.push(content['Texto Habilidade Id']);
-                        });
-                        $dataSystem.skillTypes.filter(function (skill, i) {
-                            if (skillTypesIds.indexOf(i) === -1)
-                                return true;
-                        }).map(function (skill, i) {
-                            if (skill) {
-                                data.push({
-                                    'Texto Habilidade Id': i,
-                                    'Texto Habilidade Texto': skill,
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'SkillTypes');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesSkills = function (content) {
-        if ($dataSystem && $dataSystem.skillTypes instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var skillTypesIds = [];
-                $dataSystem.skillTypes.map(function (skill, i) {
-                    if (skill) {
-                        skillTypesIds.push(i);
-                    }
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (skillTypesIds.indexOf(content['Texto Habilidade Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'SkillTypes');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsTypesWeapon = function (language) {
-        if ($dataSystem && $dataSystem.weaponTypes instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataSystem.weaponTypes.map(function (weapon, i) {
-                if (weapon) {
-                    data.push({
-                        'Texto Arma Id': i,
-                        'Texto Arma Texto': weapon,
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'WeaponTypes');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesWeapon = function (content) {
-        if ($dataSystem && $dataSystem.weaponTypes instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var weaponTypesIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                weaponTypesIds.push(content['Texto Arma Id']);
-                        });
-                        $dataSystem.weaponTypes.filter(function (weapon, i) {
-                            if (weaponTypesIds.indexOf(i) === -1)
-                                return true;
-                        }).map(function (weapon, i) {
-                            if (weapon) {
-                                data.push({
-                                    'Texto Arma Id': i,
-                                    'Texto Arma Texto': weapon,
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'WeaponTypes');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesWeapon = function (content) {
-        if ($dataSystem && $dataSystem.weaponTypes instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var weaponTypesIds = [];
-                $dataSystem.weaponTypes.map(function (weapon, i) {
-                    if (weapon) {
-                        weaponTypesIds.push(i);
-                    }
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (weaponTypesIds.indexOf(content['Texto Arma Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'WeaponTypes');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsTypesArmor = function (language) {
-        if ($dataSystem && $dataSystem.armorTypes instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataSystem.armorTypes.map(function (armor, i) {
-                if (armor) {
-                    data.push({
-                        'Texto Armadura Id': i,
-                        'Texto Armadura Texto': armor,
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'ArmorTypes');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesArmor = function (content) {
-        if ($dataSystem && $dataSystem.armorTypes instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var armorTypesIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                armorTypesIds.push(content['Texto Armadura Id']);
-                        });
-                        $dataSystem.armorTypes.filter(function (armor, i) {
-                            if (armorTypesIds.indexOf(i) === -1)
-                                return true;
-                        }).map(function (armor, i) {
-                            if (armor) {
-                                data.push({
-                                    'Texto Armadura Id': i,
-                                    'Texto Armadura Texto': armor,
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'ArmorTypes');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesArmor = function (content) {
-        if ($dataSystem && $dataSystem.armorTypes instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var armorTypesIds = [];
-                $dataSystem.armorTypes.map(function (armor, i) {
-                    if (armor) {
-                        armorTypesIds.push(i);
-                    }
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (armorTypesIds.indexOf(content['Texto Armadura Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'ArmorTypes');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.compileTextsTypesEquipment = function (language) {
-        if ($dataSystem && $dataSystem.equipTypes instanceof Array) {
-            var data = [null],
-                language = String(language).toLowerCase();
-            $dataSystem.equipTypes.map(function (equip, i) {
-                if (equip) {
-                    data.push({
-                        'Texto Equipamento Id': i,
-                        'Texto Equipamento Texto': equip,
-                        'Texto Idioma': language
-                    });
-                }
-            }, this);
-            this.compileTextsCreateFolder(language);
-            this.compileTextsCreateFile(data, language, 'EquipmentTypes');
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesEquipment = function (content) {
-        if ($dataSystem && $dataSystem.equipTypes instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                    let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                    if (fs.lstatSync(folderPath).isDirectory()) {
-                        var equipTypesIds = [];
-                        data.forEach(function (content) {
-                            if (content)
-                                equipTypesIds.push(content['Texto Equipamento Id']);
-                        });
-                        $dataSystem.equipTypes.filter(function (equip, i) {
-                            if (equipTypesIds.indexOf(i) === -1)
-                                return true;
-                        }).map(function (equip, i) {
-                            if (equip) {
-                                data.push({
-                                    'Texto Equipamento Id': i,
-                                    'Texto Equipamento Texto': equip,
-                                    'Texto Idioma': folder
-                                });
-                                save = true;
-                            }
-                        });
-                        if (save)
-                            this.compileTextsCreateFile(data, folder, 'EquipmentTypes');
-                    }
-                }, this);
-            }
-            return data;
-        }
-    };
-
-    Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesEquipment = function (content) {
-        if ($dataSystem && $dataSystem.equipTypes instanceof Array) {
-            var fs = require('fs'),
-                data = content,
-                save = false,
-                path_folderLanguage = localPath('system/language'),
-                path_folderLanguageTranslate = localPath(`system/language/translate`);
-            if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
-                var equipTypesIds = [];
-                $dataSystem.equipTypes.map(function (equip, i) {
-                    if (equip) {
-                        equipTypesIds.push(i);
-                    }
-                });
-                data.filter(function (content) {
-                    if (content) {
-                        if (equipTypesIds.indexOf(content['Texto Equipamento Id']) === -1)
-                            return true;
-                    }
-                }).forEach(function (content) {
-                    if (content) {
-                        data.splice(data.indexOf(content), 1);
-                        save = true;
-                    }
-                });
-                if (save) {
-                    fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
-                        let folderPath = path_folderLanguageTranslate + '\\' + folder;
-                        if (fs.lstatSync(folderPath).isDirectory()) {
-                            this.compileTextsCreateFile(data, folder, 'EquipmentTypes');
-                        }
-                    }, this);
-                }
-            }
-            return data;
-        }
-    };
-
-    //-----------------------------------------------------------------------------
-    // Scene_Boot
-    //
-    const __sceneBase_start = Scene_Base.prototype.start;
-    Scene_Base.prototype.start = function () {
-        __sceneBase_start.call(this);
-        if (!baseAlradyInitialize) baseAlradyInitialize = true, initializeSystem();
-    };
-
-    //-----------------------------------------------------------------------------
-    // DataManager
-    //	
-    const __datamanager_setupBattleTest = DataManager.setupBattleTest;
-    DataManager.setupBattleTest = function () {
-        __datamanager_setupBattleTest.call(this);
-        initializeSystem();
-    };
-
-    //-----------------------------------------------------------------------------
-    // Window_Base
-    //
-    const window_base_convertEscapeCharacters = Window_Base.prototype.convertEscapeCharacters;
-    Window_Base.prototype.convertEscapeCharacters = function (text) {
-        text = text.replace(/\\/g, '\x1b');
-        text = text.replace(/\x1b\x1b/g, '\\');
-        text = text.replace(/\x1bTX\[(\d+)\]/gi, function () {
-            return getTextForMessages(arguments[1]);
-        }.bind(this));
-        text = text.replace(/\x1bST\[(.*)\]/gi, function () {
-            return specialTextValue(arguments[1]);
-        }.bind(this));
-        return window_base_convertEscapeCharacters.apply(this, [text]);
-    };
-
-    //-----------------------------------------------------------------------------
-    // Window_Options
-    //
-    const __Window_Options__makeCommandList = Window_Options.prototype.makeCommandList;
-    Window_Options.prototype.makeCommandList = function () {
-        this.addLanguageOptions();
-        __Window_Options__makeCommandList.call(this);
-    };
-
-    Window_Options.prototype.addLanguageOptions = function () {
-        this.addCommand(params.commandLanguageOptions(params.language[params.languageId])[0], 'language');
-    };
-
-    const __Window_Options__statusText = Window_Options.prototype.statusText;
-    Window_Options.prototype.statusText = function (index) {
-        __Window_Options__statusText.apply(this, arguments);
-        var symbol = this.commandSymbol(index);
-        var value = this.getConfigValue(symbol);
-        if (this.isVolumeSymbol(symbol)) {
-            return this.volumeStatusText(value);
-        } else if (this.isLanguageSymbol(symbol)) {
-            return this.languageStatusText();
-        } else {
-            return this.booleanStatusText(value);
-        }
-    };
-
-    Window_Options.prototype.isLanguageSymbol = function (symbol) {
-        return symbol.contains('language');
-    };
-
-    Window_Options.prototype.languageStatusText = function () {
-        return params.commandLanguageOptions(params.language[params.languageId])[1];
-    };
-
-    const __Window_Options__processOk = Window_Options.prototype.processOk;
-    Window_Options.prototype.processOk = function () {
-        __Window_Options__processOk.call(this);
-        var index = this.index();
-        var symbol = this.commandSymbol(index);
-        var value = this.getConfigValue(symbol);
-        if (this.isLanguageSymbol(symbol)) {
-            if (params.languageId < params.language.length - 1) {
-                params.languageId++;
-            } else {
-                params.languageId = 0;
-            }
-            SceneManager._scene.startFadeIn(SceneManager._scene.fadeSpeed(), false);
-            Game_Interpreter.prototype.pluginCommand('setlanguage', [params.languageId]);
-            this.refresh();
-        }
-    };
-
-    const __Window_Options__cursorRight = Window_Options.prototype.cursorRight;
-    Window_Options.prototype.cursorRight = function (wrap) {
-        __Window_Options__cursorRight.apply(this, arguments);
-        var index = this.index();
-        var symbol = this.commandSymbol(index);
-        if (this.isLanguageSymbol(symbol)) {
-            if (params.languageId < params.language.length - 1) {
-                params.languageId++;
-                SceneManager._scene.startFadeIn(SceneManager._scene.fadeSpeed(), false);
-                Game_Interpreter.prototype.pluginCommand('setlanguage', [params.languageId]);
-                this.refresh();
-            }
-        }
-    };
-
-    const __Window_Options__cursorLeft = Window_Options.prototype.cursorLeft;
-    Window_Options.prototype.cursorLeft = function (wrap) {
-        __Window_Options__cursorLeft.apply(this, arguments);
-        var index = this.index();
-        var symbol = this.commandSymbol(index);
-        if (this.isLanguageSymbol(symbol)) {
-            if (params.languageId > 0) {
-                params.languageId--;
-                SceneManager._scene.startFadeIn(SceneManager._scene.fadeSpeed(), false);
-                Game_Interpreter.prototype.pluginCommand('setlanguage', [params.languageId]);
-                this.refresh();
-            }
-        }
-    };
-
-    //-----------------------------------------------------------------------------
-    // Game_Interpreter
-    //
-    const __Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
-    Game_Interpreter.prototype.pluginCommand = function (command, args) {
-        __Game_Interpreter_pluginCommand.call(this, command, args);
-        command = String(command).toLowerCase();
-        if (command == 'setlanguage') {
-            translateObject = {};
-            params.languageId = Number(args[0]);
-            $gameSystem.setLanguage(params.languageId);
-            createFileSettingsLanguage(defineAllTexts, true);
-        }
-        if (command == 'setmessagebox') {
-            var messageId = Number(args[0]);
-            setMessageBox(messageId);
-        }
-    };
-
-    Game_Interpreter.prototype.getterLanguageSystem = function () {
-        return getterLanguageSystem();
-    };
-
-    Game_Interpreter.prototype.getTextForMessages = function (id) {
-        return getTextForMessages(id);
-    };
-
-    Game_Interpreter.prototype.getTextLanguage = function (id) {
-        return $gameSystem.getTextLanguage(id);
-    };
-
-    //-----------------------------------------------------------------------------
-    // Game_System
-    //
-    const __game__system__initialize = Game_System.prototype.initialize;
-    Game_System.prototype.initialize = function () {
-        __game__system__initialize.call(this);
-        this._languageGame = params.languageId;
-    };
-
-    Game_System.prototype.getParamsLanguage = params;
-
-    const __game__system__onAfterLoad = Game_System.prototype.onAfterLoad;
-    Game_System.prototype.onAfterLoad = function () {
-        __game__system__onAfterLoad.call(this);
-        Game_Interpreter.prototype.pluginCommand('setlanguage', [this._languageGame]);
-    };
-
-    Game_System.prototype.setLanguage = function (language) {
-        this._languageGame = language;
-    };
-
-    Game_System.prototype.getterLanguageSystem = function () {
-        return getterLanguageSystem();
-    };
-
-    Game_System.prototype.getTextForMessages = function (id) {
-        return getTextForMessages(id);
-    };
-
-    Game_System.prototype.getTextLanguage = function (id) {
-        if (SceneManager._scene instanceof Scene_Map)
-            return SceneManager._scene._messageWindow.convertEscapeCharacters(`\\tx[${id}]`);
-        return '???';
-    };
+	"use strict";
+	//-----------------------------------------------------------------------------
+	// SceneManager
+	//
+	const scenemanager_run = SceneManager.run;
+	SceneManager.run = function (sceneClass) { scenemanager_run.apply(this, arguments); DX.compatibility(); };
+
+	//-----------------------------------------------------------------------------
+	// Parâmetros
+	//
+	var params = (function () {
+		function JsonParse(object) {
+			object = object || {};
+			Object.keys(object).forEach(function (key) {
+				if (object[key].length > 0) {
+					object[key] = JSON.parse(object[key]) || {};
+				}
+			});
+			return object;
+		}
+		var file = PluginManager.parameters('DrXama_languageManager'),
+			language = JSON.parse(file['Idiomas'] || []),
+			languageId = (function () {
+				var fs = require('fs'),
+					path_folderSystem = localPath('system'),
+					path_folderLanguage = localPath('system/language/save'),
+					path_fileSettingsLanguage = path_folderLanguage + '\\' + 'settingsLanguageSystem.drxamasave',
+					value = Number(file['Idioma'] || 0);
+				if (fs.existsSync(path_folderLanguage)) {
+					if (fs.existsSync(path_fileSettingsLanguage) && !Utils.isOptionValid('test')) {
+						var datafile = JSON.parse(LZString.decompressFromBase64(fs.readFileSync(path_fileSettingsLanguage, { encoding: 'utf8' })));
+						value = datafile.languageId;
+					}
+				}
+				return value;
+			})(),
+			title = JsonParse(JSON.parse(file['Title'] || {})),
+			menu = JsonParse(JSON.parse(file['Menu'] || {})),
+			shop = JsonParse(JSON.parse(file['Shop'] || {})),
+			save = JsonParse(JSON.parse(file['Save'] || {})),
+			load = JsonParse(JSON.parse(file['Load'] || {})),
+			options = JsonParse(JSON.parse(file['Options'] || {})),
+			status = JsonParse(JSON.parse(file['Status'] || {})),
+			basic = JsonParse(JSON.parse(file['Basic'] || {})),
+			gameEnd = JsonParse(JSON.parse(file['GameEnd'] || {})),
+			battle = JsonParse(JSON.parse(file['Battle'] || {})),
+			elementTypes = JsonParse(JSON.parse(file['Elementos(Tipo)'] || [])),
+			skillTypes = JsonParse(JSON.parse(file['Habilidades(Tipo)'] || [])),
+			weaponsTypes = JsonParse(JSON.parse(file['Armas(Tipo)'] || [])),
+			armorTypes = JsonParse(JSON.parse(file['Armaduras(Tipo)'] || [])),
+			equipTypes = JsonParse(JSON.parse(file['Equipamentos(Tipo)'] || [])),
+			messages = JsonParse(JSON.parse(file['Geral'] || {})),
+			states = JsonParse(JSON.parse(file['Estados'] || [])),
+			skills = JsonParse(JSON.parse(file['Habilidades'] || [])),
+			actors = JsonParse(JSON.parse(file['Atores'] || [])),
+			classes = JsonParse(JSON.parse(file['Classes'] || [])),
+			items = JsonParse(JSON.parse(file['Itens'] || [])),
+			weapons = JsonParse(JSON.parse(file['Armas'] || [])),
+			armors = JsonParse(JSON.parse(file['Armadura'] || [])),
+			enemies = JsonParse(JSON.parse(file['Inimigos'] || [])),
+			texts = JsonParse(JSON.parse(file['Textos'] || [])),
+			specialsTexts = JsonParse(JSON.parse(file['Especiais'] || [])),
+			windowToCompilator = JSON.parse(file['Janela do compilador'] || false),
+			defaultLanguageCompilator = String(file['Idioma padrão do compilador'] || 'qualquer'),
+			imageButtonCompilator = String(file['Imagem dos botões do compilador'] || 'ButtonSet_HelpSystemInfo'),
+			commandLanguageOptions = function () {
+				var commands = JsonParse(JSON.parse(file['Comando Idioma'] || [])),
+					commandValue = ['???', '???'];
+				commands.map(function (command) {
+					let valor = String(command['Texto']),
+						valor2 = String(command['Valor']),
+						idioma = String(command['Idioma']);
+					if (idioma == getterLanguageSystem() || idioma == 'qualquer') {
+						return commandValue = [valor, valor2];
+					}
+				});
+				return commandValue;
+			};
+		return {
+			'language': language,
+			'languageId': languageId,
+			'commandLanguageOptions': commandLanguageOptions,
+			'title': title,
+			'menu': menu,
+			'shop': shop,
+			'save': save,
+			'load': load,
+			'options': options,
+			'status': status,
+			'basic': basic,
+			'gameEnd': gameEnd,
+			'battle': battle,
+			'elementTypes': elementTypes,
+			'skillTypes': skillTypes,
+			'weaponsTypes': weaponsTypes,
+			'armorTypes': armorTypes,
+			'equipTypes': equipTypes,
+			'messages': messages,
+			'states': states,
+			'skills': skills,
+			'actors': actors,
+			'classes': classes,
+			'items': items,
+			'weapons': weapons,
+			'armors': armors,
+			'enemies': enemies,
+			'texts': texts,
+			'specialsTexts': specialsTexts,
+			'windowToCompilator': windowToCompilator,
+			'defaultLanguageCompilator': defaultLanguageCompilator,
+			'imageButtonCompilator': imageButtonCompilator
+		}
+	})();
+
+	//-----------------------------------------------------------------------------
+	// Variaveis Globais
+	//
+	var translateObject = {};
+
+	//-----------------------------------------------------------------------------
+	// String
+	//
+	String.prototype.includesEx = function (string) {
+		return this.toLowerCase().replace(/\s{1,}/g, '')
+			.includes(string.toLowerCase().replace(/\s{1,}/g, ''));
+	};
+
+	//-----------------------------------------------------------------------------
+	// Funções
+	//
+	// Retorna o caminho local para o arquivo/pasta
+	function localPath(p) {
+		// Retira uma parte da string
+		if (p.substring(0, 1) === '/')
+			p = p.substring(1);
+		// Importa o modulo PATH do Node
+		var path = require('path'),
+			// Cria a base para o caminho local
+			base = path.dirname(process.mainModule.filename);
+		// Retorna a base do caminho associado ao caminho
+		return path.join(base, p);
+	};
+
+	// Cria a pasta do sistema
+	function createSystemFolders() {
+		var fs = require('fs'),
+			path_folderSystem = localPath('system'),
+			path_folderLanguage = localPath('system/language'),
+			path_folderLanguageSave = localPath('system/language/save');
+		if (!fs.existsSync(path_folderSystem)) {
+			fs.mkdirSync(path_folderSystem);
+		}
+		if (!fs.existsSync(path_folderLanguage)) {
+			fs.mkdirSync(path_folderLanguage);
+		}
+		if (!fs.existsSync(path_folderLanguageSave)) {
+			fs.mkdirSync(path_folderLanguageSave);
+		}
+	};
+
+	// Cria o arquivo de configuração do sistema
+	function createFileSettingsLanguage(callback, setLanguage) {
+		var fs = require('fs'),
+			path_folderSystem = localPath('system'),
+			path_folderLanguage = localPath('system/language/save'),
+			path_fileSettingsLanguage = path_folderLanguage + '\\' + 'settingsLanguageSystem.drxamasave',
+			data = LZString.compressToBase64(JSON.stringify({
+				'language': params.language[params.languageId],
+				'languageId': params.languageId,
+				'isCompleteGame': false
+			}, null, 2));
+		if (fs.existsSync(path_folderLanguage)) {
+			if (!fs.existsSync(path_fileSettingsLanguage) || Utils.isOptionValid('test') || setLanguage) {
+				fs.writeFileSync(path_fileSettingsLanguage, data);
+			}
+			if (fs.existsSync(path_fileSettingsLanguage) && !Utils.isOptionValid('test')) {
+				var datafile = JSON.parse(LZString.decompressFromBase64(fs.readFileSync(path_fileSettingsLanguage, { encoding: 'utf8' })));
+				if (!datafile.isCompleteGame) {
+					datafile.language = params.language[params.languageId];
+					datafile.languageId = params.languageId;
+					datafile.isCompleteGame = true;
+					fs.writeFileSync(path_fileSettingsLanguage,
+						LZString.compressToBase64(JSON.stringify(datafile, null, 2)));
+				}
+			}
+		}
+		if (callback) callback();
+	};
+
+	// Retorna a linguagem padrão do sistema
+	function getterLanguageSystem() {
+		var fs = require('fs'),
+			path_folderSystem = localPath('system'),
+			path_folderLanguage = localPath('system/language/save'),
+			path_fileSettingsLanguage = path_folderLanguage + '\\' + 'settingsLanguageSystem.drxamasave',
+			language = params.language[params.languageId];
+		if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_fileSettingsLanguage)) {
+			var data = JSON.parse(LZString.decompressFromBase64(
+				fs.readFileSync(path_fileSettingsLanguage, {
+					'encoding': 'utf8'
+				})));
+			language = data.language;
+		}
+		return language;
+	};
+
+	// Retorna o texto para a linguagem padrão do sistema
+	function getterTextLanguage(object) {
+		if (object instanceof Array) {
+			var language = getterLanguageSystem(),
+				text = '???';
+			object.forEach(function (key) {
+				key = JSON.parse(key) || {};
+				let idioma = key.Idioma || 'qualquer',
+					valor = key.Valor || '???',
+					elemento = null;
+				if (key.Element)
+					elemento = (function () {
+						var id = key.Element[1],
+							stringCase = String(key.Element[0]).toLowerCase();
+						switch (stringCase) {
+							case 'equipamento':
+							case 'armadura':
+							case 'arma':
+							case 'habilidade':
+							case 'elemento':
+							case 'statesmessage':
+							case 'skills':
+							case 'skillsmessage':
+							case 'actors':
+							case 'classes':
+							case 'items':
+							case 'weapons':
+							case 'armors':
+							case 'enemies':
+								if (!translateObject[stringCase])
+									translateObject[stringCase] = {};
+								if (!translateObject[stringCase][id])
+									translateObject[stringCase][id] = {};
+								return translateObject[stringCase][id];
+							case 'states':
+								return $dataStates[id];
+							case 'item':
+								return $dataItems[id];
+						}
+					})();
+				if (idioma === language || idioma == 'qualquer') {
+					if (elemento) {
+						if (!elemento.translate) {
+							elemento.translate = true;
+						} else {
+							return;
+						}
+					}
+					return text = valor;
+				}
+			});
+			return text;
+		}
+		return '???';
+	};
+
+	// Define os textos do TextManager
+	function defineTextManager() {
+		Object.defineProperties(TextManager, {
+			newGame: {
+				value: getterTextLanguage(params.title['Texto New Game'])
+			},
+			continue_: {
+				value: getterTextLanguage(params.title['Texto Continue'])
+			},
+			item: {
+				value: getterTextLanguage(params.menu['Texto Item']),
+			},
+			skill: {
+				value: getterTextLanguage(params.menu['Texto Skill'])
+			},
+			equip: {
+				value: getterTextLanguage(params.menu['Texto Equip'])
+			},
+			status: {
+				value: getterTextLanguage(params.menu['Texto Status'])
+			},
+			formation: {
+				value: getterTextLanguage(params.menu['Texto Formation'])
+			},
+			save: {
+				value: getterTextLanguage(params.menu['Texto Save'])
+			},
+			gameEnd: {
+				value: getterTextLanguage(params.menu['Texto Game End'])
+			},
+			options: {
+				value: getterTextLanguage(params.menu['Texto Options'])
+			},
+			weapon: {
+				value: getterTextLanguage(params.menu['Texto Weapon'])
+			},
+			armor: {
+				value: getterTextLanguage(params.menu['Texto Armor'])
+			},
+			keyItem: {
+				value: getterTextLanguage(params.menu['Texto Key Item'])
+			},
+			equip2: {
+				value: getterTextLanguage(params.menu['Texto Equip(2)'])
+			},
+			optimize: {
+				value: getterTextLanguage(params.menu['Texto Optimize'])
+			},
+			clear: {
+				value: getterTextLanguage(params.menu['Texto Clear'])
+			},
+			buy: {
+				value: getterTextLanguage(params.shop['Texto Buy'])
+			},
+			sell: {
+				value: getterTextLanguage(params.shop['Texto Sell'])
+			},
+			cancel: {
+				value: getterTextLanguage(params.basic['Texto Cancel'])
+			},
+			possession: {
+				value: getterTextLanguage(params.shop['Texto Possession'])
+			},
+			saveMessage: {
+				value: getterTextLanguage(params.save['Texto Save Message'])
+			},
+			loadMessage: {
+				value: getterTextLanguage(params.load['Texto Load Message'])
+			},
+			file: {
+				value: getterTextLanguage(params.basic['Texto File'])
+			},
+			alwaysDash: {
+				value: getterTextLanguage(params.options['Texto Always Dash'])
+			},
+			commandRemember: {
+				value: getterTextLanguage(params.options['Texto Command Remember'])
+			},
+			bgmVolume: {
+				value: getterTextLanguage(params.options['Texto BGM Volume'])
+			},
+			bgsVolume: {
+				value: getterTextLanguage(params.options['Texto BGS Volume'])
+			},
+			meVolume: {
+				value: getterTextLanguage(params.options['Texto ME Volume'])
+			},
+			seVolume: {
+				value: getterTextLanguage(params.options['Texto SE Volume'])
+			},
+			expTotal: {
+				value: getterTextLanguage(params.status['Texto Current'])
+			},
+			exp: {
+				value: getterTextLanguage(params.status['Texto Exp'])
+			},
+			expNext: {
+				value: getterTextLanguage(params.status['Texto Exp Next'])
+			},
+			level: {
+				value: getterTextLanguage(params.basic['Texto Level'])
+			},
+			toTitle: {
+				value: getterTextLanguage(params.gameEnd['Texto To Title'])
+			},
+			fight: {
+				value: getterTextLanguage(params.battle['Texto Fight'])
+			},
+			escape: {
+				value: getterTextLanguage(params.battle['Texto Escape'])
+			},
+			attack: {
+				value: getterTextLanguage(params.battle['Texto Attack'])
+			},
+			guard: {
+				value: getterTextLanguage(params.battle['Texto Guard'])
+			}
+		});
+	};
+
+	// Define os textos dos termos
+	var systemTerms = {
+		'params': null,
+		'basic': null
+	};
+	function defineSystemTerms() {
+		if (systemTerms.params instanceof Array === false) systemTerms.params = $dataSystem.terms.params.slice(0);
+		if (systemTerms.basic instanceof Array === false) systemTerms.basic = $dataSystem.terms.basic.slice(0);
+		function setTextParameter(manager, value, object, object2, index) {
+			Object.keys(manager).forEach(function (key) {
+				if (key.includesEx(String(value))) {
+					object2[index] = getterTextLanguage(manager[key]);
+				}
+				if (key.includesEx(String('gold'))) {
+					$dataSystem.currencyUnit = getterTextLanguage(manager[key]);
+				}
+			});
+		};
+
+		function setTextParameter2(manager, stringIndex, object, index) {
+			manager.forEach(function (key) {
+				var id = Number(key['Texto ' + stringIndex + ' Id']),
+					text = String(key['Texto ' + stringIndex + ' Texto']),
+					language = String(key['Texto Idioma']);
+				if (id == index) {
+					var translateId = String(stringIndex).toLowerCase();
+					if (!translateObject[translateId] || translateObject[translateId] && !translateObject[translateId][index] ||
+						translateObject[translateId] && translateObject[translateId][index] && !translateObject[translateId][index].translate) {
+						object[index] = getterTextLanguage([
+							JSON.stringify({
+								'Idioma': language,
+								'Valor': text,
+								'Element': [
+									stringIndex,
+									index
+								]
+							})
+						])
+					}
+				}
+			});
+		};
+		function setTextParameterMessage(manager, object) {
+			Object.keys(manager).forEach(function (key) {
+				Object.keys(object).forEach(function (key2) {
+					if (key.includesEx(String(key2))) {
+						object[key2] = getterTextLanguage(manager[key])
+					}
+				});
+			});
+		};
+		setTextParameterMessage(params.messages, $dataSystem.terms.messages);
+		var i = 0,
+			length = systemTerms.params.length,
+			object = systemTerms.params;
+		for (; i < length; i++) {
+			switch (i) {
+				case 0:
+					$dataSystem.terms.params[i] = getterTextLanguage(params.status['Texto Max HP']);
+					break;
+				case 1:
+					$dataSystem.terms.params[i] = getterTextLanguage(params.status['Texto Max MP']);
+					break;
+				case 2:
+					$dataSystem.terms.params[i] = getterTextLanguage(params.status['Texto Attack']);
+					break;
+				case 3:
+					$dataSystem.terms.params[i] = getterTextLanguage(params.status['Texto Defense']);
+					break;
+				case 4:
+					$dataSystem.terms.params[i] = getterTextLanguage(params.status['Texto M.Attack']);
+					break;
+				case 5:
+					$dataSystem.terms.params[i] = getterTextLanguage(params.status['Texto M.Defense']);
+					break;
+				case 6:
+					$dataSystem.terms.params[i] = getterTextLanguage(params.status['Texto Agility']);
+					break;
+				case 7:
+					$dataSystem.terms.params[i] = getterTextLanguage(params.status['Texto Luck']);
+					break;
+				case 8:
+					$dataSystem.terms.params[i] = getterTextLanguage(params.status['Texto Hit']);
+					break;
+				case 9:
+					$dataSystem.terms.params[i] = getterTextLanguage(params.status['Texto Evasion']);
+					break;
+			}
+		}
+		i = 0,
+			length = systemTerms.basic.length,
+			object = systemTerms.basic;
+		for (; i < length; i++) {
+			setTextParameter(params.basic, object[i], object, $dataSystem.terms.basic, i);
+		}
+		i = 0,
+			length = $dataSystem.elements.length,
+			object = $dataSystem.elements;
+		for (; i < length; i++) {
+			setTextParameter2(params.elementTypes, 'Elemento', object, i);
+		}
+		i = 0,
+			length = $dataSystem.skillTypes.length,
+			object = $dataSystem.skillTypes;
+		for (; i < length; i++) {
+			setTextParameter2(params.skillTypes, 'Habilidade', object, i);
+		}
+		i = 0,
+			length = $dataSystem.weaponTypes.length,
+			object = $dataSystem.weaponTypes;
+		for (; i < length; i++) {
+			setTextParameter2(params.weaponsTypes, 'Arma', object, i);
+		}
+		i = 0,
+			length = $dataSystem.armorTypes.length,
+			object = $dataSystem.armorTypes;
+		for (; i < length; i++) {
+			setTextParameter2(params.armorTypes, 'Armadura', object, i);
+		}
+		i = 0,
+			length = $dataSystem.equipTypes.length,
+			object = $dataSystem.equipTypes;
+		for (; i < length; i++) {
+			setTextParameter2(params.equipTypes, 'Equipamento', object, i);
+		}
+	};
+
+	// Define os textos dos estados
+	function defineSystemStates() {
+		if (params.states instanceof Array) {
+			params.states.forEach(function (state) {
+				var id = Number(state['Texto Estado Id']),
+					name = String(state['Texto Estado Nome']),
+					messages = [
+						String(state['Texto Estado message 1']),
+						String(state['Texto Estado message 2']),
+						String(state['Texto Estado message 3']),
+						String(state['Texto Estado message 4'])
+					],
+					language = String(state['Texto Idioma']);
+				if ($dataStates[id]) {
+					if (name.length > 0) {
+						if (!$dataStates[id].translate) {
+							$dataStates[id].name = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': name,
+									'Element': [
+										'states',
+										id
+									]
+								})
+							]);
+						}
+					}
+					messages.forEach(function (message, index) {
+						var messageId = index + 1;
+						if (message.length > 0) {
+							if (!translateObject['statesmessage'] ||
+								translateObject['statesmessage'] && !translateObject['statesmessage']['message' + messageId] ||
+								translateObject['statesmessage'] && translateObject['statesmessage']['message' + messageId] &&
+								!translateObject['statesmessage']['message' + messageId].translate) {
+								$dataStates[id]['message' + messageId] = getterTextLanguage([
+									JSON.stringify({
+										'Idioma': language,
+										'Valor': ' ' + message,
+										'Element': [
+											'statesMessage',
+											'message' + messageId
+										]
+									})
+								]);
+							}
+						}
+					});
+				}
+			});
+		}
+	};
+
+	// Define os textos das habilidades
+	function defineSystemSkills() {
+		if (params.skills instanceof Array) {
+			params.skills.forEach(function (skill) {
+				var id = Number(skill['Texto Habilidade Id']),
+					name = String(skill['Texto Habilidade Nome']),
+					description = JSON.parse(skill['Texto Habilidade Descrição']),
+					messages = [
+						String(skill['Texto Habilidade message 1']),
+						String(skill['Texto Habilidade message 2'])
+					],
+					language = String(skill['Texto Idioma']);
+				if ($dataSkills[id]) {
+					if (name.length > 0) {
+						if (!translateObject['skills'] ||
+							translateObject['skills'] &&
+							!translateObject['skills']['name' + id] ||
+							translateObject['skills'] &&
+							translateObject['skills']['name' + id] &&
+							!translateObject['skills']['name' + id].translate) {
+							$dataSkills[id].name = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': name,
+									'Element': [
+										'skills',
+										'name' + id
+									]
+								})
+							]);
+						}
+					}
+					if (description.length > 0) {
+						if (!translateObject['skills'] ||
+							translateObject['skills'] &&
+							!translateObject['skills']['description' + id] ||
+							translateObject['skills'] &&
+							translateObject['skills']['description' + id] &&
+							!translateObject['skills']['description' + id].translate) {
+							$dataSkills[id].description = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': description,
+									'Element': [
+										'skills',
+										'description' + id
+									]
+								})
+							]);
+						}
+					}
+					messages.forEach(function (message, index) {
+						var messageId = index + 1;
+						if (message.length > 0) {
+							if (!translateObject['skillsmessage'] ||
+								translateObject['skillsmessage'] &&
+								!translateObject['skillsmessage']['message' + messageId] ||
+								translateObject['skillsmessage'] &&
+								translateObject['skillsmessage']['message' + messageId] &&
+								!translateObject['skillsmessage']['message' + messageId].translate) {
+								$dataSkills[id]['message' + messageId] = getterTextLanguage([
+									JSON.stringify({
+										'Idioma': language,
+										'Valor': ' ' + message,
+										'Element': [
+											'skillsMessage',
+											'message' + messageId
+										]
+									})
+								]);
+							}
+						}
+					});
+				}
+			});
+		}
+	};
+
+	// Define os textos dos atores
+	function defineSystemActors() {
+		if (params.actors instanceof Array) {
+			params.actors.forEach(function (actor) {
+				var id = Number(actor['Texto Ator Id']),
+					name = String(actor['Texto Ator Nome']),
+					nickname = String(actor['Texto Ator Nickname']),
+					profile = JSON.parse(actor['Texto Ator Profile']),
+					language = String(actor['Texto Idioma']);
+				if ($dataActors[id]) {
+					if (name.length > 0) {
+						if (!translateObject['actors'] ||
+							translateObject['actors'] &&
+							!translateObject['actors']['name' + id] ||
+							translateObject['actors'] &&
+							translateObject['actors']['name' + id] &&
+							!translateObject['actors']['name' + id].translate) {
+							$dataActors[id].name = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': name,
+									'Element': [
+										'Actors',
+										'name' + id
+									]
+								})
+							]);
+						}
+					}
+					if (nickname.length > 0) {
+						if (!translateObject['actors'] ||
+							translateObject['actors'] &&
+							!translateObject['actors']['nickname' + id] ||
+							translateObject['actors'] &&
+							translateObject['actors']['nickname' + id] &&
+							!translateObject['actors']['nickname' + id].translate) {
+							$dataActors[id].nickname = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': nickname,
+									'Element': [
+										'Actors',
+										'nickname' + id
+									]
+								})
+							]);
+						}
+					}
+					if (profile.length > 0) {
+						if (!translateObject['actors'] ||
+							translateObject['actors'] &&
+							!translateObject['actors']['profile' + id] ||
+							translateObject['actors'] &&
+							translateObject['actors']['profile' + id] &&
+							!translateObject['actors']['profile' + id].translate) {
+							$dataActors[id].profile = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': profile,
+									'Element': [
+										'Actors',
+										'profile' + id
+									]
+								})
+							]);
+						}
+					}
+				}
+			});
+		}
+	};
+
+	// Define os textos das classes
+	function defineSystemClasses() {
+		if (params.classes instanceof Array) {
+			params.classes.forEach(function (classe) {
+				var id = Number(classe['Texto Classe Id']),
+					name = String(classe['Texto Classe Nome']),
+					language = String(classe['Texto Idioma']);
+				if ($dataClasses[id]) {
+					if (name.length > 0) {
+						if (!translateObject['classes'] ||
+							translateObject['classes'] &&
+							!translateObject['classes']['name' + id] ||
+							translateObject['classes'] &&
+							translateObject['classes']['name' + id] &&
+							!translateObject['classes']['name' + id].translate) {
+							$dataClasses[id].name = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': name,
+									'Element': [
+										'Classes',
+										'name' + id
+									]
+								})
+							]);
+						}
+					}
+				}
+			});
+		}
+	};
+
+	// Define os textos das itens
+	function defineSystemItems() {
+		if (params.items instanceof Array) {
+			params.items.forEach(function (item) {
+				var id = Number(item['Texto Item Id']),
+					name = String(item['Texto Item Nome']),
+					description = JSON.parse(item['Texto Item Descrição']),
+					language = String(item['Texto Idioma']);
+				if ($dataItems[id]) {
+					if (name.length > 0) {
+						if (!translateObject['items'] ||
+							translateObject['items'] &&
+							!translateObject['items']['name' + id] ||
+							translateObject['items'] &&
+							translateObject['items']['name' + id] &&
+							!translateObject['items']['name' + id].translate) {
+							$dataItems[id].name = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': name,
+									'Element': [
+										'Items',
+										'name' + id
+									]
+								})
+							]);
+						}
+					}
+					if (description.length > 0) {
+						if (!translateObject['items'] ||
+							translateObject['items'] &&
+							!translateObject['items']['description' + id] ||
+							translateObject['items'] &&
+							translateObject['items']['description' + id] &&
+							!translateObject['items']['description' + id].translate) {
+							$dataItems[id].description = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': description,
+									'Element': [
+										'Items',
+										'description' + id
+									]
+								})
+							]);
+						}
+					}
+				}
+			});
+		}
+	};
+
+	// Define os textos das armas
+	function defineSystemWeapons() {
+		if (params.weapons instanceof Array) {
+			params.weapons.forEach(function (weapon) {
+				var id = Number(weapon['Texto Arma Id']),
+					name = String(weapon['Texto Arma Nome']),
+					description = JSON.parse(weapon['Texto Arma Descrição']),
+					language = String(weapon['Texto Idioma']);
+				if ($dataWeapons[id]) {
+					if (name.length > 0) {
+						if (!translateObject['weapons'] ||
+							translateObject['weapons'] &&
+							!translateObject['weapons']['name' + id] ||
+							translateObject['weapons'] &&
+							translateObject['weapons']['name' + id] &&
+							!translateObject['weapons']['name' + id].translate) {
+							$dataWeapons[id].name = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': name,
+									'Element': [
+										'Weapons',
+										'name' + id
+									]
+								})
+							]);
+						}
+					}
+					if (description.length > 0) {
+						if (!translateObject['weapons'] ||
+							translateObject['weapons'] &&
+							!translateObject['weapons']['description' + id] ||
+							translateObject['weapons'] &&
+							translateObject['weapons']['description' + id] &&
+							!translateObject['weapons']['description' + id].translate) {
+							$dataWeapons[id].description = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': description,
+									'Element': [
+										'Weapons',
+										'description' + id
+									]
+								})
+							]);
+						}
+					}
+				}
+			});
+		}
+	};
+
+	// Define os textos das armaduras
+	function defineSystemArmors() {
+		if (params.armors instanceof Array) {
+			params.armors.forEach(function (armor) {
+				var id = Number(armor['Texto Armadura Id']),
+					name = String(armor['Texto Armadura Nome']),
+					description = JSON.parse(armor['Texto Armadura Descrição']),
+					language = String(armor['Texto Idioma']);
+				if ($dataArmors[id]) {
+					if (name.length > 0) {
+						if (!translateObject['armors'] ||
+							translateObject['armors'] &&
+							!translateObject['armors']['name' + id] ||
+							translateObject['armors'] &&
+							translateObject['armors']['name' + id] &&
+							!translateObject['armors']['name' + id].translate) {
+							$dataArmors[id].name = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': name,
+									'Element': [
+										'Armors',
+										'name' + id
+									]
+								})
+							]);
+						}
+					}
+					if (description.length > 0) {
+						if (!translateObject['armors'] ||
+							translateObject['armors'] &&
+							!translateObject['armors']['description' + id] ||
+							translateObject['armors'] &&
+							translateObject['armors']['description' + id] &&
+							!translateObject['armors']['description' + id].translate) {
+							$dataArmors[id].description = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': description,
+									'Element': [
+										'Armors',
+										'description' + id
+									]
+								})
+							]);
+						}
+					}
+				}
+			});
+		}
+	};
+
+	// Define os textos das inimigos
+	function defineSystemEnemies() {
+		if (params.enemies instanceof Array) {
+			params.enemies.forEach(function (enemies) {
+				var id = Number(enemies['Texto Inimigo Id']),
+					name = String(enemies['Texto Inimigo Nome']),
+					language = String(enemies['Texto Idioma']);
+				if ($dataEnemies[id]) {
+					if (name.length > 0) {
+						if (!translateObject['enemies'] ||
+							translateObject['enemies'] &&
+							!translateObject['enemies']['name' + id] ||
+							translateObject['enemies'] &&
+							translateObject['enemies']['name' + id] &&
+							!translateObject['enemies']['name' + id].translate) {
+							$dataEnemies[id].name = getterTextLanguage([
+								JSON.stringify({
+									'Idioma': language,
+									'Valor': name,
+									'Element': [
+										'Enemies',
+										'name' + id
+									]
+								})
+							]);
+						}
+					}
+				}
+			});
+		}
+	};
+
+	// Define os nomes dos Game_Actors
+	function defineGameActors() {
+		if ($gameActors instanceof Game_Actors) {
+			$gameActors._data.map(function (actor) {
+				if (actor instanceof Game_Actor) {
+					let data = $dataActors[actor.actorId()];
+					actor.setName(data.name);
+					actor.setNickname(data.nickname);
+					actor.setProfile(data.profile);
+				}
+			});
+		}
+	};
+
+	// Retorna o texto para as mensagens
+	function getTextForMessages(id) {
+		var texto = '???';
+		if (params.texts instanceof Array) {
+			params.texts.forEach(function (text) {
+				var _id = Number(text['Texto Id']),
+					valor = String(text['Texto Valor']),
+					language = String(text['Texto Idioma']);
+				if (_id == id) {
+					if (params.language[params.languageId] == String(language).toLowerCase() || String(language).toLowerCase() == 'qualquer') {
+						return texto = getterTextLanguage([
+							JSON.stringify({
+								'Idioma': language,
+								'Valor': convertEscapeCharacters(valor)
+							})
+						]);
+					}
+				}
+			});
+		}
+		return texto;
+	};
+
+	// Converte o texto
+	function convertEscapeCharacters(text) {
+		text = text.replace(/\\/g, '\x1b');
+		text = text.replace(/\x1b\x1b/g, '\\');
+		text = text.replace(/\x1bST\[(.*)\]/gi, function () {
+			return specialTextValue(arguments[1]);
+		}.bind(this));
+		return text;
+	};
+
+	// Retorna o valor especial
+	function specialTextValue(code) {
+		switch (String(code).toLowerCase()) {
+			case 'username':
+			case '1':
+				return process.env.SteamAppUser || process.env.USERNAME;
+		}
+	};
+
+	// Define todos os textos
+	function defineAllTexts() {
+		defineTextManager();
+		defineSystemTerms();
+		defineSystemStates();
+		defineSystemSkills();
+		defineSystemActors();
+		defineSystemClasses();
+		defineSystemItems();
+		defineSystemWeapons();
+		defineSystemArmors();
+		defineSystemEnemies();
+		defineGameActors();
+	};
+
+	function setMessageBox(messageId) {
+		var specialsTexts = params.specialsTexts;
+		if (specialsTexts instanceof Array) {
+			specialsTexts.forEach(function (specialText) {
+				var language = getterLanguageSystem(),
+					idioma = String(specialText['Texto Idioma']),
+					id = Number(specialText['Texto Especial Id']),
+					valor = String(specialText['Texto Especial Texto']).replace(/\"/g, '').split('\\n'),
+					face = [
+						Boolean(JSON.parse(specialText['Texto Especial Face'])),
+						String(specialText['Texto Especial Face Name']),
+						Number(specialText['Texto Especial Face Index'])
+					];
+				if (id == messageId) {
+					if (language == idioma || idioma == 'qualquer') {
+						if (face[0]) {
+							$gameMessage.setFaceImage(face[1], face[2]);
+						}
+						valor.forEach(function (message) {
+							$gameMessage.add(message);
+						});
+					}
+				}
+			});
+		}
+	};
+
+	// Cria uma tela de ajuda para o usuario
+	var winHelpSystemInfo;
+	function helpWindowSystemInfo() {
+		if (Utils.isOptionValid('test')) {
+			if (!winHelpSystemInfo) {
+				winHelpSystemInfo = true;
+				SceneManager.push(Scene_HelpSystemInfo);
+			}
+		}
+	};
+
+	// Inicia o sistema
+	function initializeSystem() {
+		loadSystemTextsFolders();
+		createSystemFolders();
+		if (params.windowToCompilator) {
+			if (!winHelpSystemInfo) {
+				createFileSettingsLanguage();
+			} else {
+				createFileSettingsLanguage(defineAllTexts);
+			}
+			helpWindowSystemInfo();
+		} else {
+			createFileSettingsLanguage(defineAllTexts);
+		}
+	};
+
+	// Carrega os textos personalizados nas pastas
+	function loadSystemTextsFolders() {
+		var fs = require('fs'),
+			path_folderSystem = localPath('system'),
+			path_folderLanguage = localPath('system/language'),
+			path_folderLanguageTranslate = localPath(`system/language/translate`),
+			folders = [],
+			setValues = {
+				'actors': false,
+				'classes': false,
+				'skills': false,
+				'items': false,
+				'weapons': false,
+				'armors': false,
+				'enemies': false,
+				'states': false,
+				'elements': false,
+				'skillTypes': false,
+				'weaponTypes': false,
+				'armorTypes': false,
+				'equipmentTypes': false
+			};
+		if (fs.existsSync(path_folderLanguage)) {
+			if (fs.existsSync(path_folderLanguageTranslate)) {
+				// Lista as pastas
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						folders.push(folderPath);
+					}
+				});
+				// Lista os arquivos nas pastas
+				folders.map(function (folder) {
+					if (fs.existsSync(folder)) {
+						fs.readdirSync(folder).forEach(function (file) {
+							let filePath = folder + '\\' + file,
+								fileType = null;
+							if (fs.lstatSync(filePath).isFile()) {
+								if (String(file).toLowerCase().includesEx('actors')) {
+									fileType = 'actors';
+									if (!setValues.actors) {
+										setValues.actors = true;
+										params.actors = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('classes')) {
+									fileType = 'classes';
+									if (!setValues.classes) {
+										setValues.classes = true;
+										params.classes = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('skills')) {
+									fileType = 'skills';
+									if (!setValues.skills) {
+										setValues.skills = true;
+										params.skills = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('items')) {
+									fileType = 'items';
+									if (!setValues.items) {
+										setValues.items = true;
+										params.items = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('weapons')) {
+									fileType = 'weapons';
+									if (!setValues.weapons) {
+										setValues.weapons = true;
+										params.weapons = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('armors')) {
+									fileType = 'armors';
+									if (!setValues.armors) {
+										setValues.armors = true;
+										params.armors = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('enemies')) {
+									fileType = 'enemies';
+									if (!setValues.enemies) {
+										setValues.enemies = true;
+										params.enemies = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('states')) {
+									fileType = 'states';
+									if (!setValues.states) {
+										setValues.states = true;
+										params.states = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('elements')) {
+									fileType = 'elements';
+									if (!setValues.elements) {
+										setValues.elements = true;
+										params.elementTypes = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('skillTypes')) {
+									fileType = 'skillTypes';
+									if (!setValues.skillTypes) {
+										setValues.skillTypes = true;
+										params.skillTypes = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('weaponTypes')) {
+									fileType = 'weaponTypes';
+									if (!setValues.weaponTypes) {
+										setValues.weaponTypes = true;
+										params.weaponsTypes = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('armorTypes')) {
+									fileType = 'armorTypes';
+									if (!setValues.armorTypes) {
+										setValues.armorTypes = true;
+										params.armorTypes = [];
+									}
+								} else if (String(file).toLowerCase().includesEx('equipmentTypes')) {
+									fileType = 'equipmentTypes';
+									if (!setValues.equipmentTypes) {
+										setValues.equipmentTypes = true;
+										params.equipTypes = [];
+									}
+								}
+								let datafile = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf8' }));
+								if (datafile instanceof Array) {
+									if (fileType === 'actors') {
+										if ($dataActors.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsActors(datafile);
+										} else if ($dataActors.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsActors(datafile);
+										}
+									} else if (fileType === 'classes') {
+										if ($dataClasses.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsClasses(datafile);
+										} else if ($dataClasses.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsClasses(datafile);
+										}
+									} else if (fileType === 'skills') {
+										if ($dataSkills.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsSkills(datafile);
+										} else if ($dataSkills.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsSkills(datafile);
+										}
+									} else if (fileType === 'items') {
+										if ($dataItems.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsItems(datafile);
+										} else if ($dataItems.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsItems(datafile);
+										}
+									} else if (fileType === 'weapons') {
+										if ($dataWeapons.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsWeapons(datafile);
+										} else if ($dataWeapons.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsWeapons(datafile);
+										}
+									} else if (fileType === 'armors') {
+										if ($dataWeapons.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsArmors(datafile);
+										} else if ($dataWeapons.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsActors(datafile);
+										}
+									} else if (fileType === 'enemies') {
+										if ($dataEnemies.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsEnemies(datafile);
+										} else if ($dataEnemies.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsEnemies(datafile);
+										}
+									} else if (fileType === 'states') {
+										if ($dataStates.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsStates(datafile);
+										} else if ($dataStates.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsStates(datafile);
+										}
+									} else if (fileType === 'elements') {
+										if ($dataSystem.elements.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesElements(datafile);
+										} else if ($dataSystem.elements.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesElements(datafile);
+										}
+									} else if (fileType === 'skillTypes') {
+										if ($dataSystem.skillTypes.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesSkills(datafile);
+										} else if ($dataSystem.skillTypes.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesSkills(datafile);
+										}
+									} else if (fileType === 'weaponTypes') {
+										if ($dataSystem.weaponTypes.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesWeapon(datafile);
+										} else if ($dataSystem.weaponTypes.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesWeapon(datafile);
+										}
+									} else if (fileType === 'armorTypes') {
+										if ($dataSystem.armorTypes.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesArmor(datafile);
+										} else if ($dataSystem.armorTypes.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesArmor(datafile);
+										}
+									} else if (fileType === 'equipmentTypes') {
+										if ($dataSystem.equipTypes.length > datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesEquipment(datafile);
+										} else if ($dataSystem.equipTypes.length < datafile.length) {
+											datafile = Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesEquipment(datafile);
+										}
+									}
+									datafile.map(function (content) {
+										if (content) {
+											if (fileType === 'actors') {
+												params.actors.push(content);
+											} else if (fileType === 'classes') {
+												params.classes.push(content);
+											} else if (fileType === 'skills') {
+												params.skills.push(content);
+											} else if (fileType === 'items') {
+												params.items.push(content);
+											} else if (fileType === 'weapons') {
+												params.weapons.push(content);
+											} else if (fileType === 'armors') {
+												params.armors.push(content);
+											} else if (fileType === 'enemies') {
+												params.enemies.push(content);
+											} else if (fileType === 'states') {
+												params.states.push(content);
+											} else if (fileType === 'elements') {
+												params.elementTypes.push(content);
+											} else if (fileType === 'skillTypes') {
+												params.skillTypes.push(content);
+											} else if (fileType === 'weaponTypes') {
+												params.weaponsTypes.push(content);
+											} else if (fileType === 'armorTypes') {
+												params.armorTypes.push(content);
+											} else if (fileType === 'equipmentTypes') {
+												params.equipTypes.push(content);
+											}
+										}
+									});
+								}
+							}
+						});
+					}
+				});
+			}
+		}
+	};
+
+	//-----------------------------------------------------------------------------
+	// Scene_HelpSystemInfo
+	//
+	// The scene class of the title screen.
+
+	function Scene_HelpSystemInfo() {
+		this.initialize.apply(this, arguments);
+	}
+
+	Scene_HelpSystemInfo.prototype = Object.create(Scene_Base.prototype);
+	Scene_HelpSystemInfo.prototype.constructor = Scene_HelpSystemInfo;
+
+	Scene_HelpSystemInfo.prototype.initialize = function () {
+		Scene_Base.prototype.initialize.call(this);
+	};
+
+	Scene_HelpSystemInfo.prototype.create = function () {
+		Scene_Base.prototype.create.call(this);
+		this.createBackground();
+		this.createButtons();
+	};
+
+	Scene_HelpSystemInfo.prototype.start = function () {
+		Scene_Base.prototype.start.call(this);
+		this.startFadeIn(this.fadeSpeed(), false);
+	};
+
+	Scene_HelpSystemInfo.prototype.updateFade = function () {
+		if (this._fadeDuration > 0) {
+			var d = this._fadeDuration;
+			if (this._fadeSign > 0) {
+				this._fadeSprite.opacity -= this._fadeSprite.opacity / d;
+			} else {
+				this._fadeSprite.opacity += (255 - this._fadeSprite.opacity) / d;
+			}
+			this._fadeDuration--;
+		}
+		if (this._fadeDuration <= 0 && this._closeWin) {
+			translateObject = {};
+			SceneManager.pop();
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.createBackground = function () {
+		var texts = [
+			['Escolha a melhor forma para traduzir o seu jogo!', 28],
+			['Está janela só irá ser exibida no modo de teste do projeto!', 18],
+			['Plugin: DrXama_languageManager.js', 14],
+			['Compilar os Textos: Gera os arquivos para traduzir o jogo!', 14],
+			['Ver pasta translate: Exibe a pasta no computador', 14]
+		];
+		this._backSprite = new Sprite(new Bitmap(Graphics.width, Graphics.height));
+		this._backSprite.bitmap.fillAll('#005bb7');
+		texts.forEach(function (text, keyId) {
+			var keyY = 92;
+			if (keyId > 0) {
+				keyY += 42 * keyId;
+			}
+			this._backSprite.bitmap.fontSize = text[1];
+			this._backSprite.bitmap.drawText(text[0],
+				0, keyY, Graphics.width, 0, 'center');
+		}, this);
+		this.addChild(this._backSprite);
+	};
+
+	Scene_HelpSystemInfo.prototype.createButtons = function () {
+		this._buttons = [
+			{
+				'sprite': new Sprite_Button(),
+				'y': Graphics.height / 2,
+				'event': 'compilarTextos',
+				'text': 'Compilar os textos'
+			},
+			{
+				'sprite': new Sprite_Button(),
+				'y': (Graphics.height / 2) + 70,
+				'event': 'mostrarPastaTranslate',
+				'text': 'Ver pasta translate'
+			},
+			{
+				'sprite': new Sprite_Button(),
+				'y': (Graphics.height / 2) + 140,
+				'event': 'compilationExit',
+				'text': 'Sair'
+			}
+		];
+		this._buttons.map(function (data) {
+			var button = data.sprite,
+				positionY = data.y,
+				buttonEvent = data.event,
+				buttonText = data.text;
+			button.bitmap = ImageManager.loadSystem(params.imageButtonCompilator);
+			button.setColdFrame(0, 0, 180, 65);
+			button.setHotFrame(0, 65, 180, 65);
+			button.setClickHandler(this.buttonsEventCall.bind(this, buttonEvent));
+			button.move((Graphics.width / 2) - (180 / 2), positionY);
+			var text = new Sprite(new Bitmap(180, 65)),
+				textColor = ['#ebebeb', '#ffffff'],
+				textValue = buttonText,
+				textFontSize = 16,
+				textX = 0,
+				textY = 65 / 2;
+			text.bitmap.fontSize = textFontSize;
+			text.bitmap.drawText(textValue, textX, textY, 180, 0, 'center');
+			button.addChild(text);
+			this.addChild(button);
+			// Define o processo de updateFrame do botão 1
+			var __updateFrame = button.updateFrame;
+			button.updateFrame = function () {
+				__updateFrame.call(this);
+				if (button._touching && !button._textPress) {
+					button._textPress = true;
+					button.children[0].bitmap.clear();
+					button.children[0].bitmap.textColor = textColor[0];
+					button.children[0].bitmap.drawText(textValue, textX, textY, 180, 0, 'center');
+				} else if (!button._touching && button._textPress) {
+					button._textPress = false;
+					button.children[0].bitmap.clear();
+					button.children[0].bitmap.textColor = textColor[1];
+					button.children[0].bitmap.drawText(textValue, textX, textY, 180, 0, 'center');
+				}
+			};
+		}, this);
+	};
+
+	Scene_HelpSystemInfo.prototype.buttonsEventCall = function (event) {
+		switch (String(event).toLowerCase()) {
+			case 'compilartextos':
+				this.compileTexts(window.prompt('Escreva um código de compilação valido'));
+				break;
+			case 'mostrarpastatranslate':
+				var fs = require('fs'),
+					path_folderLanguage = localPath('system/language'),
+					path_folderLanguageTranslate = localPath(`system/language/translate`);
+				if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+					if (Utils.isNwjs()) {
+						require('nw.gui').Shell.showItemInFolder(path_folderLanguageTranslate);
+					} else {
+						window.alert('Não é possivel abrir a pasta translate');
+					}
+				} else {
+					window.alert('Não é possivel abrir a pasta translate');
+				}
+				break;
+			case 'compilationexit':
+				this.startFadeOut(this.fadeSpeed(), false);
+				this._closeWin = true;
+				break;
+			default:
+				break;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTexts = function (compileEvent) {
+		var fs = require('fs'),
+			path_folderLanguage = localPath('system/language'),
+			path_folderLanguageTranslate = localPath(`system/language/translate`),
+			system_prompt1 = 'Escreva o nome da pasta de idioma';
+		if (typeof compileEvent != 'string') return;
+		function compilationSuccess(desc) {
+			if (!desc || desc && typeof desc === 'string'
+				&& desc.length <= 0) desc = '???';
+			window.alert(`A compilação para ${desc} está completa!`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				if (Utils.isNwjs() && window.confirm('Deseja abrir a pasta translate?')) {
+					require('nw.gui').Shell.showItemInFolder(path_folderLanguageTranslate);
+				}
+			}
+		}
+		if (compileEvent.length > 0) {
+			if (String(compileEvent).toLowerCase() === String('BDD_ABAS').toLowerCase() ||
+				Number(compileEvent) == 1) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsActors(language);
+				this.compileTextsClasses(language);
+				this.compileTextsSkills(language);
+				this.compileTextsItems(language);
+				this.compileTextsWeapons(language);
+				this.compileTextsArmors(language);
+				this.compileTextsEnemies(language);
+				this.compileTextsStates(language);
+				this.compileTextsTypesElements(language);
+				this.compileTextsTypesSkills(language);
+				this.compileTextsTypesWeapon(language);
+				this.compileTextsTypesArmor(language);
+				this.compileTextsTypesEquipment(language);
+				compilationSuccess('o banco de dados');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_ATORES').toLowerCase() ||
+				Number(compileEvent) == 11) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsActors(language);
+				compilationSuccess('a aba do banco de dados dos atores');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_CLASSES').toLowerCase() ||
+				Number(compileEvent) == 12) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsClasses(language);
+				compilationSuccess('a aba do banco de dados das classes');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_SKILLS').toLowerCase() ||
+				Number(compileEvent) == 13) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsSkills(language);
+				compilationSuccess('a aba do banco de dados das habilidades');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_ITEMS').toLowerCase() ||
+				Number(compileEvent) == 14) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsItems(language);
+				compilationSuccess('a aba do banco de dados dos itens');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_WEAPONS').toLowerCase() ||
+				Number(compileEvent) == 15) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsWeapons(language);
+				compilationSuccess('a aba do banco de dados das armas');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_ARMORS').toLowerCase() ||
+				Number(compileEvent) == 16) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsArmors(language);
+				compilationSuccess('a aba do banco de dados das armaduras');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_ENEMIES').toLowerCase() ||
+				Number(compileEvent) == 17) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsEnemies(language);
+				compilationSuccess('a aba do banco de dados dos inimigos');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_STATES').toLowerCase() ||
+				Number(compileEvent) == 18) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsStates(language);
+				compilationSuccess('a aba do banco de dados dos estados');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_ELEMENTS').toLowerCase() ||
+				Number(compileEvent) == 19) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsTypesElements(language);
+				compilationSuccess('a aba do banco de dados dos elementos');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_TYPESSKILLS').toLowerCase() ||
+				Number(compileEvent) == 110) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsTypesSkills(language);
+				compilationSuccess('a aba do banco de dados dos tipos de habilidades');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_TYPESWEAPON').toLowerCase() ||
+				Number(compileEvent) == 111) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsTypesWeapon(language);
+				compilationSuccess('a aba do banco de dados dos tipos de armas');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_TYPESARMOR').toLowerCase() ||
+				Number(compileEvent) == 112) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsTypesArmor(language);
+				compilationSuccess('a aba do banco de dados dos tipos de armaduras');
+			} else if (String(compileEvent).toLowerCase() === String('BDD_TYPESEQUIPMENT').toLowerCase() ||
+				Number(compileEvent) == 113) {
+				this.compileTextsCreateFolder('translate');
+				var language = window.prompt(system_prompt1);
+				if (language === null || language != null && language.length <= 0) {
+					language = params.defaultLanguageCompilator;
+				}
+				this.compileTextsTypesEquipment(language);
+				compilationSuccess('a aba do banco de dados dos tipos de equipamentos');
+			}
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsCreateFolder = function (folderName) {
+		var fs = require('fs'),
+			path_folderSystem = localPath('system'),
+			path_folderLanguage = localPath('system/language'),
+			path_folderLanguageTranslate = localPath('system/language/translate');
+		if (fs.existsSync(path_folderSystem) && fs.existsSync(path_folderLanguage)) {
+			if (!fs.existsSync(path_folderLanguageTranslate)) {
+				fs.mkdirSync(path_folderLanguageTranslate);
+				console.warn(`A pasta \"system/language/translate\" foi criada!`);
+			}
+			if (String(folderName).toLowerCase() === 'translate') return;
+			if (folderName === null || typeof folderName === 'string' && folderName.length > 0) {
+				var path_folderLanguageFolder = localPath(`system/language/translate/${folderName}`);
+				if (!fs.existsSync(path_folderLanguageFolder)) {
+					fs.mkdirSync(path_folderLanguageFolder);
+					console.warn(`A pasta \"system/language/translate/${folderName}\" foi criada!`);
+				}
+			}
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsCreateFile = function (fileData, folderFile, fileType) {
+		var fs = require('fs'),
+			path_folderSystem = localPath('system'),
+			path_folderLanguage = localPath('system/language'),
+			path_folderLanguageTranslate = localPath(`system/language/translate/${folderFile}`),
+			data = JSON.stringify(fileData, null, 2);
+		if (fs.existsSync(path_folderLanguage)) {
+			if (fs.existsSync(path_folderLanguageTranslate)) {
+				var pathFile = path_folderLanguageTranslate + '\\' + fileType + '.json';
+				fs.writeFileSync(pathFile, data);
+				console.warn(`O arquivo \"system/language/translate/${folderFile}/${fileType}.json\" foi criado!`);
+			}
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsActors = function (language) {
+		if ($dataActors instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataActors.map(function (actor) {
+				if (actor) {
+					data.push({
+						'Texto Ator Id': actor.id,
+						'Texto Ator Nome': actor.name,
+						'Texto Ator Nickname': actor.nickname,
+						'Texto Ator Profile': JSON.stringify(actor.profile),
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'Actors');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsActors = function (content) {
+		if ($dataActors instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var actorsIds = [];
+						data.forEach(function (content) {
+							if (content)
+								actorsIds.push(content['Texto Ator Id']);
+						});
+						$dataActors.filter(function (actor) {
+							if (actor && actor.id != null) {
+								if (actorsIds.indexOf(actor.id) === -1)
+									return true;
+							}
+						}).forEach(function (actor) {
+							if (actor) {
+								data.push({
+									'Texto Ator Id': actor.id,
+									'Texto Ator Nome': actor.name,
+									'Texto Ator Nickname': actor.nickname,
+									'Texto Ator Profile': JSON.stringify(actor.profile),
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'Actors');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsActors = function (content) {
+		if ($dataActors instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var actorsIds = [];
+				$dataActors.forEach(function (actor) {
+					if (actor && actor.id != null)
+						actorsIds.push(actor.id);
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (actorsIds.indexOf(content['Texto Ator Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'Actors');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsClasses = function (language) {
+		if ($dataClasses instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataClasses.map(function (Class) {
+				if (Class) {
+					data.push({
+						'Texto Classe Id': Class.id,
+						'Texto Classe Nome': Class.name,
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'Classes');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsClasses = function (content) {
+		if ($dataClasses instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var classesIds = [];
+						data.forEach(function (content) {
+							if (content)
+								classesIds.push(content['Texto Classe Id']);
+						});
+						$dataClasses.filter(function (Class) {
+							if (Class && Class.id != null) {
+								if (classesIds.indexOf(Class.id) === -1)
+									return true;
+							}
+						}).forEach(function (Class) {
+							if (Class) {
+								data.push({
+									'Texto Classe Id': Class.id,
+									'Texto Classe Nome': Class.name,
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'Classes');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsClasses = function (content) {
+		if ($dataClasses instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var classesIds = [];
+				$dataClasses.forEach(function (Class) {
+					if (Class && Class.id != null)
+						classesIds.push(Class.id);
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (classesIds.indexOf(content['Texto Classe Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'Classes');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsSkills = function (language) {
+		if ($dataSkills instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataSkills.map(function (skill) {
+				if (skill) {
+					data.push({
+						'Texto Habilidade Id': skill.id,
+						'Texto Habilidade Nome': skill.name,
+						'Texto Habilidade Descrição': JSON.stringify(skill.description),
+						'Texto Habilidade message 1': skill.message1,
+						'Texto Habilidade message 2': skill.message2,
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'Skills');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsSkills = function (content) {
+		if ($dataSkills instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var skillsIds = [];
+						data.forEach(function (content) {
+							if (content)
+								skillsIds.push(content['Texto Habilidade Id']);
+						});
+						$dataSkills.filter(function (skill) {
+							if (skill && skill.id != null) {
+								if (skillsIds.indexOf(skill.id) === -1)
+									return true;
+							}
+						}).forEach(function (skill) {
+							if (skill) {
+								data.push({
+									'Texto Habilidade Id': skill.id,
+									'Texto Habilidade Nome': skill.name,
+									'Texto Habilidade Descrição': JSON.stringify(skill.description),
+									'Texto Habilidade message 1': skill.message1,
+									'Texto Habilidade message 2': skill.message2,
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'Skills');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsSkills = function (content) {
+		if ($dataSkills instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var skillsIds = [];
+				$dataSkills.forEach(function (skill) {
+					if (skill && skill.id != null)
+						skillsIds.push(skill.id);
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (skillsIds.indexOf(content['Texto Habilidade Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'Skills');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsItems = function (language) {
+		if ($dataItems instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataItems.map(function (item) {
+				if (item) {
+					data.push({
+						'Texto Item Id': item.id,
+						'Texto Item Nome': item.name,
+						'Texto Item Descrição': JSON.stringify(item.description),
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'Items');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsItems = function (content) {
+		if ($dataItems instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var itemsIds = [];
+						data.forEach(function (content) {
+							if (content)
+								itemsIds.push(content['Texto Item Id']);
+						});
+						$dataItems.filter(function (item) {
+							if (item && item.id != null) {
+								if (itemsIds.indexOf(item.id) === -1)
+									return true;
+							}
+						}).forEach(function (item) {
+							if (item) {
+								data.push({
+									'Texto Item Id': item.id,
+									'Texto Item Nome': item.name,
+									'Texto Item Descrição': JSON.stringify(item.description),
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'Items');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsItems = function (content) {
+		if ($dataItems instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var itemsIds = [];
+				$dataItems.forEach(function (item) {
+					if (item && item.id != null)
+						itemsIds.push(item.id);
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (itemsIds.indexOf(content['Texto Item Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'Items');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsWeapons = function (language) {
+		if ($dataWeapons instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataWeapons.map(function (weapon) {
+				if (weapon) {
+					data.push({
+						'Texto Arma Id': weapon.id,
+						'Texto Arma Nome': weapon.name,
+						'Texto Arma Descrição': JSON.stringify(weapon.description),
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'Weapons');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsWeapons = function (content) {
+		if ($dataWeapons instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var weaponsIds = [];
+						data.forEach(function (content) {
+							if (content)
+								weaponsIds.push(content['Texto Arma Id']);
+						});
+						$dataWeapons.filter(function (weapon) {
+							if (weapon && weapon.id != null) {
+								if (weaponsIds.indexOf(weapon.id) === -1)
+									return true;
+							}
+						}).forEach(function (weapon) {
+							if (weapon) {
+								data.push({
+									'Texto Arma Id': weapon.id,
+									'Texto Arma Nome': weapon.name,
+									'Texto Arma Descrição': JSON.stringify(weapon.description),
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'Weapons');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsWeapons = function (content) {
+		if ($dataWeapons instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var weaponsIds = [];
+				$dataWeapons.forEach(function (weapon) {
+					if (weapon && weapon.id != null)
+						weaponsIds.push(weapon.id);
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (weaponsIds.indexOf(content['Texto Arma Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'Weapons');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsArmors = function (language) {
+		if ($dataArmors instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataArmors.map(function (armor) {
+				if (armor) {
+					data.push({
+						'Texto Armadura Id': armor.id,
+						'Texto Armadura Nome': armor.name,
+						'Texto Armadura Descrição': JSON.stringify(armor.description),
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'Armors');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsArmors = function (content) {
+		if ($dataArmors instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var armorsIds = [];
+						data.forEach(function (content) {
+							if (content)
+								armorsIds.push(content['Texto Armadura Id']);
+						});
+						$dataArmors.filter(function (armor) {
+							if (armor && armor.id != null) {
+								if (armorsIds.indexOf(armor.id) === -1)
+									return true;
+							}
+						}).forEach(function (armor) {
+							if (armor) {
+								data.push({
+									'Texto Armadura Id': armor.id,
+									'Texto Armadura Nome': armor.name,
+									'Texto Armadura Descrição': JSON.stringify(armor.description),
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'Armors');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsArmors = function (content) {
+		if ($dataArmors instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var armorsIds = [];
+				$dataArmors.forEach(function (armor) {
+					if (armor && armor.id != null)
+						armorsIds.push(armor.id);
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (armorsIds.indexOf(content['Texto Armadura Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'Armors');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsEnemies = function (language) {
+		if ($dataEnemies instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataEnemies.map(function (enemy) {
+				if (enemy) {
+					data.push({
+						'Texto Inimigo Id': enemy.id,
+						'Texto Inimigo Nome': enemy.name,
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'Enemies');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsEnemies = function (content) {
+		if ($dataEnemies instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var enemiesIds = [];
+						data.forEach(function (content) {
+							if (content)
+								enemiesIds.push(content['Texto Inimigo Id']);
+						});
+						$dataEnemies.filter(function (enemy) {
+							if (enemy && enemy.id != null) {
+								if (enemiesIds.indexOf(enemy.id) === -1)
+									return true;
+							}
+						}).forEach(function (enemy) {
+							if (enemy) {
+								data.push({
+									'Texto Inimigo Id': enemy.id,
+									'Texto Inimigo Nome': enemy.name,
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'Enemies');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsEnemies = function (content) {
+		if ($dataEnemies instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var enemiesIds = [];
+				$dataEnemies.forEach(function (enemy) {
+					if (enemy && enemy.id != null)
+						enemiesIds.push(enemy.id);
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (enemiesIds.indexOf(content['Texto Inimigo Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'Enemies');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsStates = function (language) {
+		if ($dataStates instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataStates.map(function (state) {
+				if (state) {
+					data.push({
+						'Texto Estado Id': state.id,
+						'Texto Estado Nome': state.name,
+						'Texto Estado message 1': state.message1,
+						'Texto Estado message 2': state.message2,
+						'Texto Estado message 3': state.message3,
+						'Texto Estado message 4': state.message4,
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'States');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsStates = function (content) {
+		if ($dataStates instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var statesIds = [];
+						data.forEach(function (content) {
+							if (content)
+								statesIds.push(content['Texto Estado Id']);
+						});
+						$dataStates.filter(function (state) {
+							if (state && state.id != null) {
+								if (statesIds.indexOf(state.id) === -1)
+									return true;
+							}
+						}).forEach(function (state) {
+							if (state) {
+								data.push({
+									'Texto Estado Id': state.id,
+									'Texto Estado Nome': state.name,
+									'Texto Estado message 1': state.message1,
+									'Texto Estado message 2': state.message2,
+									'Texto Estado message 3': state.message3,
+									'Texto Estado message 4': state.message4,
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'States');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsStates = function (content) {
+		if ($dataStates instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var statesIds = [];
+				$dataStates.forEach(function (state) {
+					if (state && state.id != null)
+						statesIds.push(state.id);
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (statesIds.indexOf(content['Texto Estado Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'States');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsTypesElements = function (language) {
+		if ($dataSystem && $dataSystem.elements instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataSystem.elements.map(function (element, i) {
+				if (element) {
+					data.push({
+						'Texto Elemento Id': i,
+						'Texto Elemento Texto': element,
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'Elements');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesElements = function (content) {
+		if ($dataSystem && $dataSystem.elements instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var elementsIds = [];
+						data.forEach(function (content) {
+							if (content)
+								elementsIds.push(content['Texto Elemento Id']);
+						});
+						$dataSystem.elements.filter(function (element, i) {
+							if (elementsIds.indexOf(i) === -1)
+								return true;
+						}).map(function (element, i) {
+							if (element) {
+								data.push({
+									'Texto Elemento Id': i,
+									'Texto Elemento Texto': element,
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'Elements');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesElements = function (content) {
+		if ($dataSystem && $dataSystem.elements instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var elementsIds = [];
+				$dataSystem.elements.map(function (element, i) {
+					if (element) {
+						elementsIds.push(i);
+					}
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (elementsIds.indexOf(content['Texto Elemento Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'Elements');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsTypesSkills = function (language) {
+		if ($dataSystem && $dataSystem.skillTypes instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataSystem.skillTypes.map(function (skill, i) {
+				if (skill) {
+					data.push({
+						'Texto Habilidade Id': i,
+						'Texto Habilidade Texto': skill,
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'SkillTypes');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesSkills = function (content) {
+		if ($dataSystem && $dataSystem.skillTypes instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var skillTypesIds = [];
+						data.forEach(function (content) {
+							if (content)
+								skillTypesIds.push(content['Texto Habilidade Id']);
+						});
+						$dataSystem.skillTypes.filter(function (skill, i) {
+							if (skillTypesIds.indexOf(i) === -1)
+								return true;
+						}).map(function (skill, i) {
+							if (skill) {
+								data.push({
+									'Texto Habilidade Id': i,
+									'Texto Habilidade Texto': skill,
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'SkillTypes');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesSkills = function (content) {
+		if ($dataSystem && $dataSystem.skillTypes instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var skillTypesIds = [];
+				$dataSystem.skillTypes.map(function (skill, i) {
+					if (skill) {
+						skillTypesIds.push(i);
+					}
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (skillTypesIds.indexOf(content['Texto Habilidade Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'SkillTypes');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsTypesWeapon = function (language) {
+		if ($dataSystem && $dataSystem.weaponTypes instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataSystem.weaponTypes.map(function (weapon, i) {
+				if (weapon) {
+					data.push({
+						'Texto Arma Id': i,
+						'Texto Arma Texto': weapon,
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'WeaponTypes');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesWeapon = function (content) {
+		if ($dataSystem && $dataSystem.weaponTypes instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var weaponTypesIds = [];
+						data.forEach(function (content) {
+							if (content)
+								weaponTypesIds.push(content['Texto Arma Id']);
+						});
+						$dataSystem.weaponTypes.filter(function (weapon, i) {
+							if (weaponTypesIds.indexOf(i) === -1)
+								return true;
+						}).map(function (weapon, i) {
+							if (weapon) {
+								data.push({
+									'Texto Arma Id': i,
+									'Texto Arma Texto': weapon,
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'WeaponTypes');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesWeapon = function (content) {
+		if ($dataSystem && $dataSystem.weaponTypes instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var weaponTypesIds = [];
+				$dataSystem.weaponTypes.map(function (weapon, i) {
+					if (weapon) {
+						weaponTypesIds.push(i);
+					}
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (weaponTypesIds.indexOf(content['Texto Arma Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'WeaponTypes');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsTypesArmor = function (language) {
+		if ($dataSystem && $dataSystem.armorTypes instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataSystem.armorTypes.map(function (armor, i) {
+				if (armor) {
+					data.push({
+						'Texto Armadura Id': i,
+						'Texto Armadura Texto': armor,
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'ArmorTypes');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesArmor = function (content) {
+		if ($dataSystem && $dataSystem.armorTypes instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var armorTypesIds = [];
+						data.forEach(function (content) {
+							if (content)
+								armorTypesIds.push(content['Texto Armadura Id']);
+						});
+						$dataSystem.armorTypes.filter(function (armor, i) {
+							if (armorTypesIds.indexOf(i) === -1)
+								return true;
+						}).map(function (armor, i) {
+							if (armor) {
+								data.push({
+									'Texto Armadura Id': i,
+									'Texto Armadura Texto': armor,
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'ArmorTypes');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesArmor = function (content) {
+		if ($dataSystem && $dataSystem.armorTypes instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var armorTypesIds = [];
+				$dataSystem.armorTypes.map(function (armor, i) {
+					if (armor) {
+						armorTypesIds.push(i);
+					}
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (armorTypesIds.indexOf(content['Texto Armadura Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'ArmorTypes');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.compileTextsTypesEquipment = function (language) {
+		if ($dataSystem && $dataSystem.equipTypes instanceof Array) {
+			var data = [null],
+				language = String(language).toLowerCase();
+			$dataSystem.equipTypes.map(function (equip, i) {
+				if (equip) {
+					data.push({
+						'Texto Equipamento Id': i,
+						'Texto Equipamento Texto': equip,
+						'Texto Idioma': language
+					});
+				}
+			}, this);
+			this.compileTextsCreateFolder(language);
+			this.compileTextsCreateFile(data, language, 'EquipmentTypes');
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.includeIncompileTextsTypesEquipment = function (content) {
+		if ($dataSystem && $dataSystem.equipTypes instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+					let folderPath = path_folderLanguageTranslate + '\\' + folder;
+					if (fs.lstatSync(folderPath).isDirectory()) {
+						var equipTypesIds = [];
+						data.forEach(function (content) {
+							if (content)
+								equipTypesIds.push(content['Texto Equipamento Id']);
+						});
+						$dataSystem.equipTypes.filter(function (equip, i) {
+							if (equipTypesIds.indexOf(i) === -1)
+								return true;
+						}).map(function (equip, i) {
+							if (equip) {
+								data.push({
+									'Texto Equipamento Id': i,
+									'Texto Equipamento Texto': equip,
+									'Texto Idioma': folder
+								});
+								save = true;
+							}
+						});
+						if (save)
+							this.compileTextsCreateFile(data, folder, 'EquipmentTypes');
+					}
+				}, this);
+			}
+			return data;
+		}
+	};
+
+	Scene_HelpSystemInfo.prototype.removeIncompileTextsTypesEquipment = function (content) {
+		if ($dataSystem && $dataSystem.equipTypes instanceof Array) {
+			var fs = require('fs'),
+				data = content,
+				save = false,
+				path_folderLanguage = localPath('system/language'),
+				path_folderLanguageTranslate = localPath(`system/language/translate`);
+			if (fs.existsSync(path_folderLanguage) && fs.existsSync(path_folderLanguageTranslate)) {
+				var equipTypesIds = [];
+				$dataSystem.equipTypes.map(function (equip, i) {
+					if (equip) {
+						equipTypesIds.push(i);
+					}
+				});
+				data.filter(function (content) {
+					if (content) {
+						if (equipTypesIds.indexOf(content['Texto Equipamento Id']) === -1)
+							return true;
+					}
+				}).forEach(function (content) {
+					if (content) {
+						data.splice(data.indexOf(content), 1);
+						save = true;
+					}
+				});
+				if (save) {
+					fs.readdirSync(path_folderLanguageTranslate).forEach(function (folder) {
+						let folderPath = path_folderLanguageTranslate + '\\' + folder;
+						if (fs.lstatSync(folderPath).isDirectory()) {
+							this.compileTextsCreateFile(data, folder, 'EquipmentTypes');
+						}
+					}, this);
+				}
+			}
+			return data;
+		}
+	};
+
+	//-----------------------------------------------------------------------------
+	// Scene_Boot
+	//
+	const __sceneBoot_start = Scene_Boot.prototype.start;
+	Scene_Boot.prototype.start = function () {
+		__sceneBoot_start.call(this);
+		initializeSystem();
+	};
+
+	//-----------------------------------------------------------------------------
+	// DataManager
+	//	
+	const __datamanager_setupBattleTest = DataManager.setupBattleTest;
+	DataManager.setupBattleTest = function () {
+		__datamanager_setupBattleTest.call(this);
+		initializeSystem();
+	};
+
+	//-----------------------------------------------------------------------------
+	// Window_Base
+	//
+	const window_base_convertEscapeCharacters = Window_Base.prototype.convertEscapeCharacters;
+	Window_Base.prototype.convertEscapeCharacters = function (text) {
+		text = text.replace(/\\/g, '\x1b');
+		text = text.replace(/\x1b\x1b/g, '\\');
+		text = text.replace(/\x1bTX\[(\d+)\]/gi, function () {
+			return getTextForMessages(arguments[1]);
+		}.bind(this));
+		text = text.replace(/\x1bST\[(.*)\]/gi, function () {
+			return specialTextValue(arguments[1]);
+		}.bind(this));
+		return window_base_convertEscapeCharacters.apply(this, [text]);
+	};
+
+	//-----------------------------------------------------------------------------
+	// Window_Options
+	//
+	const __Window_Options__makeCommandList = Window_Options.prototype.makeCommandList;
+	Window_Options.prototype.makeCommandList = function () {
+		this.addLanguageOptions();
+		__Window_Options__makeCommandList.call(this);
+	};
+
+	Window_Options.prototype.addLanguageOptions = function () {
+		this.addCommand(params.commandLanguageOptions(params.language[params.languageId])[0], 'language');
+	};
+
+	const __Window_Options__statusText = Window_Options.prototype.statusText;
+	Window_Options.prototype.statusText = function (index) {
+		__Window_Options__statusText.apply(this, arguments);
+		var symbol = this.commandSymbol(index);
+		var value = this.getConfigValue(symbol);
+		if (this.isVolumeSymbol(symbol)) {
+			return this.volumeStatusText(value);
+		} else if (this.isLanguageSymbol(symbol)) {
+			return this.languageStatusText();
+		} else {
+			return this.booleanStatusText(value);
+		}
+	};
+
+	Window_Options.prototype.isLanguageSymbol = function (symbol) {
+		return symbol.contains('language');
+	};
+
+	Window_Options.prototype.languageStatusText = function () {
+		return params.commandLanguageOptions(params.language[params.languageId])[1];
+	};
+
+	const __Window_Options__processOk = Window_Options.prototype.processOk;
+	Window_Options.prototype.processOk = function () {
+		__Window_Options__processOk.call(this);
+		var index = this.index();
+		var symbol = this.commandSymbol(index);
+		var value = this.getConfigValue(symbol);
+		if (this.isLanguageSymbol(symbol)) {
+			if (params.languageId < params.language.length - 1) {
+				params.languageId++;
+			} else {
+				params.languageId = 0;
+			}
+			SceneManager._scene.startFadeIn(SceneManager._scene.fadeSpeed(), false);
+			Game_Interpreter.prototype.pluginCommand('setlanguage', [params.languageId]);
+			this.refresh();
+		}
+	};
+
+	const __Window_Options__cursorRight = Window_Options.prototype.cursorRight;
+	Window_Options.prototype.cursorRight = function (wrap) {
+		__Window_Options__cursorRight.apply(this, arguments);
+		var index = this.index();
+		var symbol = this.commandSymbol(index);
+		if (this.isLanguageSymbol(symbol)) {
+			if (params.languageId < params.language.length - 1) {
+				params.languageId++;
+				SceneManager._scene.startFadeIn(SceneManager._scene.fadeSpeed(), false);
+				Game_Interpreter.prototype.pluginCommand('setlanguage', [params.languageId]);
+				this.refresh();
+			}
+		}
+	};
+
+	const __Window_Options__cursorLeft = Window_Options.prototype.cursorLeft;
+	Window_Options.prototype.cursorLeft = function (wrap) {
+		__Window_Options__cursorLeft.apply(this, arguments);
+		var index = this.index();
+		var symbol = this.commandSymbol(index);
+		if (this.isLanguageSymbol(symbol)) {
+			if (params.languageId > 0) {
+				params.languageId--;
+				SceneManager._scene.startFadeIn(SceneManager._scene.fadeSpeed(), false);
+				Game_Interpreter.prototype.pluginCommand('setlanguage', [params.languageId]);
+				this.refresh();
+			}
+		}
+	};
+
+	//-----------------------------------------------------------------------------
+	// TextManager
+	//
+	TextManager.param = function (paramId) {
+		return $dataSystem.terms.params[paramId] || '';
+	};
+
+	//-----------------------------------------------------------------------------
+	// Game_Interpreter
+	//
+	const __Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
+	Game_Interpreter.prototype.pluginCommand = function (command, args) {
+		__Game_Interpreter_pluginCommand.call(this, command, args);
+		command = String(command).toLowerCase();
+		if (command == 'setlanguage') {
+			translateObject = {};
+			params.languageId = Number(args[0]);
+			$gameSystem.setLanguage(params.languageId);
+			createFileSettingsLanguage(defineAllTexts, true);
+		}
+		if (command == 'setmessagebox') {
+			var messageId = Number(args[0]);
+			setMessageBox(messageId);
+		}
+	};
+
+	Game_Interpreter.prototype.getterLanguageSystem = function () {
+		return getterLanguageSystem();
+	};
+
+	Game_Interpreter.prototype.getTextForMessages = function (id) {
+		return getTextForMessages(id);
+	};
+
+	//-----------------------------------------------------------------------------
+	// Game_System
+	//
+	const __game__system__initialize = Game_System.prototype.initialize;
+	Game_System.prototype.initialize = function () {
+		__game__system__initialize.call(this);
+		this._languageGame = params.languageId;
+	};
+
+	const __game__system__onAfterLoad = Game_System.prototype.onAfterLoad;
+	Game_System.prototype.onAfterLoad = function () {
+		__game__system__onAfterLoad.call(this);
+		Game_Interpreter.prototype.pluginCommand('setlanguage', [this._languageGame]);
+	};
+
+	Game_System.prototype.setLanguage = function (language) {
+		this._languageGame = language;
+	};
+
+	Game_System.prototype.getterLanguageSystem = function () {
+		return getterLanguageSystem();
+	};
+
+	Game_System.prototype.getTextForMessages = function (id) {
+		return getTextForMessages(id);
+	};
 })();
 //==================================================================================================
 // Estruturas dos Parâmetros

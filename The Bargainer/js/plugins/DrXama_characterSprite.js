@@ -18,10 +18,15 @@
  * ================================================================================
  *    Introdução
  * ================================================================================
- * Permite uma alteração avançada nos personagens, seguidores, veiculos e eventos
+ * Permite uma alteração avançada nos personagens, seguidores, veiculos e eventos.
  * ================================================================================
  *    Comandos de plugin
  * ================================================================================
+ * ------- TODOS -------
+ * - allsprite color r g b gray
+ * - allsprite scale x y
+ * - allsprite opacity opacity
+ * - allsprite blend type(0~3)
  * ------- EVENT -------
  * - eventSprite eventId color r g b gray
  * - eventSprite eventId scale x y
@@ -104,6 +109,48 @@
                         }
                         if (eventChange) {
                             this.pluginCommand('eventSprite', [eventId, 'scale', args[1], args[2]]);
+                        }
+                    }
+                });
+            }
+            if (command === 'color') {
+                var r = parseInt(args[1]) || 0,
+                    g = parseInt(args[2]) || 0,
+                    b = parseInt(args[3]) || 0,
+                    gray = parseInt(args[4]) || 0;
+                $gameTemp.characterSprite_addConfig([{
+                    'isCallOk': false
+                },
+                [$gameTemp.characterSprite_setId, 'player', 'player'],
+                [$gameTemp.characterSprite_setColorTone, [r, g, b, gray]]
+                ]);
+                $dataMap.events.map(event => {
+                    let eventChange = true, eventId;
+                    if (event) {
+                        eventId = event.id;
+                        for (var i = 0; i < event.pages.length; i++) {
+                            var page = event.pages[i];
+                            page.list.forEach(function (line) {
+                                if (line.code == 108 || line.code == 408) {
+                                    var text = line.parameters[0].toLowerCase().replace(/\s{1,}/g, '');
+                                    if (text === 'spritechange_off') {
+                                        return eventChange = false;
+                                    }
+                                }
+                            });
+                            break;
+                        }
+                        if (eventChange) {
+                            var r = parseInt(args[1]) || 0,
+                                g = parseInt(args[2]) || 0,
+                                b = parseInt(args[3]) || 0,
+                                gray = parseInt(args[4]) || 0;
+                            $gameTemp.characterSprite_addConfig([{
+                                'isCallOk': false
+                            },
+                            [$gameTemp.characterSprite_setId, 'event', eventId],
+                            [$gameTemp.characterSprite_setColorTone, [r, g, b, gray]]
+                            ]);
                         }
                     }
                 });

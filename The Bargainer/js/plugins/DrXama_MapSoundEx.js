@@ -2,11 +2,21 @@
 // DrXama_MapSoundEx.js
 //==================================================================================================
 /*:
- * @plugindesc v1.01 - Esse plugin cria sons ambiente com virtualização 3D.
+ * @plugindesc v1.0.2 - Esse plugin cria sons ambiente com virtualização 3D.
  *
  * @author Dr.Xamã
  * 
+ * @param MapAudioExRestrict
+ * @desc Restringe a criação de múltiplos áudios com o mesmo ID.
+ * @type string[]
+ * @default []
+ * 
  * @help
+ * ================================================================================
+ *    CHANGELOG
+ * ================================================================================
+ * v1.0.2
+ * - Resolvido o erro do áudio no máximo ao iniciar o mapa.
  * ================================================================================
  *    Introdução
  * ================================================================================
@@ -73,9 +83,39 @@
  * - Site: http://drxama.epizy.com/?page_id=299
  * - Github: https://github.com/GS-GAME-WORDS/Dr.Xama---RPG-MAKER-MV
  */
-
+var DX = DX || {
+    'site': function () { return require('nw.gui').Shell.openExternal('http://drxama.epizy.com/?i=1'); },
+    'terms': function () { return require('nw.gui').Shell.openExternal('http://drxama.epizy.com/?page_id=296'); },
+    'compatibility': function () {
+        if (Utils.RPGMAKER_VERSION == '1.4.1' ||
+            Utils.RPGMAKER_VERSION == '1.4.0' ||
+            Utils.RPGMAKER_VERSION == '1.3.5' ||
+            Utils.RPGMAKER_VERSION == '1.3.4' ||
+            Utils.RPGMAKER_VERSION == '1.3.3' ||
+            Utils.RPGMAKER_VERSION == '1.3.2' ||
+            Utils.RPGMAKER_VERSION == '1.3.1' ||
+            Utils.RPGMAKER_VERSION == '1.3.0' ||
+            Utils.RPGMAKER_VERSION == '1.2.0' ||
+            Utils.RPGMAKER_VERSION == '1.1.0' ||
+            Utils.RPGMAKER_VERSION == '1.0.1' ||
+            Utils.RPGMAKER_NAME != 'MV')
+            return Graphics.printError('Dr.Xamã', 'Atualmente seu RPG MAKER MV não suporta o seguinte plugin: DrXama_MapSoundEx'), SceneManager.stop();
+    }
+};
+DX.mapSoundEx = DX.mapSoundEx || {
+    'page': function () { return require('nw.gui').Shell.openExternal('http://drxama.epizy.com/?p=482'); },
+    'update': function () { return require('nw.gui').Shell.openExternal('https://www.dropbox.com/s/9hrxl1laqhl8rb9/DrXama_MapSoundEx.js?dl=0'); },
+    'changelog': function () { return require('nw.gui').Shell.openExternal('https://github.com/GS-GAME-WORDS/Dr.Xama---RPG-MAKER-MV/blob/master/changelog/DrXama_MapSoundEx.md'); },
+    'version': function () { return console.log('v1.0.2') }
+};
 (function () {
     "use strict";
+    //-----------------------------------------------------------------------------
+    // Parameters
+    //
+    const params = PluginManager.parameters('DrXama_MapSoundEx');
+    const param_mapAudioExRestrict = JSON.parse(params['MapAudioExRestrict']) || [];
+
     //-----------------------------------------------------------------------------
     // Variaveis Globais
     //
@@ -175,8 +215,8 @@
     MapAudioEX.prototype.update = function () {
         this.updateMap();
         if (!this.fadeOutIsOn()) {
-            this.updateVolume();
             this.updatePosition();
+            this.updateVolume();
         }
     };
 
@@ -228,11 +268,11 @@
             this._volumeFadeOptions.active = true;
             this._volumeFadeOptions.fadeOut.active = true;
             this._volumeFadeOptions.fadeOut.frames = 0;
-            return this._volumeFadeOptions.fadeIn.active = false;
+            this._volumeFadeOptions.fadeIn.active = false;
         } else if (volume >= .1 && this._volumeFadeOptions.active) {
             this._volumeFadeOptions.fadeIn.active = true;
             this._volumeFadeOptions.fadeIn.frames = 0;
-            return this._volumeFadeOptions.fadeOut.active = false;
+            this._volumeFadeOptions.fadeOut.active = false;
         }
         this.volume = volume > 0 ? volume : 0;
     };
@@ -288,12 +328,9 @@
     const _game_temp_initialize = Game_Temp.prototype.initialize;
     Game_Temp.prototype.initialize = function () {
         _game_temp_initialize.call(this);
-        this._mapAudioExRestrict = {
-            'casa_nick_fogueira_sound': null,
-            'heidel_fogueira_sound': null,
-            'heidel_fogueira_sound_2': null,
-            'heidel_fogueira_sound_3': null,
-        };
+        this._mapAudioExRestrict = {};
+        if (param_mapAudioExRestrict instanceof Array)
+            param_mapAudioExRestrict.map(audio => { this._mapAudioExRestrict[audio] = null; }, this);
         this._mapAudioEx = [];
         this._mapAudioEx_cacheStop = [];
     };
