@@ -1,5 +1,3 @@
-var settings = {
-    "fonts": {
-        "primaryFont": "Audiowide", "subFont": ""
-    }
+var session = {
+    "user": null
 };

@@ -9,7 +9,6 @@
     <script src="settings/main.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="assets/css/main.css">
     <link rel="icon" href="https://img.icons8.com/material/32/000000/game-jolt.png" sizes="32x32" />
     <link rel="icon" href="https://img.icons8.com/material/192/000000/game-jolt.png" sizes="192x192" />
     <link rel="apple-touch-icon-precomposed" href="https://img.icons8.com/material/180/000000/game-jolt.png" />
@@ -18,11 +17,36 @@
 </head>
 
 <body style="background-color:rgb(24, 24, 24);">
-    <div id="main">
+    <div id="section_1">
+        <img src="img/icon.svg" width="240" height="40" style="margin-left: 35%; margin-top: 255px;">
+        <div class="row">
+            <a id="login" class="col s12 grey darken-3 waves-effect waves-light btn" style="height: 42px; margin-top: 12px; width: 75%; margin-left: 13%;">
+                Iniciar Sessão
+            </a>
+        </div>
+    </div>
+    <div id="section_2">
+        <img src="img/icon.svg" width="240" height="40" style="margin-left: 35%; margin-top: 255px;">
+        <div class="row">
+            <div class="col s12 grey darken-3" style="height: 42px; margin-top: 12px; width: 75%; margin-left: 13%;">
+                <input placeholder="Nome de usuario" type="text" style="border-bottom: 0px solid #000; color: rgb(243, 243, 243)">
+            </div>
+            <div class="col s12 grey darken-3" style="height: 42px; margin-top: 12px; width: 75%; margin-left: 13%;">
+                <input id="inputgametoken" placeholder="Game Token!" type="password" style="border-bottom: 0px solid #000; color: rgb(243, 243, 243)">
+            </div>
+            <a id="conectToGame" class="col s12 grey darken-3 waves-effect waves-light btn" style="height: 42px; margin-top: 12px; width: 75%; margin-left: 13%;">
+                Conectar ao jogo
+            </a>
+            <a id="viewGameToken" class="col s12 grey darken-3 waves-effect waves-light btn" style="height: 42px; margin-top: 12px; width: 75%; margin-left: 13%;">
+                Ver/Esconder o Game Token
+            </a>
+        </div>
+    </div>
+    <div id="section_3">
         <img src="img/icon.svg" width="240" height="40" style="margin-left: 35%; margin-top: 255px;">
         <div class="row">
             <a class="col s12 grey darken-3 waves-effect waves-light btn" style="height: 42px; margin-top: 12px; width: 75%; margin-left: 13%;">
-                Iniciar Sessão
+                Finalizar Sessão
             </a>
         </div>
     </div>
@@ -30,7 +54,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.5/TweenMax.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
