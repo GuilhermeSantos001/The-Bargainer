@@ -34,10 +34,28 @@
     // Functions
     //=====================================================================================================
     /**
+     * @function localPath
+     * @description Retorna o caminho convertido para a pasta raiz do projeto
+     * @param {String} p - Caminho para conversão
+     * @returns {String}
+     */
+    function localPath(p) {
+        // Retira uma parte da string
+        if (p.substring(0, 1) === '/')
+            p = p.substring(1);
+        // Importa o modulo PATH do Node
+        var path = require('path'),
+            // Cria a base para o caminho local
+            base = path.dirname(process.mainModule.filename);
+        // Retorna a base do caminho associado ao caminho
+        return path.join(base, p);
+    };
+
+    /**
      * @function get_signature
      * @description Usado para criar uma assinatura com conversão em MD5.
      * @param {String} data - Data usada para ser convertida
-     * @return {String}
+     * @returns {String}
      */
     function get_signature(data) {
         let crypto = require('crypto');
@@ -65,5 +83,10 @@
         error: (e) => {
             console.error(e);
         }
+    });
+    require('nw.gui').Window.open(localPath('system/gamejolt/main.html'), {
+        'width': 816,
+        'height': 624,
+        'position': 'center'
     });
 })();
