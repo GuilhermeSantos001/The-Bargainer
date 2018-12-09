@@ -1,3 +1,0 @@
-var session = {
-    "user": null
-};
