@@ -101,12 +101,21 @@ function Scene_GameJolt() {
     Scene_GameJolt.prototype = Object.create(Scene_Base.prototype);
     Scene_GameJolt.prototype.constructor = Scene_GameJolt;
 
-    Scene_GameJolt._isPressAnyKey = null;
     Scene_GameJolt._changeValue = null;
     Scene_GameJolt._username = '';
     Scene_GameJolt._gameToken = '';
     Scene_GameJolt._isLoading = null;
     Scene_GameJolt._isConnected = null;
+    Scene_GameJolt._isInputProcess = null;
+    Scene_GameJolt._inputProcess = null;
+    Scene_GameJolt._isInputChangeValues = null;
+    Scene_GameJolt._inputCharacterValue = null;
+    Scene_GameJolt._inputValues = {
+        default: '???',
+        username: '',
+        gameToken: ''
+    };
+    Scene_GameJolt._isErrorWindow = null;
 
     Scene_GameJolt.prototype.initialize = function () {
         Scene_Base.prototype.initialize.call(this);
@@ -117,6 +126,8 @@ function Scene_GameJolt() {
         this.createBackground();
         this.createWindowLayer();
         this.createButtons();
+        this.createInputWindow();
+        this.createErrorWindow();
     };
 
     Scene_GameJolt.prototype.createBackground = function () {
@@ -145,7 +156,8 @@ function Scene_GameJolt() {
         let button_1 = new Sprite_Button(),
             button_2 = new Sprite_Button(),
             button_3 = new Sprite_Button(),
-            _y = 270;
+            _y = 270,
+            _scene = this;
         /**
          * BUTTON 1
          */
@@ -154,13 +166,8 @@ function Scene_GameJolt() {
         button_1.x = (Graphics._width - button_1.width) / 2;
         button_1.y = _y;
         var username;
-        if (Scene_GameJolt._isPressAnyKey &&
-            typeof $gameVariables.value(15) === 'string' &&
-            Scene_GameJolt._changeValue === 'username' ||
-            Scene_GameJolt._isPressAnyKey &&
-            typeof $gameVariables.value(15) === 'number' &&
-            Scene_GameJolt._changeValue === 'username') {
-            Scene_GameJolt._username = String($gameVariables.value(15));
+        if (Scene_GameJolt._inputCharacterValue && Scene_GameJolt._changeValue === 'username') {
+            Scene_GameJolt._username = String(Scene_GameJolt._inputCharacterValue);
             username = Scene_GameJolt._username;
         } else if (Scene_GameJolt._username.length > 0) {
             username = Scene_GameJolt._username;
@@ -180,21 +187,9 @@ function Scene_GameJolt() {
         }
         button_1.bitmap.drawText(username, 0, button_1.height / 2, button_1.width, 0, 'center');
         button_1.setClickHandler(() => {
-            Scene_GameJolt._isPressAnyKey = null;
             Scene_GameJolt._changeValue = 'username';
-            Game_Interpreter.prototype.pluginCommand('InputDialog', ['open']);
-            Game_Interpreter.prototype.pluginCommand('InputDialog', ['text', getTextLanguage([
-                JSON.stringify(
-                    {
-                        Language: "pt_br",
-                        Value: "Nome de usuário"
-                    }),
-                JSON.stringify(
-                    {
-                        Language: "en_us",
-                        Value: "Username"
-                    })
-            ])]);
+            Scene_GameJolt._isInputProcess = true;
+            Scene_GameJolt._inputProcess = 0;
         });
         /**
          * BUTTON 2
@@ -205,13 +200,8 @@ function Scene_GameJolt() {
         button_2.x = (Graphics._width - button_2.width) / 2;
         button_2.y = _y;
         var gameToken;
-        if (Scene_GameJolt._isPressAnyKey &&
-            typeof $gameVariables.value(15) === 'string' &&
-            Scene_GameJolt._changeValue === 'gameToken' ||
-            Scene_GameJolt._isPressAnyKey &&
-            typeof $gameVariables.value(15) === 'number' &&
-            Scene_GameJolt._changeValue === 'gameToken') {
-            Scene_GameJolt._gameToken = String($gameVariables.value(15));
+        if (Scene_GameJolt._inputCharacterValue && Scene_GameJolt._changeValue === 'gameToken') {
+            Scene_GameJolt._gameToken = String(Scene_GameJolt._inputCharacterValue);
             gameToken = Scene_GameJolt._gameToken;
         } else if (Scene_GameJolt._gameToken.length > 0) {
             gameToken = Scene_GameJolt._gameToken;
@@ -220,10 +210,9 @@ function Scene_GameJolt() {
         }
         button_2.bitmap.drawText(gameToken, 0, button_2.height / 2, button_2.width, 0, 'center');
         button_2.setClickHandler(() => {
-            Scene_GameJolt._isPressAnyKey = null;
             Scene_GameJolt._changeValue = 'gameToken';
-            Game_Interpreter.prototype.pluginCommand('InputDialog', ['open']);
-            Game_Interpreter.prototype.pluginCommand('InputDialog', ['text', 'Game Token']);
+            Scene_GameJolt._isInputProcess = true;
+            Scene_GameJolt._inputProcess = 1;
         });
         /**
          * BUTTON 3
@@ -249,9 +238,14 @@ function Scene_GameJolt() {
             Scene_GameJolt._isLoading = true;
             user_auth(Scene_GameJolt._username, Scene_GameJolt._gameToken, {
                 sucess: (data) => {
-                    Scene_GameJolt._isLoading = null;
-                    Scene_GameJolt._isConnected = true;
-                    console.log(data);
+                    if (data.response.success === 'false') {
+                        Scene_GameJolt._isLoading = null;
+                        Scene_GameJolt._isErrorWindow = { frames: 120 };
+                        _scene.setErrorWindow(0);
+                    } else {
+                        Scene_GameJolt._isLoading = null;
+                        Scene_GameJolt._isConnected = true;
+                    }
                 },
                 error: (e) => {
                     console.error(e);
@@ -308,6 +302,100 @@ function Scene_GameJolt() {
         this.addChild(this._spritesLoadingContainer);
     };
 
+    Scene_GameJolt.prototype.createInputWindow = function () {
+        this._spriteInputTitle = new Sprite(new Bitmap(480, 92));
+        this._spriteInputTitle.move((Graphics.width - 480) / 2, 220);
+        this._spriteInputText = new Sprite(new Bitmap(480, 92));
+        this._spriteInputText.move((Graphics.width - 480) / 2, 615);
+        this._inputWindow = new Window_GameJoltInput((Graphics.width - 480) / 2, 280, {
+            add: (character) => {
+                if (Scene_GameJolt._inputProcess === 0) {
+                    Scene_GameJolt._inputValues.username += character;
+                    return true;
+                } else if (Scene_GameJolt._inputProcess === 1) {
+                    Scene_GameJolt._inputValues.gameToken += character;
+                    return true;
+                }
+            },
+            back: () => {
+                if (Scene_GameJolt._inputProcess === 0) {
+                    let characters = Scene_GameJolt._inputValues.username.slice(0, -1);
+                    Scene_GameJolt._inputValues.username = characters;
+                } else if (Scene_GameJolt._inputProcess === 1) {
+                    let characters = Scene_GameJolt._inputValues.gameToken.slice(0, -1);
+                    Scene_GameJolt._inputValues.gameToken = characters;
+                }
+            },
+            name: () => {
+                if (Scene_GameJolt._inputProcess === 0) {
+                    return Scene_GameJolt._inputValues.username;
+                } else if (Scene_GameJolt._inputProcess === 1) {
+                    return Scene_GameJolt._inputValues.gameToken;
+                }
+            },
+            restoreDefault: () => {
+                if (Scene_GameJolt._inputProcess === 0) {
+                    Scene_GameJolt._username = '';
+                    return true;
+                } else if (Scene_GameJolt._inputProcess === 1) {
+                    Scene_GameJolt._gameToken = '';
+                    return true;
+                }
+            }
+        });
+        this._inputWindow.setHandler('ok', this.onInputOk.bind(this));
+        this._spriteInputTitle.opacity = 0;
+        this._spriteInputText.opacity = 0;
+        this._inputWindow.opacity = 0;
+        this._inputWindow.backOpacity = 0;
+        this._inputWindow.contentsOpacity = 0;
+        this._inputWindow.active = false;
+        this.addChild(this._inputWindow);
+        this.addChild(this._spriteInputTitle);
+        this.addChild(this._spriteInputText);
+    };
+
+    Scene_GameJolt.prototype.onInputOk = function () {
+        if (Scene_GameJolt._inputProcess === 0) {
+            Scene_GameJolt._inputCharacterValue = Scene_GameJolt._inputValues.username;
+            Scene_GameJolt._isInputProcess = null;
+            Scene_GameJolt._inputProcess = null;
+            Scene_GameJolt._isInputChangeValues = true;
+        } else if (Scene_GameJolt._inputProcess === 1) {
+            Scene_GameJolt._inputCharacterValue = Scene_GameJolt._inputValues.gameToken;
+            Scene_GameJolt._isInputProcess = null;
+            Scene_GameJolt._inputProcess = null;
+            Scene_GameJolt._isInputChangeValues = true;
+        }
+    };
+
+    Scene_GameJolt.prototype.createErrorWindow = function () {
+        this._errorWindow = new Window_Help();
+        this._errorWindow.move((Graphics.width - 480) / 2, 450, 480, 115);
+        this._errorWindow.backOpacity = 0;
+        this._errorWindow.contentsOpacity = 0;
+        this._errorWindow.opacity = 0;
+        Game_Interpreter.prototype.pluginCommand('setlanguage', [1]);
+        this.addChild(this._errorWindow);
+    };
+
+    Scene_GameJolt.prototype.setErrorWindow = function (textId) {
+        if (textId === 0) {
+            this._errorWindow.setText(getTextLanguage([
+                JSON.stringify(
+                    {
+                        Language: "pt_br",
+                        Value: "Há algo errado com o nome de \nusuário ou Token Game!"
+                    }),
+                JSON.stringify(
+                    {
+                        Language: "en_us",
+                        Value: "There is something wrong with \nthe user name or Token Game!"
+                    })
+            ]));
+        }
+    };
+
     Scene_GameJolt.prototype.start = function () {
         Scene_Base.prototype.start.call(this);
         SceneManager.clearStack();
@@ -319,11 +407,16 @@ function Scene_GameJolt() {
         this.updateICON();
         this.updateButtonsLogin();
         this.updateLoading();
+        this.updateInputWindow();
+        this.updateErrorWindow();
     };
 
     Scene_GameJolt.prototype.updateICON = function () {
         if (Scene_GameJolt._isLoading || Scene_GameJolt._isConnected) {
-            if (this._animationICON) this._animationICON = undefined;
+            if (!this._animationICON.return)
+                this._animationICON.return = true;
+            if (this._animationICON.frame1 != this._animationICON.frame2)
+                this._animationICON.frame1 = this._animationICON.frame2;
             if (this._icon.opacity > 0) this._icon.opacity -= 8;
             return;
         }
@@ -344,14 +437,47 @@ function Scene_GameJolt() {
     };
 
     Scene_GameJolt.prototype.updateButtonsLogin = function () {
-        if (Scene_GameJolt._isLoading || Scene_GameJolt._isConnected) {
+        if (Scene_GameJolt._isLoading || Scene_GameJolt._isConnected
+            || Scene_GameJolt._isInputProcess) {
             if (this._buttonsLogin[0].opacity > 0)
                 this._buttonsLogin[0].opacity -= 8;
+            else this._buttonsLogin[0].visible = false;
             if (this._buttonsLogin[1].opacity > 0)
                 this._buttonsLogin[1].opacity -= 8;
+            else this._buttonsLogin[1].visible = false;
             if (this._buttonsLogin[2].opacity > 0)
                 this._buttonsLogin[2].opacity -= 8;
-            return;
+            else this._buttonsLogin[2].visible = false;
+        } else {
+            if (this._inputWindow.opacity > 0) return;
+            if (Scene_GameJolt._username === '' || Scene_GameJolt._gameToken === '') {
+                if (this._buttonsLogin[2].opacity > 72)
+                    this._buttonsLogin[2].opacity -= 8;
+                if (typeof this._buttonsLogin[2].isActive === 'function' && !this._buttonsLogin[2].isActiveBKP) {
+                    this._buttonsLogin[2].isActiveBKP = this._buttonsLogin[2].isActive;
+                    this._buttonsLogin[2].isActive = () => { return false; }
+                }
+            } else {
+                if (this._buttonsLogin[2].opacity < 255)
+                    this._buttonsLogin[2].opacity += 8;
+                if (typeof this._buttonsLogin[2].isActiveBKP === 'function') {
+                    this._buttonsLogin[2].isActive = this._buttonsLogin[2].isActiveBKP;
+                }
+            }
+            if (!this._buttonsLogin[0].visible) this._buttonsLogin[0].visible = true;
+            if (!this._buttonsLogin[1].visible) this._buttonsLogin[1].visible = true;
+            if (!this._buttonsLogin[2].visible) this._buttonsLogin[2].visible = true;
+            if (this._buttonsLogin[0].opacity < 255)
+                this._buttonsLogin[0].opacity += 8;
+            if (this._buttonsLogin[1].opacity < 255)
+                this._buttonsLogin[1].opacity += 8;
+            if (this._buttonsLogin[0].opacity >= 255 && Scene_GameJolt._isInputChangeValues) {
+                Scene_GameJolt._isInputChangeValues = null;
+                this.removeChild(this._buttonsLogin[0]);
+                this.removeChild(this._buttonsLogin[1]);
+                this.removeChild(this._buttonsLogin[2]);
+                this.createButtonsLogin();
+            }
         }
     };
 
@@ -404,22 +530,341 @@ function Scene_GameJolt() {
         }
     };
 
-    //=====================================================================================================
-    // Scene_InputDialog
-    //=====================================================================================================
-    const _scene_inputDialog_okResult = Scene_InputDialog.prototype.okResult;
-    Scene_InputDialog.prototype.okResult = function () {
-        _scene_inputDialog_okResult.call(this);
-        var text = this._textBox.getText() || '';
-        if (text.length > 0) Scene_GameJolt._isPressAnyKey = true;
+    Scene_GameJolt.prototype.updateInputWindow = function () {
+        if (Scene_GameJolt._isInputProcess) {
+            this._spriteInputTitle.bitmap.clear();
+            this._spriteInputText.bitmap.clear();
+            if (this._buttonsLogin[0].opacity > 0) return;
+            if (this._spriteInputTitle.opacity < 255)
+                this._spriteInputTitle.opacity += 4;
+            if (this._spriteInputText.opacity < 255)
+                this._spriteInputText.opacity += 4;
+            if (this._inputWindow.opacity < 255)
+                this._inputWindow.opacity += 4;
+            if (this._inputWindow.contentsOpacity < 255)
+                this._inputWindow.contentsOpacity += 4;
+            if (this._inputWindow.contentsOpacity >= 255) if (!this._inputWindow.active) this._inputWindow.active = true;
+            if (Scene_GameJolt._inputProcess === 0) {
+                let username = Scene_GameJolt._inputValues.username.length > 0 ?
+                    Scene_GameJolt._inputValues.username : Scene_GameJolt._inputValues.default;
+                this._spriteInputTitle.bitmap.drawText(getTextLanguage([
+                    JSON.stringify(
+                        {
+                            Language: "pt_br",
+                            Value: "Nome de usuário"
+                        }),
+                    JSON.stringify(
+                        {
+                            Language: "en_us",
+                            Value: "Username"
+                        })
+                ]), 0, 92 / 2, 480, 0, 'center');
+                this._spriteInputText.bitmap.drawText(username, 0, 92 / 2, 480, 0, 'center');
+            } else if (Scene_GameJolt._inputProcess === 1) {
+                let gameToken = Scene_GameJolt._inputValues.gameToken.length > 0 ?
+                    Scene_GameJolt._inputValues.gameToken : Scene_GameJolt._inputValues.default;
+                this._spriteInputTitle.bitmap.drawText('Game Token', 0, 92 / 2, 480, 0, 'center');
+                this._spriteInputText.bitmap.drawText(gameToken, 0, 92 / 2, 480, 0, 'center');
+            }
+        } else {
+            if (this._inputWindow.active) this._inputWindow.active = false;
+            if (this._spriteInputTitle.opacity > 0)
+                this._spriteInputTitle.opacity -= 4;
+            if (this._spriteInputText.opacity > 0)
+                this._spriteInputText.opacity -= 4;
+            if (this._inputWindow.opacity > 0)
+                this._inputWindow.opacity -= 4;
+            if (this._inputWindow.contentsOpacity > 0)
+                this._inputWindow.contentsOpacity -= 4;
+        }
     };
 
-    const _scene_inputDialog_createTextBox = Scene_InputDialog.prototype.createTextBox;
-    Scene_InputDialog.prototype.createTextBox = function () {
-        _scene_inputDialog_createTextBox.call(this);
-        if (Scene_GameJolt._changeValue === 'username')
-            this._textBox.setText(Scene_GameJolt._username);
-        else if (Scene_GameJolt._changeValue === 'gameToken')
-            this._textBox.setText(Scene_GameJolt._gameToken);
+    Scene_GameJolt.prototype.updateErrorWindow = function () {
+        if (Scene_GameJolt._isLoading || !Scene_GameJolt._isErrorWindow || Scene_GameJolt._isInputProcess) {
+            if (Scene_GameJolt._isInputProcess) Scene_GameJolt._isErrorWindow = null;
+            if (this._errorWindow.contentsOpacity > 0)
+                this._errorWindow.contentsOpacity -= 4;
+            if (this._errorWindow.opacity > 0)
+                this._errorWindow.opacity -= 4;
+        } else if (Scene_GameJolt._isErrorWindow) {
+            if (this._buttonsLogin[0].opacity < 255) return;
+            if (this._errorWindow.contentsOpacity < 255)
+                this._errorWindow.contentsOpacity += 4;
+            if (this._errorWindow.opacity < 255)
+                this._errorWindow.opacity += 4;
+            else {
+                if (Scene_GameJolt._isErrorWindow.frames > 0)
+                    Scene_GameJolt._isErrorWindow.frames -= .60;
+                else Scene_GameJolt._isErrorWindow = null;
+            }
+        }
+    };
+
+    //=====================================================================================================
+    // Window_GameJoltInput
+    //=====================================================================================================
+    function Window_GameJoltInput() {
+        this.initialize.apply(this, arguments);
+    }
+
+    Window_GameJoltInput.prototype = Object.create(Window_Selectable.prototype);
+    Window_GameJoltInput.prototype.constructor = Window_GameJoltInput;
+    Window_GameJoltInput.LATIN1 =
+        ['A', 'B', 'C', 'D', 'E', 'a', 'b', 'c', 'd', 'e',
+            'F', 'G', 'H', 'I', 'J', 'f', 'g', 'h', 'i', 'j',
+            'K', 'L', 'M', 'N', 'O', 'k', 'l', 'm', 'n', 'o',
+            'P', 'Q', 'R', 'S', 'T', 'p', 'q', 'r', 's', 't',
+            'U', 'V', 'W', 'X', 'Y', 'u', 'v', 'w', 'x', 'y',
+            'Z', '[', ']', '^', '_', 'z', '{', '}', '|', '~',
+            '0', '1', '2', '3', '4', '!', '#', '$', '%', '&',
+            '5', '6', '7', '8', '9', '(', ')', '*', '+', '-',
+            '/', '=', '@', '<', '>', ':', ';', ' ', 'Page', 'OK'];
+    Window_GameJoltInput.LATIN2 =
+        ['Á', 'É', 'Í', 'Ó', 'Ú', 'á', 'é', 'í', 'ó', 'ú',
+            'À', 'È', 'Ì', 'Ò', 'Ù', 'à', 'è', 'ì', 'ò', 'ù',
+            'Â', 'Ê', 'Î', 'Ô', 'Û', 'â', 'ê', 'î', 'ô', 'û',
+            'Ä', 'Ë', 'Ï', 'Ö', 'Ü', 'ä', 'ë', 'ï', 'ö', 'ü',
+            'Ā', 'Ē', 'Ī', 'Ō', 'Ū', 'ā', 'ē', 'ī', 'ō', 'ū',
+            'Ã', 'Å', 'Æ', 'Ç', 'Ð', 'ã', 'å', 'æ', 'ç', 'ð',
+            'Ñ', 'Õ', 'Ø', 'Š', 'Ŵ', 'ñ', 'õ', 'ø', 'š', 'ŵ',
+            'Ý', 'Ŷ', 'Ÿ', 'Ž', 'Þ', 'ý', 'ÿ', 'ŷ', 'ž', 'þ',
+            'Ĳ', 'Œ', 'ĳ', 'œ', 'ß', '«', '»', ' ', 'Page', 'OK'];
+    Window_GameJoltInput.RUSSIA =
+        ['А', 'Б', 'В', 'Г', 'Д', 'а', 'б', 'в', 'г', 'д',
+            'Е', 'Ё', 'Ж', 'З', 'И', 'е', 'ё', 'ж', 'з', 'и',
+            'Й', 'К', 'Л', 'М', 'Н', 'й', 'к', 'л', 'м', 'н',
+            'О', 'П', 'Р', 'С', 'Т', 'о', 'п', 'р', 'с', 'т',
+            'У', 'Ф', 'Х', 'Ц', 'Ч', 'у', 'ф', 'х', 'ц', 'ч',
+            'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'ш', 'щ', 'ъ', 'ы', 'ь',
+            'Э', 'Ю', 'Я', '^', '_', 'э', 'ю', 'я', '%', '&',
+            '0', '1', '2', '3', '4', '(', ')', '*', '+', '-',
+            '5', '6', '7', '8', '9', ':', ';', ' ', '', 'OK'];
+    Window_GameJoltInput.JAPAN1 =
+        ['あ', 'い', 'う', 'え', 'お', 'が', 'ぎ', 'ぐ', 'げ', 'ご',
+            'か', 'き', 'く', 'け', 'こ', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ',
+            'さ', 'し', 'す', 'せ', 'そ', 'だ', 'ぢ', 'づ', 'で', 'ど',
+            'た', 'ち', 'つ', 'て', 'と', 'ば', 'び', 'ぶ', 'べ', 'ぼ',
+            'な', 'に', 'ぬ', 'ね', 'の', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ',
+            'は', 'ひ', 'ふ', 'へ', 'ほ', 'ぁ', 'ぃ', 'ぅ', 'ぇ', 'ぉ',
+            'ま', 'み', 'む', 'め', 'も', 'っ', 'ゃ', 'ゅ', 'ょ', 'ゎ',
+            'や', 'ゆ', 'よ', 'わ', 'ん', 'ー', '～', '・', '＝', '☆',
+            'ら', 'り', 'る', 'れ', 'ろ', 'ゔ', 'を', '　', 'カナ', '決定'];
+    Window_GameJoltInput.JAPAN2 =
+        ['ア', 'イ', 'ウ', 'エ', 'オ', 'ガ', 'ギ', 'グ', 'ゲ', 'ゴ',
+            'カ', 'キ', 'ク', 'ケ', 'コ', 'ザ', 'ジ', 'ズ', 'ゼ', 'ゾ',
+            'サ', 'シ', 'ス', 'セ', 'ソ', 'ダ', 'ヂ', 'ヅ', 'デ', 'ド',
+            'タ', 'チ', 'ツ', 'テ', 'ト', 'バ', 'ビ', 'ブ', 'ベ', 'ボ',
+            'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'パ', 'ピ', 'プ', 'ペ', 'ポ',
+            'ハ', 'ヒ', 'フ', 'ヘ', 'ホ', 'ァ', 'ィ', 'ゥ', 'ェ', 'ォ',
+            'マ', 'ミ', 'ム', 'メ', 'モ', 'ッ', 'ャ', 'ュ', 'ョ', 'ヮ',
+            'ヤ', 'ユ', 'ヨ', 'ワ', 'ン', 'ー', '～', '・', '＝', '☆',
+            'ラ', 'リ', 'ル', 'レ', 'ロ', 'ヴ', 'ヲ', '　', '英数', '決定'];
+    Window_GameJoltInput.JAPAN3 =
+        ['Ａ', 'Ｂ', 'Ｃ', 'Ｄ', 'Ｅ', 'ａ', 'ｂ', 'ｃ', 'ｄ', 'ｅ',
+            'Ｆ', 'Ｇ', 'Ｈ', 'Ｉ', 'Ｊ', 'ｆ', 'ｇ', 'ｈ', 'ｉ', 'ｊ',
+            'Ｋ', 'Ｌ', 'Ｍ', 'Ｎ', 'Ｏ', 'ｋ', 'ｌ', 'ｍ', 'ｎ', 'ｏ',
+            'Ｐ', 'Ｑ', 'Ｒ', 'Ｓ', 'Ｔ', 'ｐ', 'ｑ', 'ｒ', 'ｓ', 'ｔ',
+            'Ｕ', 'Ｖ', 'Ｗ', 'Ｘ', 'Ｙ', 'ｕ', 'ｖ', 'ｗ', 'ｘ', 'ｙ',
+            'Ｚ', '［', '］', '＾', '＿', 'ｚ', '｛', '｝', '｜', '～',
+            '０', '１', '２', '３', '４', '！', '＃', '＄', '％', '＆',
+            '５', '６', '７', '８', '９', '（', '）', '＊', '＋', '－',
+            '／', '＝', '＠', '＜', '＞', '：', '；', '　', 'かな', '決定'];
+
+    Window_GameJoltInput.prototype.initialize = function (x, y, editWindow) {
+        var width = this.windowWidth();
+        var height = this.windowHeight();
+        Window_Selectable.prototype.initialize.call(this, x, y, width, height);
+        this._editWindow = editWindow;
+        this._page = 0;
+        this._index = 0;
+        this.refresh();
+        this.updateCursor();
+        this.activate();
+    };
+
+    Window_GameJoltInput.prototype.windowWidth = function () {
+        return 480;
+    };
+
+    Window_GameJoltInput.prototype.windowHeight = function () {
+        return this.fittingHeight(9);
+    };
+
+    Window_GameJoltInput.prototype.table = function () {
+        if ($gameSystem.isJapanese()) {
+            return [Window_GameJoltInput.JAPAN1,
+            Window_GameJoltInput.JAPAN2,
+            Window_GameJoltInput.JAPAN3];
+        } else if ($gameSystem.isRussian()) {
+            return [Window_GameJoltInput.RUSSIA];
+        } else {
+            return [Window_GameJoltInput.LATIN1,
+            Window_GameJoltInput.LATIN2];
+        }
+    };
+
+    Window_GameJoltInput.prototype.maxCols = function () {
+        return 10;
+    };
+
+    Window_GameJoltInput.prototype.maxItems = function () {
+        return 90;
+    };
+
+    Window_GameJoltInput.prototype.character = function () {
+        return this._index < 88 ? this.table()[this._page][this._index] : '';
+    };
+
+    Window_GameJoltInput.prototype.isPageChange = function () {
+        return this._index === 88;
+    };
+
+    Window_GameJoltInput.prototype.isOk = function () {
+        return this._index === 89;
+    };
+
+    Window_GameJoltInput.prototype.itemRect = function (index) {
+        return {
+            x: index % 10 * 42 + Math.floor(index % 10 / 5) * 24,
+            y: Math.floor(index / 10) * this.lineHeight(),
+            width: 42,
+            height: this.lineHeight()
+        };
+    };
+
+    Window_GameJoltInput.prototype.refresh = function () {
+        var table = this.table();
+        this.contents.clear();
+        this.resetTextColor();
+        for (var i = 0; i < 90; i++) {
+            var rect = this.itemRect(i);
+            rect.x += 3;
+            rect.width -= 6;
+            this.drawText(table[this._page][i], rect.x, rect.y, rect.width, 'center');
+        }
+    };
+
+    Window_GameJoltInput.prototype.updateCursor = function () {
+        var rect = this.itemRect(this._index);
+        this.setCursorRect(rect.x, rect.y, rect.width, rect.height);
+    };
+
+    Window_GameJoltInput.prototype.isCursorMovable = function () {
+        return this.active;
+    };
+
+    Window_GameJoltInput.prototype.cursorDown = function (wrap) {
+        if (this._index < 80 || wrap) {
+            this._index = (this._index + 10) % 90;
+        }
+    };
+
+    Window_GameJoltInput.prototype.cursorUp = function (wrap) {
+        if (this._index >= 10 || wrap) {
+            this._index = (this._index + 80) % 90;
+        }
+    };
+
+    Window_GameJoltInput.prototype.cursorRight = function (wrap) {
+        if (this._index % 10 < 9) {
+            this._index++;
+        } else if (wrap) {
+            this._index -= 9;
+        }
+    };
+
+    Window_GameJoltInput.prototype.cursorLeft = function (wrap) {
+        if (this._index % 10 > 0) {
+            this._index--;
+        } else if (wrap) {
+            this._index += 9;
+        }
+    };
+
+    Window_GameJoltInput.prototype.cursorPagedown = function () {
+        this._page = (this._page + 1) % this.table().length;
+        this.refresh();
+    };
+
+    Window_GameJoltInput.prototype.cursorPageup = function () {
+        this._page = (this._page + this.table().length - 1) % this.table().length;
+        this.refresh();
+    };
+
+    Window_GameJoltInput.prototype.processCursorMove = function () {
+        var lastPage = this._page;
+        Window_Selectable.prototype.processCursorMove.call(this);
+        this.updateCursor();
+        if (this._page !== lastPage) {
+            SoundManager.playCursor();
+        }
+    };
+
+    Window_GameJoltInput.prototype.processHandling = function () {
+        if (this.isOpen() && this.active) {
+            if (Input.isTriggered('shift')) {
+                this.processJump();
+            }
+            if (Input.isRepeated('cancel')) {
+                this.processBack();
+            }
+            if (Input.isRepeated('ok')) {
+                this.processOk();
+            }
+        }
+    };
+
+    Window_GameJoltInput.prototype.isCancelEnabled = function () {
+        return true;
+    };
+
+    Window_GameJoltInput.prototype.processCancel = function () {
+        this.processBack();
+    };
+
+    Window_GameJoltInput.prototype.processJump = function () {
+        if (this._index !== 89) {
+            this._index = 89;
+            SoundManager.playCursor();
+        }
+    };
+
+    Window_GameJoltInput.prototype.processBack = function () {
+        if (this._editWindow.back()) {
+            SoundManager.playCancel();
+        }
+    };
+
+    Window_GameJoltInput.prototype.processOk = function () {
+        if (this.character()) {
+            this.onNameAdd();
+        } else if (this.isPageChange()) {
+            SoundManager.playOk();
+            this.cursorPagedown();
+        } else if (this.isOk()) {
+            this.onNameOk();
+        }
+    };
+
+    Window_GameJoltInput.prototype.onNameAdd = function () {
+        if (this._editWindow.add(this.character())) {
+            SoundManager.playOk();
+        } else {
+            SoundManager.playBuzzer();
+        }
+    };
+
+    Window_GameJoltInput.prototype.onNameOk = function () {
+        if (this._editWindow.name() === '') {
+            if (this._editWindow.restoreDefault()) {
+                SoundManager.playOk();
+                this.callOkHandler();
+            } else {
+                SoundManager.playBuzzer();
+            }
+        } else {
+            SoundManager.playOk();
+            this.callOkHandler();
+        }
     };
 })();
