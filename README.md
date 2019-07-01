@@ -1,6 +1,7 @@
-# Recomendados
+# Requisitos
 
 - Baixar
+  - RPG MAKER MV https://store.steampowered.com/app/363890/RPG_Maker_MV/
   - Visual Studio Code https://code.visualstudio.com/
   - Git https://git-scm.com/
   - Node.js https://nodejs.org/en/
