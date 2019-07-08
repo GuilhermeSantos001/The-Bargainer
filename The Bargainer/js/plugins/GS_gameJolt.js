@@ -15,23 +15,7 @@ function Scene_GameJolt() {
     //=====================================================================================================
     // Global Variables
     //=====================================================================================================
-    const api = {
-        gameId: '383365',
-        privateKey: '34e852058f535125e6834a2fad9e18f2',
-        url: 'https://api.gamejolt.com/api/game/v1_2',
-        https: {
-            base: require('https'),
-            get: (url, callback) => {
-                api.https.base.get(url, (res) => {
-                    res.on('data', (data) => {
-                        callback.sucess(JSON.parse(data));
-                    });
-                }).on('error', (e) => {
-                    callback.error(e);
-                });
-            }
-        }
-    }
+    const params = PluginManager.parameters('GS_gameJolt');
 
     //=====================================================================================================
     // Functions
@@ -52,31 +36,6 @@ function Scene_GameJolt() {
             base = path.dirname(process.mainModule.filename);
         // Retorna a base do caminho associado ao caminho
         return path.join(base, p);
-    };
-
-    /**
-     * @function get_signature
-     * @description Usado para criar uma assinatura com conversão em MD5.
-     * @param {String} data - Data usada para ser convertida
-     * @returns {String}
-     */
-    function get_signature(data) {
-        let crypto = require('crypto');
-        return crypto.createHash('md5').update(data).digest('hex');
-    };
-
-    /**
-     * @function user_auth
-     * @description Usado para verificar os dados do usuario.
-     * @param {String} username - Nome do usuario
-     * @param {String} user_token - Senha do usuario
-     * @param {Function} callback - Função a ser chamada ao final do processo
-     */
-    function user_auth(username, user_token, callback) {
-        let url = `${api.url}/users/auth/?game_id=${api.gameId}&username=${username}&user_token=${user_token}`.replace(/\s{1,}/g, ""),
-            signature = get_signature(url + api.privateKey);
-        url += `&signature=${signature}`;
-        return api.https.get(url, callback);
     };
 
     /**
@@ -104,8 +63,9 @@ function Scene_GameJolt() {
     Scene_GameJolt._changeValue = null;
     Scene_GameJolt._username = '';
     Scene_GameJolt._gameToken = '';
+    Scene_GameJolt._gameTokenSecret = true;
     Scene_GameJolt._isLoading = null;
-    Scene_GameJolt._isConnected = null;
+    Scene_GameJolt._isConnected = true;
     Scene_GameJolt._isInputProcess = null;
     Scene_GameJolt._inputProcess = null;
     Scene_GameJolt._isInputChangeValues = null;
@@ -128,6 +88,7 @@ function Scene_GameJolt() {
         this.createButtons();
         this.createInputWindow();
         this.createErrorWindow();
+        this.createDashboardWindow();
     };
 
     Scene_GameJolt.prototype.createBackground = function () {
@@ -152,19 +113,7 @@ function Scene_GameJolt() {
         this.addChild(this._icon);
     };
 
-    Scene_GameJolt.prototype.createButtonsLogin = function () {
-        let button_1 = new Sprite_Button(),
-            button_2 = new Sprite_Button(),
-            button_3 = new Sprite_Button(),
-            _y = 270,
-            _scene = this;
-        /**
-         * BUTTON 1
-         */
-        button_1.bitmap = new Bitmap(480, 52);
-        button_1.bitmap.fillAll('#242424');
-        button_1.x = (Graphics._width - button_1.width) / 2;
-        button_1.y = _y;
+    Scene_GameJolt.prototype.getUsername = function () {
         var username;
         if (Scene_GameJolt._inputCharacterValue && Scene_GameJolt._changeValue === 'username') {
             Scene_GameJolt._username = String(Scene_GameJolt._inputCharacterValue);
@@ -185,7 +134,46 @@ function Scene_GameJolt() {
                     })
             ]);
         }
-        button_1.bitmap.drawText(username, 0, button_1.height / 2, button_1.width, 0, 'center');
+        return username;
+    };
+
+    Scene_GameJolt.prototype.getGameToken = function () {
+        var gameToken;
+        if (Scene_GameJolt._inputCharacterValue && Scene_GameJolt._changeValue === 'gameToken') {
+            Scene_GameJolt._gameToken = String(Scene_GameJolt._inputCharacterValue);
+            gameToken = Scene_GameJolt._gameToken;
+        } else if (Scene_GameJolt._gameToken.length > 0) {
+            gameToken = Scene_GameJolt._gameToken;
+        } else {
+            gameToken = 'Game Token';
+        }
+        if (gameToken != 'Game Token' && Scene_GameJolt._gameTokenSecret) {
+            gameToken = this.getGameTokenSecret(gameToken);
+        }
+        return gameToken;
+    };
+
+    Scene_GameJolt.prototype.getGameTokenSecret = function (gameToken) {
+        let i = 0, l = gameToken.length, str = '';
+        for (; i < l; i++) str += '*';
+        return str;
+    };
+
+    Scene_GameJolt.prototype.createButtonsLogin = function () {
+        let button_1 = new Sprite_Button(),
+            button_2 = new Sprite_Button(),
+            button_3 = new Sprite_Button(),
+            button_4 = new Sprite_Button(),
+            _y = 270,
+            _scene = this;
+        /**
+         * BUTTON 1
+         */
+        button_1.bitmap = new Bitmap(480, 52);
+        button_1.bitmap.fillAll('#242424');
+        button_1.x = (Graphics._width - button_1.width) / 2;
+        button_1.y = _y;
+        button_1.bitmap.drawText(this.getUsername(), 0, button_1.height / 2, button_1.width, 0, 'center');
         button_1.setClickHandler(() => {
             Scene_GameJolt._changeValue = 'username';
             Scene_GameJolt._isInputProcess = true;
@@ -199,16 +187,7 @@ function Scene_GameJolt() {
         button_2.bitmap.fillAll('#242424');
         button_2.x = (Graphics._width - button_2.width) / 2;
         button_2.y = _y;
-        var gameToken;
-        if (Scene_GameJolt._inputCharacterValue && Scene_GameJolt._changeValue === 'gameToken') {
-            Scene_GameJolt._gameToken = String(Scene_GameJolt._inputCharacterValue);
-            gameToken = Scene_GameJolt._gameToken;
-        } else if (Scene_GameJolt._gameToken.length > 0) {
-            gameToken = Scene_GameJolt._gameToken;
-        } else {
-            gameToken = 'Game Token';
-        }
-        button_2.bitmap.drawText(gameToken, 0, button_2.height / 2, button_2.width, 0, 'center');
+        button_2.bitmap.drawText(this.getGameToken(), 0, button_2.height / 2, button_2.width, 0, 'center');
         button_2.setClickHandler(() => {
             Scene_GameJolt._changeValue = 'gameToken';
             Scene_GameJolt._isInputProcess = true;
@@ -217,12 +196,39 @@ function Scene_GameJolt() {
         /**
          * BUTTON 3
          */
-        _y = (_y + 52) + 10;
+        _y = (_y + 52) + 5;
         button_3.bitmap = new Bitmap(480, 52);
         button_3.bitmap.fillAll('#313131');
         button_3.x = (Graphics._width - button_3.width) / 2;
         button_3.y = _y;
+        button_3.opacity = 72;
         button_3.bitmap.drawText(getTextLanguage([
+            JSON.stringify(
+                {
+                    Language: "pt_br",
+                    Value: "Mostrar a senha"
+                }),
+            JSON.stringify(
+                {
+                    Language: "en_us",
+                    Value: "Show Password"
+                })
+        ]), 0, button_3.height / 2, button_3.width, 0, 'center');
+        let _this = this;
+        button_3.setClickHandler(() => {
+            Scene_GameJolt._gameTokenSecret = Scene_GameJolt._gameTokenSecret ? false : true;
+            _this.updateInputChangeValues();
+        });
+        /**
+         * BUTTON 4
+         */
+        _y = (_y + 52) + 10;
+        button_4.bitmap = new Bitmap(480, 52);
+        button_4.bitmap.fillAll('#313131');
+        button_4.x = (Graphics._width - button_4.width) / 2;
+        button_4.y = _y;
+        button_4.opacity = 72;
+        button_4.bitmap.drawText(getTextLanguage([
             JSON.stringify(
                 {
                     Language: "pt_br",
@@ -233,33 +239,44 @@ function Scene_GameJolt() {
                     Language: "en_us",
                     Value: "Begin Session"
                 })
-        ]), 0, button_3.height / 2, button_3.width, 0, 'center');
-        button_3.setClickHandler(() => {
+        ]), 0, button_4.height / 2, button_4.width, 0, 'center');
+        button_4.setClickHandler(() => {
             Scene_GameJolt._isLoading = true;
-            user_auth(Scene_GameJolt._username, Scene_GameJolt._gameToken, {
-                sucess: (data) => {
-                    if (data.response.success === 'false') {
-                        Scene_GameJolt._isLoading = null;
-                        Scene_GameJolt._isErrorWindow = { frames: 120 };
-                        _scene.setErrorWindow(0);
-                    } else {
-                        Scene_GameJolt._isLoading = null;
-                        Scene_GameJolt._isConnected = true;
-                    }
-                },
-                error: (e) => {
-                    console.error(e);
+            if (this._errorWindow.opacity > 0) {
+                this._errorWindow.calllistener = {
+                    frame: 120,
+                    callback: callback
                 }
-            });
+                return;
+            }
+            function callback() {
+                let username = Scene_GameJolt._username,
+                    gametoken = Scene_GameJolt._gameToken;
+                if ($gameTemp.gameJoltAddUser(username, gametoken)) {
+                    $gameTemp.gameJoltLoginUser(username, success => {
+                        if (!success) {
+                            Scene_GameJolt._isLoading = null;
+                            Scene_GameJolt._isErrorWindow = { frames: 60 };
+                            _scene.setErrorWindow(0);
+                        } else {
+                            Scene_GameJolt._isLoading = null;
+                            Scene_GameJolt._isConnected = true;
+                        }
+                    });
+                }
+            }
+            return callback();
         });
         this._buttonsLogin = [
             button_1,
             button_2,
-            button_3
+            button_3,
+            button_4
         ];
         this.addChild(button_1);
         this.addChild(button_2);
         this.addChild(button_3);
+        this.addChild(button_4);
     };
 
 
@@ -307,7 +324,7 @@ function Scene_GameJolt() {
         this._spriteInputTitle.move((Graphics.width - 480) / 2, 220);
         this._spriteInputText = new Sprite(new Bitmap(480, 92));
         this._spriteInputText.move((Graphics.width - 480) / 2, 615);
-        this._inputWindow = new Window_GameJoltInput((Graphics.width - 480) / 2, 280, {
+        this._inputWindow = new Window_GameJoltInput((Graphics.width - 480) / 2, (Graphics.height - 155) / 2, {
             add: (character) => {
                 if (Scene_GameJolt._inputProcess === 0) {
                     Scene_GameJolt._inputValues.username += character;
@@ -371,11 +388,10 @@ function Scene_GameJolt() {
 
     Scene_GameJolt.prototype.createErrorWindow = function () {
         this._errorWindow = new Window_Help();
-        this._errorWindow.move((Graphics.width - 480) / 2, 450, 480, 115);
+        this._errorWindow.move((Graphics.width - 480) / 2, (Graphics.height - 210), 480, 115);
         this._errorWindow.backOpacity = 0;
         this._errorWindow.contentsOpacity = 0;
         this._errorWindow.opacity = 0;
-        Game_Interpreter.prototype.pluginCommand('setlanguage', [1]);
         this.addChild(this._errorWindow);
     };
 
@@ -385,15 +401,23 @@ function Scene_GameJolt() {
                 JSON.stringify(
                     {
                         Language: "pt_br",
-                        Value: "Há algo errado com o nome de \nusuário ou Token Game!"
+                        Value: "Há algo errado com o nome de \nusuário ou Game Token!"
                     }),
                 JSON.stringify(
                     {
                         Language: "en_us",
-                        Value: "There is something wrong with \nthe user name or Token Game!"
+                        Value: "There is something wrong with \nthe user name or Game Token!"
                     })
             ]));
         }
+    };
+
+    Scene_GameJolt.prototype.createDashboardWindow = function () {
+        this._dashboardWindow = new Window_Dashboard();
+        this._dashboardWindow.backOpacity = 0;
+        this._dashboardWindow.contentsOpacity = 0;
+        this._dashboardWindow.opacity = 0;
+        this.addChild(this._dashboardWindow);
     };
 
     Scene_GameJolt.prototype.start = function () {
@@ -409,9 +433,16 @@ function Scene_GameJolt() {
         this.updateLoading();
         this.updateInputWindow();
         this.updateErrorWindow();
+        this.updateDashboard();
     };
 
     Scene_GameJolt.prototype.updateICON = function () {
+        if (this._animationICON === undefined)
+            this._animationICON = {
+                return: false,
+                frames1: 0,
+                frames2: 24
+            }
         if (Scene_GameJolt._isLoading || Scene_GameJolt._isConnected) {
             if (!this._animationICON.return)
                 this._animationICON.return = true;
@@ -420,12 +451,6 @@ function Scene_GameJolt() {
             if (this._icon.opacity > 0) this._icon.opacity -= 8;
             return;
         }
-        if (this._animationICON === undefined)
-            this._animationICON = {
-                return: false,
-                frames1: 0,
-                frames2: 24
-            }
         if (!this._animationICON.return && this._animationICON.frames1 < this._animationICON.frames2) {
             this._animationICON.frames1 += .60;
             if (this._icon.opacity > 30) this._icon.opacity -= 8;
@@ -437,8 +462,8 @@ function Scene_GameJolt() {
     };
 
     Scene_GameJolt.prototype.updateButtonsLogin = function () {
-        if (Scene_GameJolt._isLoading || Scene_GameJolt._isConnected
-            || Scene_GameJolt._isInputProcess) {
+        if (Scene_GameJolt._isLoading || Scene_GameJolt._isConnected || Scene_GameJolt._isInputProcess) {
+            if (this._errorWindow.opacity > 0) return;
             if (this._buttonsLogin[0].opacity > 0)
                 this._buttonsLogin[0].opacity -= 8;
             else this._buttonsLogin[0].visible = false;
@@ -448,41 +473,66 @@ function Scene_GameJolt() {
             if (this._buttonsLogin[2].opacity > 0)
                 this._buttonsLogin[2].opacity -= 8;
             else this._buttonsLogin[2].visible = false;
+            if (this._buttonsLogin[3].opacity > 0)
+                this._buttonsLogin[3].opacity -= 8;
+            else this._buttonsLogin[3].visible = false;
         } else {
             if (this._inputWindow.opacity > 0) return;
-            if (Scene_GameJolt._username === '' || Scene_GameJolt._gameToken === '') {
+            if (Scene_GameJolt._gameTokenSecret) {
                 if (this._buttonsLogin[2].opacity > 72)
                     this._buttonsLogin[2].opacity -= 8;
-                if (typeof this._buttonsLogin[2].isActive === 'function' && !this._buttonsLogin[2].isActiveBKP) {
-                    this._buttonsLogin[2].isActiveBKP = this._buttonsLogin[2].isActive;
-                    this._buttonsLogin[2].isActive = () => { return false; }
-                }
+                if (this._buttonsLogin[2].opacity < 72)
+                    this._buttonsLogin[2].opacity += 8;
             } else {
                 if (this._buttonsLogin[2].opacity < 255)
                     this._buttonsLogin[2].opacity += 8;
-                if (typeof this._buttonsLogin[2].isActiveBKP === 'function') {
-                    this._buttonsLogin[2].isActive = this._buttonsLogin[2].isActiveBKP;
+            }
+            if (Scene_GameJolt._username === '' || Scene_GameJolt._gameToken === '') {
+                if (this._buttonsLogin[3].opacity > 72)
+                    this._buttonsLogin[3].opacity -= 8;
+                if (this._buttonsLogin[3].opacity < 72)
+                    this._buttonsLogin[3].opacity += 8;
+                if (typeof this._buttonsLogin[3].isActive === 'function' && !this._buttonsLogin[3].isActiveBKP) {
+                    this._buttonsLogin[3].isActiveBKP = this._buttonsLogin[3].isActive;
+                    this._buttonsLogin[3].isActive = () => { return false; }
+                }
+            } else {
+                if (this._buttonsLogin[3].opacity < 255)
+                    this._buttonsLogin[3].opacity += 8;
+                if (typeof this._buttonsLogin[3].isActiveBKP === 'function') {
+                    this._buttonsLogin[3].isActive = this._buttonsLogin[3].isActiveBKP;
+                    this._buttonsLogin[3].isActiveBKP = null;
                 }
             }
             if (!this._buttonsLogin[0].visible) this._buttonsLogin[0].visible = true;
             if (!this._buttonsLogin[1].visible) this._buttonsLogin[1].visible = true;
             if (!this._buttonsLogin[2].visible) this._buttonsLogin[2].visible = true;
+            if (!this._buttonsLogin[3].visible) this._buttonsLogin[3].visible = true;
             if (this._buttonsLogin[0].opacity < 255)
                 this._buttonsLogin[0].opacity += 8;
             if (this._buttonsLogin[1].opacity < 255)
                 this._buttonsLogin[1].opacity += 8;
             if (this._buttonsLogin[0].opacity >= 255 && Scene_GameJolt._isInputChangeValues) {
                 Scene_GameJolt._isInputChangeValues = null;
-                this.removeChild(this._buttonsLogin[0]);
-                this.removeChild(this._buttonsLogin[1]);
-                this.removeChild(this._buttonsLogin[2]);
-                this.createButtonsLogin();
+                this.updateInputChangeValues();
             }
         }
     };
 
+    Scene_GameJolt.prototype.updateInputChangeValues = function () {
+        this._buttonsLogin[0].bitmap.clear();
+        this._buttonsLogin[0].bitmap.fillAll('#242424');
+        this._buttonsLogin[0].bitmap.drawText(this.getUsername(), 0, this._buttonsLogin[0].height / 2, this._buttonsLogin[0].width, 0, 'center');
+        this._buttonsLogin[1].bitmap.clear();
+        this._buttonsLogin[1].bitmap.fillAll('#242424');
+        this._buttonsLogin[1].bitmap.drawText(this.getGameToken(), 0, this._buttonsLogin[0].height / 2, this._buttonsLogin[0].width, 0, 'center');
+    };
     Scene_GameJolt.prototype.updateLoading = function () {
         if (Scene_GameJolt._isLoading) {
+            if (this._buttonsLogin[0].opacity > 0 ||
+                this._buttonsLogin[1].opacity > 0 ||
+                this._buttonsLogin[2].opacity > 0 ||
+                this._buttonsLogin[3].opacity > 0) return;
             if (!this._animationLoading) this._animationLoading = {
                 frame1: true,
                 frame2: false,
@@ -535,6 +585,7 @@ function Scene_GameJolt() {
             this._spriteInputTitle.bitmap.clear();
             this._spriteInputText.bitmap.clear();
             if (this._buttonsLogin[0].opacity > 0) return;
+            if (this._errorWindow.opacity > 0) return;
             if (this._spriteInputTitle.opacity < 255)
                 this._spriteInputTitle.opacity += 4;
             if (this._spriteInputText.opacity < 255)
@@ -563,6 +614,9 @@ function Scene_GameJolt() {
             } else if (Scene_GameJolt._inputProcess === 1) {
                 let gameToken = Scene_GameJolt._inputValues.gameToken.length > 0 ?
                     Scene_GameJolt._inputValues.gameToken : Scene_GameJolt._inputValues.default;
+                if (gameToken != '???' && Scene_GameJolt._gameTokenSecret) {
+                    gameToken = this.getGameTokenSecret(gameToken);
+                }
                 this._spriteInputTitle.bitmap.drawText('Game Token', 0, 92 / 2, 480, 0, 'center');
                 this._spriteInputText.bitmap.drawText(gameToken, 0, 92 / 2, 480, 0, 'center');
             }
@@ -586,6 +640,14 @@ function Scene_GameJolt() {
                 this._errorWindow.contentsOpacity -= 4;
             if (this._errorWindow.opacity > 0)
                 this._errorWindow.opacity -= 4;
+            if (this._errorWindow.calllistener) {
+                if (this._errorWindow.calllistener.frame > 0) {
+                    this._errorWindow.calllistener.frame -= .60;
+                } else {
+                    this._errorWindow.calllistener.callback();
+                    this._errorWindow.calllistener = null;
+                }
+            }
         } else if (Scene_GameJolt._isErrorWindow) {
             if (this._buttonsLogin[0].opacity < 255) return;
             if (this._errorWindow.contentsOpacity < 255)
@@ -598,6 +660,10 @@ function Scene_GameJolt() {
                 else Scene_GameJolt._isErrorWindow = null;
             }
         }
+    };
+
+    Scene_GameJolt.prototype.updateDashboard = function () {
+        this._dashboardWindow.update();
     };
 
     //=====================================================================================================
@@ -865,6 +931,89 @@ function Scene_GameJolt() {
         } else {
             SoundManager.playOk();
             this.callOkHandler();
+        }
+    };
+
+    //-----------------------------------------------------------------------------
+    // Window_Dashboard
+    //
+    function Window_Dashboard() {
+        this.initialize.apply(this, arguments);
+    }
+
+    Window_Dashboard.prototype = Object.create(Window_Base.prototype);
+    Window_Dashboard.prototype.constructor = Window_Dashboard;
+
+    Window_Dashboard.prototype.initialize = function () {
+        var width = this.windowWidth();
+        var height = this.windowHeight();
+        Window_Base.prototype.initialize.call(this, 0, 0, width, height);
+    };
+
+    Window_Dashboard.prototype.windowWidth = function () {
+        return Graphics.width;
+    };
+
+    Window_Dashboard.prototype.windowHeight = function () {
+        return Graphics.height;
+    };
+
+    Window_Dashboard.prototype.refresh = function () {
+        var x = this.textPadding();
+        var width = this.contents.width - this.textPadding() * 2;
+        this.contents.clear();
+        /**
+         * Horizontal Lines (x, y, width, height, Color)
+         */
+        // Avatar Lines
+        this.contents.fillRect(x, 5, 250, 1, 'white');
+        this.contents.fillRect(x, 150, 250, 1, 'white');
+        this.contents.fillRect(x + 5, 155, 240, 1, 'white');
+        // Username Lines
+        this.contents.fillRect(x, 188, 45, 1, 'white');
+        // Type User Lines
+        this.contents.fillRect(x, 223, 45, 1, 'white');
+        /**
+         * Vertical Lines (x, y, width, height, Color)
+         */
+        // Avatar Lines
+        this.contents.fillRect(x, 5, 1, 145, 'white');
+        this.contents.fillRect(255, 5, 1, 145, 'white');
+        /**
+         * Avatar of user
+         */
+        var bitmap = $gameTemp.gamejoltGetSpriteAvatar(Scene_GameJolt._username);
+        bitmap.resize(96, 96); // CONFIGURAR O TAMANHO DA IMAGEM
+        var sprite = new Sprite(bitmap);
+        sprite.x = 30;
+        sprite.y = 8;
+        this.addChild(sprite);
+        /**
+         * Username
+         */
+        this.changeTextColor(this.textColor(16));
+        this.contents.drawText(Scene_GameJolt._username || 'Anonymous', x, 175, width, 0, 'left');
+        /**
+         * Type User
+         */
+        this.changeTextColor(this.textColor(17));
+        this.contents.drawText($gameTemp.gamejoltGetTypeUser(Scene_GameJolt._username) ||
+            'Guest', x, 210, width, 0, 'left');
+    };
+
+    Window_Dashboard.prototype.update = function () {
+        if (Scene_GameJolt._isLoading || !Scene_GameJolt._isConnected) {
+            if (this.contentsOpacity > 0)
+                this.contentsOpacity -= 4;
+            if (this.opacity > 0)
+                this.opacity -= 4;
+        }
+        if (Scene_GameJolt._isConnected) {
+            if (this.contentsOpacity < 255)
+                this.contentsOpacity += 4;
+            if (this.opacity < 255)
+                this.opacity += 4;
+            this.refresh();
         }
     };
 })();
