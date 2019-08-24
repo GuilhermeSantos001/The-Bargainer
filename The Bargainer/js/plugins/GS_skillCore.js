@@ -12,6 +12,38 @@
    */
   let skillLevels = {};
 
+  /**
+   * FUNÇÕES
+   */
+  function localPath(p) {
+    if (p.substring(0, 1) === '/')
+      p = p.substring(1);
+    var path = require('path'),
+      base = path.dirname(process.mainModule.filename);
+    return path.join(base, p);
+  };
+
+  function saveData(data, path) {
+    let fs = require('fs'),
+      pathFolder = localPath('save'),
+      pathFile = localPath('save/data_8.data');
+    if (path) pathFile = localPath(`save/${path}.data`);
+    if (fs.existsSync(pathFolder)) {
+      fs.writeFileSync(pathFile, LZString.compressToBase64(JsonEx.stringify(data)), 'utf8');
+    }
+  };
+
+  function loadData(path) {
+    let fs = require('fs'),
+      pathFolder = localPath('save'),
+      pathFile = localPath('save/data_8.data');
+    if (path) pathFile = localPath(`save/${path}.data`);
+    if (fs.existsSync(pathFolder) && fs.existsSync(pathFile)) {
+      return JsonEx.parse(LZString.decompressFromBase64(fs.readFileSync(pathFile, 'utf8')));
+    }
+    return null;
+  };
+
   //-----------------------------------------------------------------------------
   // Graphics
   //
@@ -42,14 +74,26 @@
   };
 
   Scene_Boot.prototype.loadSystemLevelsSkills = function () {
+    let dataSkills = loadData();
     $dataSkills.map(skill => {
       if (skill) {
         let level = Number(skill.meta["Skill Level"]) || 1,
           levelMax = Number(skill.meta["Skill Max Level"]) || 100,
+          scoreBonus = [],
+          fameBonus = [],
           scoreDivider = Number((20 * levelMax) / 100),
           fameDivider = Number((20 * scoreDivider) / 100),
+          iconIndex = Number(skill.meta["Skill IconIndex"]) || 16,
           levelName = {},
           help = [];
+        if (
+          String(skill.meta["Skill Score Bonus"]).replace(/\s{1,}/g, "") != "undefined"
+        )
+          scoreBonus = eval(String(skill.meta["Skill Score Bonus"]));
+        if (
+          String(skill.meta["Skill Fame Bonus"]).replace(/\s{1,}/g, "") != "undefined"
+        )
+          fameBonus = eval(String(skill.meta["Skill Fame Bonus"]));
         if (
           String(skill.meta["Skill Help"]).replace(/\s{1,}/g, "") != "undefined"
         )
@@ -61,6 +105,7 @@
         skillLevels[skill.id] = {
           level: level,
           levelName: levelName,
+          iconIndex: iconIndex,
           levelMax: levelMax,
           range: 0,
           levelRange() {
@@ -77,12 +122,72 @@
               levelMax = (this.levelMax * .8) * this.levelMax;
             return Math.ceil(level * levelMax + (this.level * (this.levelMax / .2)) * (1000 + level + levelMax));
           },
+          scoreBonus: scoreBonus,
+          fameBonus: fameBonus,
           scoreDivider: scoreDivider,
           fameDivider: fameDivider,
           help: help
         };
+        if (dataSkills) {
+          if (dataSkills[skill.id].range != undefined)
+            skillLevels[skill.id].range = dataSkills[skill.id].range;
+          if (dataSkills[skill.id].level != undefined)
+            skillLevels[skill.id].level = dataSkills[skill.id].level;
+        }
       }
     });
+  };
+
+  //-----------------------------------------------------------------------------
+  // Game_Temp
+  //
+  Game_Temp.prototype.addRangeSkill = function (id, range) {
+    if (skillLevels[id].levelRangeFormat(range) >= skillLevels[id].levelMaxRange()) {
+      addlevel();
+    } else {
+      addrange();
+    }
+    function addlevel() {
+      if (skillLevels[id].level < skillLevels[id].levelMax) {
+        $gameParty.gainRangeSkill($dataSkills[id].name, (() => {
+          let name = "\\tx[2016]";
+          skillLevels[id].levelName.map(levelName => {
+            if (levelName.level === skillLevels[id].level)
+              return (name =
+                levelName.text[$gameSystem.getterLanguageSystem()]);
+          });
+          return name;
+        })(), skillLevels[id].iconIndex, (() => {
+          let name = "\\tx[2016]";
+          skillLevels[id].levelName.map(levelName => {
+            if (levelName.level === skillLevels[id].level + 1)
+              return (name =
+                levelName.text[$gameSystem.getterLanguageSystem()]);
+          });
+          return name;
+        })(), `Subiu para `);
+        skillLevels[id].level++;
+        skillLevels[id].range = 0;
+        saveData(skillLevels);
+      }
+    }
+    function addrange() {
+      skillLevels[id].range += skillLevels[id].levelRangeFormat(range);
+      if (skillLevels[id].levelRange(range) >= skillLevels[id].levelMaxRange()) {
+        addlevel();
+      } else {
+        $gameParty.gainRangeSkill($dataSkills[id].name, (() => {
+          let name = "\\tx[2016]";
+          skillLevels[id].levelName.map(levelName => {
+            if (levelName.level === skillLevels[id].level)
+              return (name =
+                levelName.text[$gameSystem.getterLanguageSystem()]);
+          });
+          return name;
+        })(), skillLevels[id].iconIndex, skillLevels[id].levelRangeFormat(range) + ` de Exp. Total ${skillLevels[id].range}`, `+`);
+        saveData(skillLevels);
+      }
+    }
   };
 
   //-----------------------------------------------------------------------------
@@ -299,8 +404,24 @@
         scoreDivider = skillLevels[skill.id].scoreDivider,
         fameDivider = skillLevels[skill.id].fameDivider,
         help = skillLevels[skill.id].help,
-        score = (level * (levelMax / scoreDivider)) / 100,
-        fame = (level * (score / fameDivider)) / 100;
+        scoreBonus = (() => {
+          let bonus = skillLevels[skill.id].scoreBonus[0][0] || 0;
+          skillLevels[skill.id].scoreBonus.map(meta => {
+            if (meta[level] != undefined)
+              return (bonus = meta[level]);
+          });
+          return bonus;
+        })(),
+        score = ((level * (levelMax / scoreDivider)) / 100) + scoreBonus,
+        fameBonus = (() => {
+          let bonus = skillLevels[skill.id].fameBonus[0][0] || 0;
+          skillLevels[skill.id].fameBonus.map(meta => {
+            if (meta[level] != undefined)
+              return (bonus = meta[level]);
+          });
+          return bonus;
+        })(),
+        fame = ((level * (score / fameDivider)) / 100) + fameBonus;
       this.drawIconEx(
         skill.iconIndex,
         96 / 4 - this.textPadding(),

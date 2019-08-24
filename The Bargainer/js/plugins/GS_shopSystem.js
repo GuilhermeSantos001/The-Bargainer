@@ -20,7 +20,7 @@
  *
  * Texto: Um objeto que é composto por idiomas e tem seus respectivos valores em cada idioma.
  * Numerador: Um numero que é usado por todos os dialogos que são compativeis com o mesmo.
- * Desativação: Um Array que é composto por todos os index que dos dialogos que devem ser desativados.
+ * Desativação: Um Array que é composto por todos os index dos dialogos que devem ser desativados.
  *
  * EXEMPLO:
  * this.addDialog(

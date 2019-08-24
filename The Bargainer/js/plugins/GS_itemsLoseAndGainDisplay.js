@@ -13,12 +13,16 @@
     // Game_Party
     //================================================================================================
     const _game_party = {
-        display: function (item, amount) {
+        display: function (item, amount, symbol) {
             var scene = SceneManager._scene;
             if (scene instanceof Scene_Map) {
-                let sceneSpriteset = scene._spriteset,
-                    symbol;
-                if (amount > 0) symbol = '+'; else symbol = '-';
+                let sceneSpriteset = scene._spriteset;
+                if (!symbol) {
+                    if (typeof amount == 'number')
+                        if (amount > 0) symbol = '+'; else symbol = '-';
+                    else
+                        if (amount.amount > 0) symbol = '+'; else symbol = '-';
+                }
                 sceneSpriteset.createItemDisplay(item, amount, symbol);
             }
         },
@@ -26,6 +30,7 @@
         gainGold: Game_Party.prototype.gainGold,
         loseGold: Game_Party.prototype.loseGold
     };
+
     Game_Party.prototype.gainItem = function (item, amount, includeEquip) {
         _game_party.gainItem.apply(this, arguments);
         _game_party.display.apply(this, arguments);
@@ -39,6 +44,15 @@
     Game_Party.prototype.loseGold = function (amount) {
         _game_party.loseGold.apply(this, arguments);
         _game_party.display.call(this, '_gold', amount);
+    };
+
+    Game_Party.prototype.gainRangeSkill = function (skilltitle, skillName, iconIndex, amount, symbol) {
+        _game_party.display.call(this, '_rangeSkill', {
+            skilltitle: skilltitle,
+            skillName: skillName,
+            iconIndex: iconIndex,
+            amount: amount
+        }, symbol);
     };
 
     //================================================================================================
@@ -116,7 +130,12 @@
         this.anchor.y = 1;
         this._ty = 0;
         this._item = item;
-        this._amount = String(Math.abs(amount));
+        this._amount = (() => {
+            if (typeof amount != 'number')
+                return amount;
+            else
+                return String(Math.abs(amount));
+        })();
         this.scale.x = 0;
         this.scale.y = 0;
         this.opacity = 0;
@@ -139,9 +158,15 @@
     Sprite_itemDisplay.prototype.setBitmap = function () {
         var bitmap = ImageManager.loadSystem('IconSet');
         var sprite = new Sprite();
+        var title = null;
         if (this._item === '_gold') {
             var iconIndex = 313,
                 iconName = $gameSystem.getTextLanguage(2006);
+        } else if (this._item === '_rangeSkill') {
+            var iconIndex = this._amount.iconIndex,
+                iconName = this._amount.skillName;
+            title = this._amount.skilltitle;
+            this._amount = this._amount.amount;
         } else {
             var iconIndex = $dataItems[this._item.id].iconIndex,
                 iconName = $dataItems[this._item.id].name;
@@ -151,14 +176,18 @@
         var sx = iconIndex % 16 * pw;
         var sy = Math.floor(iconIndex / 16) * ph;
         this.bitmap = new Bitmap(480, 100);
-        this.bitmap.fontSize = 18;
+        if (title) {
+            this.bitmap.fontSize = 14;
+            this.bitmap.drawText(title, (pw * 6) + 19, this.bitmap.height / 2, this.bitmap.width, -48, 'left');
+        }
+        this.bitmap.fontSize = 12;
         this.bitmap.drawText(`${this._symbol}${this._amount}`, (pw * 6) + 22, this.bitmap.height / 2, this.bitmap.width, -10, 'left');
         sprite.bitmap = bitmap;
         sprite.move(-((pw * 2)), -((ph * 2) + 8));
         sprite.setFrame(sx, sy, pw, ph);
         this.addChild(sprite);
-        this.bitmap.fontSize = 18;
-        this.bitmap.drawText(iconName, 0, this.bitmap.height / 2, this.bitmap.width, 48, 'center');
+        this.bitmap.fontSize = 10;
+        this.bitmap.drawText(iconName, (pw * 6) + 19, this.bitmap.height / 2, this.bitmap.width, 24, 'left');
     };
 
     Sprite_itemDisplay.prototype.scrolledX = function () {
