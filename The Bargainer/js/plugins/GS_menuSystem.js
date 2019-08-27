@@ -430,12 +430,12 @@
             JSON.stringify(
                 {
                     Language: "pt_br",
-                    Value: 'Versão Atual | Alpha 0.01'
+                    Value: 'Versão Atual | Alpha-Build 1.10.50'
                 }),
             JSON.stringify(
                 {
                     Language: "en_us",
-                    Value: 'Current Version | Alpha 0.01'
+                    Value: 'Current Version | Alpha-Build 1.10.50'
                 })
         ]), -15, sprite.height - 20, sprite.width, 0, 'right');
     };

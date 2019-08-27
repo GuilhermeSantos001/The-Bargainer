@@ -79,6 +79,7 @@
       if (skill) {
         let level = Number(skill.meta["Skill Level"]) || 1,
           levelMax = Number(skill.meta["Skill Max Level"]) || 100,
+          scoreType = [],
           scoreBonus = [],
           fameBonus = [],
           scoreDivider = Number((20 * levelMax) / 100),
@@ -86,6 +87,10 @@
           iconIndex = Number(skill.meta["Skill IconIndex"]) || 16,
           levelName = {},
           help = [];
+        if (
+          String(skill.meta["Skill Bonus Type"]).replace(/\s{1,}/g, "") != "undefined"
+        )
+          scoreType = eval(String(skill.meta["Skill Bonus Type"]));
         if (
           String(skill.meta["Skill Score Bonus"]).replace(/\s{1,}/g, "") != "undefined"
         )
@@ -122,6 +127,7 @@
               levelMax = (this.levelMax * .8) * this.levelMax;
             return Math.ceil(level * levelMax + (this.level * (this.levelMax / .2)) * (1000 + level + levelMax));
           },
+          scoreType: scoreType,
           scoreBonus: scoreBonus,
           fameBonus: fameBonus,
           scoreDivider: scoreDivider,
@@ -189,6 +195,31 @@
       }
     }
   };
+
+  Game_Temp.prototype.getScoreBonusSkills = function (id) {
+    if (skillLevels[id] != undefined) {
+      let level = skillLevels[id].level,
+        levelMax = skillLevels[id].levelMax,
+        scoreDivider = skillLevels[id].scoreDivider,
+        scoreBonus = (() => {
+          let bonus = skillLevels[id].scoreBonus[0][0] || 0;
+          skillLevels[id].scoreBonus.map(meta => {
+            if (meta[level] != undefined)
+              return (bonus = meta[level]);
+          });
+          return bonus;
+        })(),
+        score = ((level * (levelMax / scoreDivider)) / 100) + scoreBonus;
+      return typeof score != 'number' ? 0 : score;
+    }
+  };
+
+  Game_Temp.prototype.getBonusTypeSkills = function (id) {
+    if (skillLevels[id] != undefined) {
+      return skillLevels[id].scoreType[0];
+    }
+  };
+
 
   //-----------------------------------------------------------------------------
   // Scene_Skill

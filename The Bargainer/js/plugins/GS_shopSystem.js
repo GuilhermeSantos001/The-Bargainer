@@ -1295,13 +1295,6 @@ function Game_ItemShop() {
     };
 
     Window_Dialog.prototype.formatBonus = function (bonus) {
-        let actor = $gameActors.actor(1);
-        if (actor.isLearnedSkill(4)) {
-            let score = (actor.skill(4).level * (actor.skill(4).levelMax / actor.skill(4).scoreDivider)) / 100,
-                fame = (actor.skill(4).level * (score / actor.skill(4).fameDivider)) / 100,
-                efficiency = (2 * bonus / 100) + (score + fame);
-            bonus += parseFloat(efficiency.toFixed(2));
-        }
         return parseFloat(bonus.toFixed(2));
     };
 
@@ -2603,7 +2596,28 @@ function Game_ItemShop() {
             buy: 0,
             sell: 0
         }
+        this.getSkillsBonusSell();
         this.refresh();
+    };
+
+    Window_bonusShop.prototype.getSkillsBonusSell = function () {
+        /**
+         * ID DAS HABILIDADES PARA O BONUS IMEDIATO NO DIALOGO
+         * 3
+         * 4
+         * 9
+         */
+        let h = [3, 4, 9],
+            i = 0,
+            l = h.length;
+        for (; i < l; i++) {
+            if ($gameParty.allMembers()[0].hasSkill(h[i])) {
+                if ($gameTemp.getBonusTypeSkills(h[i]).buy.toLocaleLowerCase() === "on")
+                    this.addBonusBuy(SceneManager._scene._windowDialog.formatBonus($gameTemp.getScoreBonusSkills(h[i])));
+                if ($gameTemp.getBonusTypeSkills(h[i]).sell.toLocaleLowerCase() === "on")
+                    this.addBonusSell(SceneManager._scene._windowDialog.formatBonus($gameTemp.getScoreBonusSkills(h[i])));
+            }
+        }
     };
 
     Window_bonusShop.prototype.windowWidth = function () {
@@ -2902,11 +2916,11 @@ function Game_ItemShop() {
  * @on Sim
  * @off Não
  * @default true
- * 
+ *
  * @param Item-Fabrication
  * @desc Fabricação desse item
  * @type struct<ItemFabrication>
- * 
+ *
  */
 /*~struct~Language:
  * @param Value
@@ -2930,227 +2944,227 @@ function Game_ItemShop() {
  * @type string
  * @default pt_br
  */
- /*~struct~dataDialog:
- * @param Initial Message
- * @desc Mensagem inicial do vendedor
- * @type struct<Language>[]
- * @default []
- *
- * @param ----------------------
- * @default -------------------------------
- *
- * @param Answer Default
- * @desc Resposta padrão a ser usada quando a IA não achar uma adequada.
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer Same phrase
- * @desc Resposta usada quando o jogador fala a mesma coisa.
- * @type struct<Language>[]
- * @default []
- *
- * @param Dialog Efficiency
- * @desc Efficiencia dos dialogos nos bonus
- * @type struct<DialogEfficiency>[]
- * @default []
- *
- * @param ----------------------
- * @default -------------------------------
- *
- * @param Answer 1
- * @desc Resposta a "olá"
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 1 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
- * @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
- * @type struct<DialogWithdrawalBonusREC>
- * @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10"}
- *
- * @param Answer 1 Reclamation
- * @desc Reclamação ao exceder o nivel de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 1 Reclamation Exceeded
- * @desc Reclamação ao exceder o nivel maximo de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 1 Dialog Cancel
- * @desc Resposta para cancelar o dialogo
- * @type struct<Language>[]
- * @default []
- *
- * @param ----------------------
- * @default -------------------------------
- *
- * @param Answer 2
- * @desc Resposta a "tudo bem?"
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 2 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
- * @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
- * @type struct<DialogWithdrawalBonusREC>
- * @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10"}
- *
- * @param Answer 2 Reclamation
- * @desc Reclamação ao exceder o nivel de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 2 Reclamation Exceeded
- * @desc Reclamação ao exceder o nivel maximo de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 2 Dialog Cancel
- * @desc Resposta para cancelar o dialogo
- * @type struct<Language>[]
- * @default []
- *
- * @param ----------------------
- * @default -------------------------------
- *
- * @param Answer 3
- * @desc Resposta a "olá tudo bem?"
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 3 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
- * @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
- * @type struct<DialogWithdrawalBonusREC>
- * @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10","Same Phrase Buy":"0.06","Same Phrase Sell":"0.06"}
- *
- * @param Answer 3 Reclamation
- * @desc Reclamação ao exceder o nivel de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 3 Reclamation Exceeded
- * @desc Reclamação ao exceder o nivel maximo de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 3 Dialog Cancel
- * @desc Resposta para cancelar o dialogo
- * @type struct<Language>[]
- * @default []
- *
- * @param ----------------------
- * @default -------------------------------
- *
- * @param Answer 4
- * @desc Resposta a "quero comprar"
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 4 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
- * @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
- * @type struct<DialogWithdrawalBonusREC>
- * @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10","Same Phrase Buy":"0.06","Same Phrase Sell":"0.06"}
- *
- * @param Answer 4 Reclamation
- * @desc Reclamação ao exceder o nivel de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 4 Reclamation Exceeded
- * @desc Reclamação ao exceder o nivel maximo de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 4 Dialog Cancel
- * @desc Resposta para cancelar o dialogo
- * @type struct<Language>[]
- * @default []
- *
- * @param ----------------------
- * @default -------------------------------
- *
- * @param Answer 5
- * @desc Resposta a "Olá quero comprar"
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 5 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
- * @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
- * @type struct<DialogWithdrawalBonusREC>
- * @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10","Same Phrase Buy":"0.06","Same Phrase Sell":"0.06"}
- *
- * @param Answer 5 Reclamation
- * @desc Reclamação ao exceder o nivel de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 5 Reclamation Exceeded
- * @desc Reclamação ao exceder o nivel maximo de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 5 Dialog Cancel
- * @desc Resposta para cancelar o dialogo
- * @type struct<Language>[]
- * @default []
- *
- * @param ----------------------
- * @default -------------------------------
- *
- * @param Answer 6
- * @desc Resposta a "Olá tudo bem? quero comprar"
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 6 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
- * @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
- * @type struct<DialogWithdrawalBonusREC>
- * @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10","Same Phrase Buy":"0.06","Same Phrase Sell":"0.06"}
- *
- * @param Answer 6 Reclamation
- * @desc Reclamação ao exceder o nivel de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 6 Reclamation Exceeded
- * @desc Reclamação ao exceder o nivel maximo de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 6 Dialog Cancel
- * @desc Resposta para cancelar o dialogo
- * @type struct<Language>[]
- * @default []
- *
- * @param ----------------------
- * @default -------------------------------
- *
- * @param Answer 7
- * @desc Resposta a "Tudo bem? quero comprar"
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 7 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
- * @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
- * @type struct<DialogWithdrawalBonusREC>
- * @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10","Same Phrase Buy":"0.06","Same Phrase Sell":"0.06"}
- *
- * @param Answer 7 Reclamation
- * @desc Reclamação ao exceder o nivel de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 7 Reclamation Exceeded
- * @desc Reclamação ao exceder o nivel maximo de tolerância
- * @type struct<Language>[]
- * @default []
- *
- * @param Answer 7 Dialog Cancel
- * @desc Resposta para cancelar o dialogo
- * @type struct<Language>[]
- * @default []
- *
- */
+/*~struct~dataDialog:
+* @param Initial Message
+* @desc Mensagem inicial do vendedor
+* @type struct<Language>[]
+* @default []
+*
+* @param ----------------------
+* @default -------------------------------
+*
+* @param Answer Default
+* @desc Resposta padrão a ser usada quando a IA não achar uma adequada.
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer Same phrase
+* @desc Resposta usada quando o jogador fala a mesma coisa.
+* @type struct<Language>[]
+* @default []
+*
+* @param Dialog Efficiency
+* @desc Efficiencia dos dialogos nos bonus
+* @type struct<DialogEfficiency>[]
+* @default []
+*
+* @param ----------------------
+* @default -------------------------------
+*
+* @param Answer 1
+* @desc Resposta a "olá"
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 1 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
+* @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
+* @type struct<DialogWithdrawalBonusREC>
+* @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10"}
+*
+* @param Answer 1 Reclamation
+* @desc Reclamação ao exceder o nivel de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 1 Reclamation Exceeded
+* @desc Reclamação ao exceder o nivel maximo de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 1 Dialog Cancel
+* @desc Resposta para cancelar o dialogo
+* @type struct<Language>[]
+* @default []
+*
+* @param ----------------------
+* @default -------------------------------
+*
+* @param Answer 2
+* @desc Resposta a "tudo bem?"
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 2 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
+* @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
+* @type struct<DialogWithdrawalBonusREC>
+* @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10"}
+*
+* @param Answer 2 Reclamation
+* @desc Reclamação ao exceder o nivel de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 2 Reclamation Exceeded
+* @desc Reclamação ao exceder o nivel maximo de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 2 Dialog Cancel
+* @desc Resposta para cancelar o dialogo
+* @type struct<Language>[]
+* @default []
+*
+* @param ----------------------
+* @default -------------------------------
+*
+* @param Answer 3
+* @desc Resposta a "olá tudo bem?"
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 3 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
+* @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
+* @type struct<DialogWithdrawalBonusREC>
+* @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10","Same Phrase Buy":"0.06","Same Phrase Sell":"0.06"}
+*
+* @param Answer 3 Reclamation
+* @desc Reclamação ao exceder o nivel de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 3 Reclamation Exceeded
+* @desc Reclamação ao exceder o nivel maximo de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 3 Dialog Cancel
+* @desc Resposta para cancelar o dialogo
+* @type struct<Language>[]
+* @default []
+*
+* @param ----------------------
+* @default -------------------------------
+*
+* @param Answer 4
+* @desc Resposta a "quero comprar"
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 4 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
+* @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
+* @type struct<DialogWithdrawalBonusREC>
+* @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10","Same Phrase Buy":"0.06","Same Phrase Sell":"0.06"}
+*
+* @param Answer 4 Reclamation
+* @desc Reclamação ao exceder o nivel de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 4 Reclamation Exceeded
+* @desc Reclamação ao exceder o nivel maximo de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 4 Dialog Cancel
+* @desc Resposta para cancelar o dialogo
+* @type struct<Language>[]
+* @default []
+*
+* @param ----------------------
+* @default -------------------------------
+*
+* @param Answer 5
+* @desc Resposta a "Olá quero comprar"
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 5 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
+* @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
+* @type struct<DialogWithdrawalBonusREC>
+* @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10","Same Phrase Buy":"0.06","Same Phrase Sell":"0.06"}
+*
+* @param Answer 5 Reclamation
+* @desc Reclamação ao exceder o nivel de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 5 Reclamation Exceeded
+* @desc Reclamação ao exceder o nivel maximo de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 5 Dialog Cancel
+* @desc Resposta para cancelar o dialogo
+* @type struct<Language>[]
+* @default []
+*
+* @param ----------------------
+* @default -------------------------------
+*
+* @param Answer 6
+* @desc Resposta a "Olá tudo bem? quero comprar"
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 6 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
+* @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
+* @type struct<DialogWithdrawalBonusREC>
+* @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10","Same Phrase Buy":"0.06","Same Phrase Sell":"0.06"}
+*
+* @param Answer 6 Reclamation
+* @desc Reclamação ao exceder o nivel de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 6 Reclamation Exceeded
+* @desc Reclamação ao exceder o nivel maximo de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 6 Dialog Cancel
+* @desc Resposta para cancelar o dialogo
+* @type struct<Language>[]
+* @default []
+*
+* @param ----------------------
+* @default -------------------------------
+*
+* @param Answer 7
+* @desc Resposta a "Tudo bem? quero comprar"
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 7 Withdrawal of Bonus for Reclamation, Exceeded and Cancel
+* @desc Retirada de bonus por reclamação, reclamação excedida e cancelamento
+* @type struct<DialogWithdrawalBonusREC>
+* @default {"Reclamation Buy":"0.06","Reclamation Exceeded Buy":"0.08","Dialog Cancel Buy":"0.10","Reclamation Sell":"0.06","Reclamation Exceeded Sell":"0.08","Dialog Cancel Sell":"0.10","Same Phrase Buy":"0.06","Same Phrase Sell":"0.06"}
+*
+* @param Answer 7 Reclamation
+* @desc Reclamação ao exceder o nivel de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 7 Reclamation Exceeded
+* @desc Reclamação ao exceder o nivel maximo de tolerância
+* @type struct<Language>[]
+* @default []
+*
+* @param Answer 7 Dialog Cancel
+* @desc Resposta para cancelar o dialogo
+* @type struct<Language>[]
+* @default []
+*
+*/
 /*~struct~DialogEfficiency:
  * @param Word
  * @desc Palavra associada
@@ -3247,63 +3261,63 @@ function Game_ItemShop() {
  * @decimals 2
  * @default 0.06
  */
- /*~struct~ItemFabrication:
- * @param Days of Work
- * @desc Dias de trabalho
- * @type struct<CalendarDaysMonths>[]
- * @default []
- * 
- * @param Days and Months of vacations
- * @desc Dias e Meses de ferias
- * @type struct<CalendarDaysMonths>[]
- * @default []
- * 
- * @param Map-ID
- * @desc ID do mapa do NPC
- * @type number
- * @min 1
- * @default 1
- * 
- * @param Event-ID
- * @desc ID do evento do NPC
- * @type number
- * @min 1
- * @default 1
- * 
- * @param Event-SelfSwitches_1
- * @desc Primeiro 'Switch Local' a ser ativado enquanto o evento está trabalhando.
- * @type select
- * @default A
- * @option A
- * @option B
- * @option C
- * @option D
- * 
- * @param Event-SelfSwitches_2
- * @desc Segundo 'Switch Local' a ser ativado enquanto o evento está trabalhando.
- * @type select
- * @default A
- * @option A
- * @option B
- * @option C
- * @option D
- * 
- * @param Event-SelfSwitches_3
- * @desc Terceiro 'Switch Local' a ser ativado enquanto o evento está trabalhando.
- * @type select
- * @default A
- * @option A
- * @option B
- * @option C
- * @option D
- * 
- * @param Timer of Fabrication
- * @desc Tempo de fabricação
- * @type number
- * @min 1
- * @default 180
- * 
- */
+/*~struct~ItemFabrication:
+* @param Days of Work
+* @desc Dias de trabalho
+* @type struct<CalendarDaysMonths>[]
+* @default []
+*
+* @param Days and Months of vacations
+* @desc Dias e Meses de ferias
+* @type struct<CalendarDaysMonths>[]
+* @default []
+*
+* @param Map-ID
+* @desc ID do mapa do NPC
+* @type number
+* @min 1
+* @default 1
+*
+* @param Event-ID
+* @desc ID do evento do NPC
+* @type number
+* @min 1
+* @default 1
+*
+* @param Event-SelfSwitches_1
+* @desc Primeiro 'Switch Local' a ser ativado enquanto o evento está trabalhando.
+* @type select
+* @default A
+* @option A
+* @option B
+* @option C
+* @option D
+*
+* @param Event-SelfSwitches_2
+* @desc Segundo 'Switch Local' a ser ativado enquanto o evento está trabalhando.
+* @type select
+* @default A
+* @option A
+* @option B
+* @option C
+* @option D
+*
+* @param Event-SelfSwitches_3
+* @desc Terceiro 'Switch Local' a ser ativado enquanto o evento está trabalhando.
+* @type select
+* @default A
+* @option A
+* @option B
+* @option C
+* @option D
+*
+* @param Timer of Fabrication
+* @desc Tempo de fabricação
+* @type number
+* @min 1
+* @default 180
+*
+*/
 /*~struct~CalendarDaysMonths:
  * @param Month of Year
  * @desc Mês do ano
@@ -3317,11 +3331,11 @@ function Game_ItemShop() {
  * @value 3
  * @option Marte
  * @value 4
- * 
+ *
  * @param Day of Month
  * @desc Dia do mês
  * @type number
  * @min 1
  * @default 1
- * 
+ *
  */
